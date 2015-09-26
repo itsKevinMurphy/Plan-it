@@ -1,3 +1,4 @@
+#node.js ignore
 # Logs
 logs
 *.log
@@ -26,3 +27,28 @@ build/Release
 # Dependency directory
 # https://docs.npmjs.com/misc/faq#should-i-check-my-node-modules-folder-into-git
 node_modules
+
+#angular ignore
+
+/build/
+/benchpress-build/
+.DS_Store
+gen_docs.disable
+test.disable
+regression/temp*.html
+performance/temp*.html
+.idea/workspace.xml
+*~
+*.swp
+angular.js.tmproj
+/node_modules/
+bower_components/
+angular.xcodeproj
+.idea
+*.iml
+.agignore
+.lvimrc
+libpeerconnection.log
+npm-debug.log
+/tmp/
+/scripts/bower/bower-*
