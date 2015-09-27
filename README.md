@@ -14,7 +14,6 @@ To get all the npm packages listed in the packasge.json file, run this command
     ```
     npm install
     ```
-
 * Angular
     ```
     bower install
@@ -32,22 +31,30 @@ For contributing code, please follow these steps:
     ```
     git clone https://github.com/{Your GitHub Account}/Plan-it.git
     ```
-    
-3.  Update to the latest revision
+
+3.  Add upstream remote
+
     ```
-    git pull
+    git remote add upstream https://github.com/Team-Murphy/Plan-it.git
     ```
     
-4.  Create a branch
+4.  Update to the latest revision
+
+    ```
+    git pull upstream
+    ```
+    
+5.  Create a branch
     ```
     git checkout -b feature-name
     ```
     
-5. Commit code to your dev repo
+6. Commit code to your dev repo
     ```
     git push --all origin
     ```
     
-6. Submit a pull request
+7. Submit a pull request
 
+__Please ensure you pull the upstream repo before commiting to reduce the chances of having a merge conflict__<br />
 __Please ensure that all pull requests are accompanied with tests__
