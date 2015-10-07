@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html ng-app="planItApp">
+<head>
+    <title>Plan-It</title>
+        <link rel="stylesheet" href="style.css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+        <script src="socket.io/socket.io.js"></script>
+        <script src="js/angular.min.js"></script>
+        <script src="js/angular-route.min.js"></script>
+        <!-- <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script> -->
+        <script src="js/angular-ui-router.js"></script>
+        <script src="js/app.js"></script>
+</head>
+
+<body>
+
+<!-- <div class="row" style="background-color:#0B3B39">
+    <div class="col-md-2 col-md-offset-1" align="center">
+        <h1>Plan-It <small> v1.0</small></h1>
+    </div>
+</div> -->
+
+<div class="row">
+
+    <div class="col-md-2 user">
+        <a href=""><h1>Plan-It <small> v1.0</small></h1></a>
+        <hr style="height:1px; background-color:#666; margin-bottom:15px; margin-top:5px;">
+        <h2><span class="glyphicon glyphicon-picture"></span></h2>
+        <p class="lead">Captain Planet</p>
+
+        <button ui-sref="event" style="height:50px;" class="menu glyphicon glyphicon-list-alt"> Events</button>
+        <button ui-sref="contact" style="height:50px;" class="menu glyphicon glyphicon-user"> Contacts</button>
+        <button ui-sref="setting" style="height:50px;" class="menu glyphicon glyphicon-cog"> Account</button>
+        <button ui-sref="index" style="height:50px;" class="menu glyphicon glyphicon-off"> Logout</button>
+
+    </div>
+
+    <div class="col-md-9 general">
+        <div ui-view="generalView">
+    </div>
+
+<!--     <div class="col-md-9 general">
+
+        <div class="row">
+            <div ui-view="topView"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-5" ui-view="middleView"></div>
+            <div class="col-md-6" ui-view="rightView"></div>      
+        </div>
+    </div> -->
+
+</div>
+
+</body>
+</html>
