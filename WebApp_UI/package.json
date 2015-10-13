@@ -1,0 +1,16 @@
+{
+  "name": "socket-chat-example",
+  "version": "0.0.1",
+  "description": "COMP308 Assignment 2 v2.0 Socket.io",
+  "author": "Joanne Tanson 300767984",
+  "private": true,
+  "dependencies": {
+    "angular": "^1.3.12",
+    "angular-ui-router": "^0.2.15",
+    "express": "3.4.x",
+    "socket.io": "0.9.x"
+  },
+  "devDependencies": {
+    "mongoose": "^3.8.24"
+  }
+}
