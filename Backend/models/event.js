@@ -1,7 +1,8 @@
 var mongoose = require('mongoose');
+var database = require('../database');
 
 var event = new mongoose.Schema({
-  EventID: mongoose.Schema.ObjectId,
+  EventID: Number,
   Members: {
     UserId: mongoose.Schema.ObjectId,
     Nofications: [{
@@ -26,3 +27,5 @@ var event = new mongoose.Schema({
   when: String,
   picture: String
 });
+
+module.exports = event;

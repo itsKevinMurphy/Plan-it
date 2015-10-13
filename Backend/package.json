@@ -9,7 +9,8 @@
   "dependencies": {
     "body-parser": "^1.14.1",
     "express": "^4.13.3",
-    "mongoose": "^4.1.11"
+    "mongoose": "^4.0.8",
+    "mongoose-auto-increment": "^4.0.0"
   },
   "devDependencies": {},
   "scripts": {
