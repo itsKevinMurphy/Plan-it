@@ -1,8 +1,13 @@
 <resources>
     <string name="app_name">Plan-It</string>
-
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_create_event">CreateEventActivity</string>
-    <string name="title_activity_view_event_actvity">ViewEventActvity</string>
+    <string name="title_activity_friends_list">Friends List</string>
+    <string name="title_activity_create_event">Create Event</string>
+    <string name="title_activity_view_event_actvity">View Event</string>
+    <string name="title_activity_events_list">Events List</string>
+    <string name="event_name">Event Name</string>
+    <string name="event_owner">Event Owner</string>
+    <string name="event_countdown">Countdown</string>
+    <string name="event_description">Event Description</string>
 </resources>
