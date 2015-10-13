@@ -19,6 +19,17 @@
         <activity
             android:name=".FriendsListActivity"
             android:label="@string/title_activity_friends_list" >
+            android:name=".CreateEventActivity"
+            android:label="@string/title_activity_create_event"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".ViewEventActvity"
+            android:label="@string/title_activity_view_event_actvity" >
+        </activity>
+        <activity
+            android:name=".EventsListActivity"
+            android:label="@string/title_activity_events_list" >
         </activity>
     </application>
 
