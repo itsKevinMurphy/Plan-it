@@ -1,11 +1,10 @@
 package com.plan_it.mobile.plan_it;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 public class CreateEventActivity extends AppCompatActivity {
 
@@ -13,15 +12,26 @@ public class CreateEventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        Button submit=(Button)findViewById(R.id.add_event);
+        Button clear=(Button)findViewById(R.id.clear_event);
+        final EditText event_name=(EditText)findViewById((R.id.event_name));
+        final EditText event_reason=(EditText)findViewById((R.id.event_reason));
+        final EditText event_location=(EditText)findViewById((R.id.event_location));
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        submit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onClick(View v) {
+                String e_name = event_name.getText().toString();
+                String e_reason = event_reason.getText().toString();
+                String e_loc = event_location.getText().toString();
+            }
+        });
+        clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                event_name.setText("");
+                event_reason.setText("");
+                event_location.setText("");
             }
         });
     }
