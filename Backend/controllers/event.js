@@ -1,15 +1,17 @@
-exports.createEvent = function(req, res, next){
+var event = module.exports;
+
+event.createEvent = function(req, res, next){
 
 }
 
-exports.viewEvent = function(req, res, next){
+event.viewEvent = function(req, res, next){
 
 }
 
-exports.updateEvent = function(req, res, next){
+event.updateEvent = function(req, res, next){
 
 }
 
-exports.deleteEvent = function(req, res, next){
-  
+event.deleteEvent = function(req, res, next){
+
 }
