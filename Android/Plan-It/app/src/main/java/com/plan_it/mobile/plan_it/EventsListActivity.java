@@ -1,7 +1,10 @@
 package com.plan_it.mobile.plan_it;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -11,6 +14,9 @@ public class EventsListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events_list);
+        RecyclerView events_recycler_view = (RecyclerView)findViewById(R.id.events_recycler_view);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        events_recycler_view.setLayoutManager(llm);
     }
 
     @Override
@@ -33,5 +39,31 @@ public class EventsListActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    enum IsAttending{INVITED, ATTENDING, DECLINED, LEFT, OWNER}
+
+    class Event
+    {
+        String name;
+        String owner;
+        String description;
+        int photoId;
+        String date;
+        IsAttending isAttending;
+        boolean itemList;
+        boolean messageBoard;
+
+        Event(String name, String owner, String description, int photoId, String date, IsAttending isAttending, boolean itemList, boolean messageBoard)
+        {
+            this.name = name;
+            this.owner = owner;
+            this.description = description;
+            this.photoId = photoId;
+            this.date = date;
+            this.isAttending = isAttending;
+            this.itemList = itemList;
+            this.messageBoard = messageBoard;
+        }
     }
 }
