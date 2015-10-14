@@ -19,8 +19,23 @@ event.createEvent = function(req, res, next){
   });
 }
 
-event.viewEvent = function(req, res, next){
+event.getEventById = function(req, res, next){
+  database.eventModel.findOne({"EventID" : req.params.id}, function(err, event){
+    if(err)
+      console.log(err);
+    else
+      res.json(event);
+  });
+}
 
+event.getAllEvents = function(req, res, next){
+  database.eventModel.find({}, function(err, events){
+    if(err)
+      console.log(err);
+    else {
+      res.json(events);
+    }
+  });
 }
 
 event.updateEvent = function(req, res, next){
