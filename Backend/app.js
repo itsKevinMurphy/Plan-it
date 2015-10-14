@@ -21,7 +21,8 @@ var database = require('./database');
 database.createConnection();
 
 app.post("/events", eventCtrl.createEvent);
-app.get("/events/:id", eventCtrl.createEvent);
+app.get("/events/:id", eventCtrl.getEventById);
+app.get("/events", eventCtrl.getAllEvents);
 
 app.listen(80, function(){
   console.log("Server is running on port 80");
