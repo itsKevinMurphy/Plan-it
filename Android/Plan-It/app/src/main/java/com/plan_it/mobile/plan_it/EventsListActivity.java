@@ -20,7 +20,13 @@ public class EventsListActivity extends AppCompatActivity {
         events.add(new Event("Riot Fest", "Kevin Murphy", "Hey Guys, Let's go listen to some Music", R.drawable.riot_fest_325, "13/11/2015", IsAttending.OWNER, true, true));
         events.add(new Event("Itza Time to do Camps", "Mohammed Sumon", "I would like to go camping", R.drawable.canot_camp_000, "10/12/2015", IsAttending.INVITED, false, false));
         events.add(new Event("Snowboarding", "Joanne Tanson", "LET'S GO SNOWBOARDING", R.drawable.victoria_snowboard_mount_washington_small, "03/01/2016", IsAttending.ATTENDING, true, false));
-        events.add(new Event("Riot Fest", "Stephanie DeLongo", "Hey Guys, Let's go listen to some Music", R.drawable.mickey_mouse_icon, "30/03/2016", IsAttending.INVITED, true, true));
+        events.add(new Event("Disney World", "Stephanie DeLongo", "Hey Guys, Let's go listen to some Music", R.drawable.mickey_mouse_icon, "30/03/2016", IsAttending.INVITED, true, true));
+        events.add(new Event("The Cottage", "Cottage MacGee", "Hey Guys, Let's go listen to some Music", R.drawable.cottage_26_waterside_248, "12/12/2015", IsAttending.DECLINED, false, true));
+        events.add(new Event("Let Us Camp", "Coolio McCampington", "Hey Guys, Let's go listen to some Music", R.drawable.canot_camp_000, "12/25/2015", IsAttending.LEFT, true, false));
+        events.add(new Event("Riot Fest", "Kevin Murphy", "Hey Guys, Let's go listen to some Music", R.drawable.riot_fest_325, "13/11/2015", IsAttending.OWNER, true, true));
+        events.add(new Event("Itza Time to do Camps", "Mohammed Sumon", "I would like to go camping", R.drawable.canot_camp_000, "10/12/2015", IsAttending.INVITED, false, false));
+        events.add(new Event("Snowboarding", "Joanne Tanson", "LET'S GO SNOWBOARDING", R.drawable.victoria_snowboard_mount_washington_small, "03/01/2016", IsAttending.ATTENDING, true, false));
+        events.add(new Event("Disney World", "Stephanie DeLongo", "Hey Guys, Let's go listen to some Music", R.drawable.mickey_mouse_icon, "30/03/2016", IsAttending.INVITED, true, true));
         events.add(new Event("The Cottage", "Cottage MacGee", "Hey Guys, Let's go listen to some Music", R.drawable.cottage_26_waterside_248, "12/12/2015", IsAttending.DECLINED, false, true));
         events.add(new Event("Let Us Camp", "Coolio McCampington", "Hey Guys, Let's go listen to some Music", R.drawable.canot_camp_000, "12/25/2015", IsAttending.LEFT, true, false));
     }

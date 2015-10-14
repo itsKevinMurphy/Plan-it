@@ -1,5 +1,6 @@
 package com.plan_it.mobile.plan_it;
 
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -49,12 +50,37 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
     }
     @Override
     public EventsViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+
+
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.event_card, viewGroup, false);
         EventsViewHolder pvh = new EventsViewHolder(v);
-        return pvh;
+             return pvh;
     }
     @Override
     public void onBindViewHolder(EventsViewHolder eventsViewHolder, int i) {
+        if(events.get(i).isAttending == EventsListActivity.IsAttending.INVITED){
+            eventsViewHolder.button1.setImageResource(R.drawable.ic_thumb_up_green_24dp);
+            eventsViewHolder.button2.setImageResource(R.drawable.ic_thumb_down_red_24dp);
+            eventsViewHolder.cv.setBackgroundColor(Color.argb(125, 249, 255, 145));
+        }
+        else if(events.get(i).isAttending == EventsListActivity.IsAttending.ATTENDING)
+        {
+            eventsViewHolder.button2.setImageResource(R.drawable.ic_delete_grey_24dp);
+            eventsViewHolder.cv.setBackgroundColor(Color.argb(125, 155, 255, 118));
+        }
+        else if(events.get(i).isAttending == EventsListActivity.IsAttending.LEFT)
+        {
+            eventsViewHolder.cv.setBackgroundColor(Color.argb(125, 255, 165, 171));
+        }
+        else if(events.get(i).isAttending == EventsListActivity.IsAttending.DECLINED)
+        {
+            eventsViewHolder.cv.setBackgroundColor(Color.argb(125, 255, 165, 171));
+        }
+        else
+        {
+            eventsViewHolder.button2.setImageResource(R.drawable.ic_edit_blue_24dp);
+            eventsViewHolder.cv.setBackgroundColor(Color.argb(125, 255, 254, 199));
+        }
         eventsViewHolder.name.setText(events.get(i).name);
         eventsViewHolder.description.setText(events.get(i).description);
         eventsViewHolder.date.setText(events.get(i).date);
