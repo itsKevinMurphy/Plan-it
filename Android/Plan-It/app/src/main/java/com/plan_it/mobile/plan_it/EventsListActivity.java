@@ -6,7 +6,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +31,7 @@ public class EventsListActivity extends AppCompatActivity {
     }
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +43,7 @@ public class EventsListActivity extends AppCompatActivity {
         events_recycler_view.setLayoutManager(llm);
         events_recycler_view.setAdapter(adapter);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -62,7 +63,14 @@ public class EventsListActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == R.id.action_filter)
+        {
+            
+        }
+        if (id == R.id.action_friendsList)
+        {
 
+        }
         return super.onOptionsItemSelected(item);
     }
 

@@ -10,6 +10,11 @@
     <string name="event_owner">Event Owner</string>
     <string name="event_countdown">Countdown</string>
     <string name="event_description">Event Description</string>
+    <string name="attending">Attending</string>
+    <string name="invited">Invited</string>
+    <string name="declined">Declined</string>
+    <string name="owner">Owner</string>
+    <string name="filterBy">Filter By</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
