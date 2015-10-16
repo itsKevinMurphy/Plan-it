@@ -10,6 +10,7 @@ var config = require('./config');
 
 //import all controllers
 var eventCtrl = require('./controllers/event');
+var userCtrl = require('./controllers/user');
 
 var app = express();
 
@@ -23,6 +24,8 @@ database.createConnection();
 app.post("/events", eventCtrl.createEvent);
 app.get("/events/:id", eventCtrl.getEventById);
 app.get("/events", eventCtrl.getAllEvents);
+app.post("/user", userCtrl.createUser);
+
 
 app.listen(80, function(){
   console.log("Server is running on port 80");

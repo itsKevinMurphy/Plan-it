@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 var increment = require('mongoose-auto-increment');
 var config = require('./config');
 var eventjs = require('./models/event');
+var userjs = require('./models/user')
 
 database.createConnection = function(){
   mongoose.connect(config.db);
@@ -23,3 +24,5 @@ database.initEventIncrement = function(){
 //database.connection = db;
 
 database.eventModel = mongoose.model("Event", eventjs);
+//Create User model
+database.userModel = mongoose.model("User", userjs);
