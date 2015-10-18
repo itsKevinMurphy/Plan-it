@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var increment = require('mongoose-auto-increment');
 
-
+var database = require('./database');
 //import config file
 var config = require('./config');
 
@@ -20,14 +20,15 @@ app.use(bodyParser.urlencoded({
 }));
 app.disable('etag');
 
-var database = require('./database');
+
 database.createConnection();
 
 app.post("/events", eventCtrl.createEvent);
 app.get("/events/:id", eventCtrl.getEventById);
 app.get("/events", eventCtrl.getAllEvents);
 app.post("/user", userCtrl.createUser);
-app.post('/events/:id/list', eventCtrl.createListItem)
+app.post('/events/:id/list', eventCtrl.createListItem);
+app.get('/events/:id/list', eventCtrl.getListItems);
 
 
 app.listen(80, function() {

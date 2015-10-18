@@ -74,3 +74,15 @@ event.createListItem = function(req, res, next) {
     }
   });
 }
+
+event.getListItems = function(req, res, next) {
+  database.eventModel.findOne({
+    "EventID": req.params.id
+  }, function(err, events) {
+    if (err)
+      console.log(err);
+    else {
+      res.json(events.itemList);
+    }
+  });
+}
