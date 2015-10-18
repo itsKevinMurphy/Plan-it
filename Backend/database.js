@@ -13,6 +13,7 @@ database.createConnection = function() {
   increment.initialize(db);
   this.initListIncrement();
   this.initEventIncrement();
+  this.initUserIncrement();
   db.on('error', console.error.bind(console, 'connection error:'));
   db.on('open', function() {
     console.log("connection made to database");
@@ -34,6 +35,14 @@ database.initListIncrement = function() {
     startAt: 1
   });
 }
+
+//Create autonumber field on UserID field in User model
+database.initUserIncrement = function(){
+  userjs.plugin(increment.plugin, {
+    model: "User", field: "UserID", startAt: 1
+  }
+  );
+};
 
 //database.connection = db;
 //Create List Model
