@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var database = require('../database');
+var list = require('./list');
 
 var event = new mongoose.Schema({
   EventID: Number,
@@ -8,19 +9,12 @@ var event = new mongoose.Schema({
     Nofications: [{
         itemList: Boolean,
         messageBoard: Boolean,
-        isAttending: { type: String, enum: ['invited', 'Attending', 'Declined', 'Left', 'Owner'] }
+        isAttending: { type: String, enum: ['Invited', 'Attending', 'Declined', 'Left', 'Owner'] }
     }]
   },
-  itemList: {
-    List: [{
-      item: String,
-      whoseBringing: String,
-      estCost: Number,
-      actCost: Number
-    }],
-    totalEstCost: Number,
-    totalActCost: Number
-  },
+  itemList: [list],
+  totalEstCost: {type: Number, default: 0},
+  totalActCost: {type: Number, default: 0},
   what: String,
   why: String,
   where: String,

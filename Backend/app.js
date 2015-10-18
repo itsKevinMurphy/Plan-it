@@ -15,7 +15,9 @@ var userCtrl = require('./controllers/user');
 var app = express();
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 app.disable('etag');
 
 var database = require('./database');
@@ -25,8 +27,9 @@ app.post("/events", eventCtrl.createEvent);
 app.get("/events/:id", eventCtrl.getEventById);
 app.get("/events", eventCtrl.getAllEvents);
 app.post("/user", userCtrl.createUser);
+app.post('/events/:id/list', eventCtrl.createListItem)
 
 
-app.listen(80, function(){
+app.listen(80, function() {
   console.log("Server is running on port 80");
 });
