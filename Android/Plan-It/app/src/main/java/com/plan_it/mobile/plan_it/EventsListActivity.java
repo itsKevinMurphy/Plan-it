@@ -1,19 +1,29 @@
 package com.plan_it.mobile.plan_it;
 
+import android.app.Dialog;
+import android.app.SearchManager;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
+import android.widget.SearchView.OnQueryTextListener;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventsListActivity extends AppCompatActivity {
+public class EventsListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
 
     private List<Event> events;
-    enum IsAttending{INVITED, ATTENDING, DECLINED, LEFT, OWNER}
 
+    private EventsListAdapter adapter;
+    private RecyclerView events_recycler_view;
     void initializeData() {
         events = new ArrayList<>();
         events.add(new Event("Riot Fest", "Kevin Murphy", "Hey Guys, Let's go listen to some Music", R.drawable.riot_fest_325, "13/11/2015", IsAttending.OWNER, true, true));
@@ -36,9 +46,9 @@ public class EventsListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initializeData();
-        EventsListAdapter adapter = new EventsListAdapter(events);
+        adapter = new EventsListAdapter(this, events);
         setContentView(R.layout.activity_events_list);
-        RecyclerView events_recycler_view = (RecyclerView)findViewById(R.id.events_list_recycler_view);
+        events_recycler_view = (RecyclerView)findViewById(R.id.events_list_recycler_view);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         events_recycler_view.setLayoutManager(llm);
         events_recycler_view.setAdapter(adapter);
@@ -49,9 +59,35 @@ public class EventsListActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_events_list, menu);
+        MenuItem item = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.setOnQueryTextListener(this);
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onQueryTextChange(String query) {
+        final List<Event> filteredModelList = filter(events, query);
+        adapter.animateTo(filteredModelList);
+        events_recycler_view.scrollToPosition(0);
         return true;
     }
 
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+    private List<Event> filter(List<Event> events, String query) {
+        query = query.toLowerCase();
+
+        final List<Event> filteredModelList = new ArrayList<>();
+        for (Event event : events) {
+            final String text = event.name.toLowerCase();
+            if (text.contains(query)) {
+                filteredModelList.add(event);
+            }
+        }
+        return filteredModelList;
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -65,7 +101,7 @@ public class EventsListActivity extends AppCompatActivity {
         }
         if (id == R.id.action_filter)
         {
-            
+            FilterEvents();
         }
         if (id == R.id.action_friendsList)
         {
@@ -74,28 +110,57 @@ public class EventsListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void FilterEvents()
+    {
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.menu_filter_list);
+        dialog.show();
+        Button invited = (Button)dialog.findViewById(R.id.filterButtonInvited);
+        Button attending = (Button)dialog.findViewById(R.id.filterButtonAttending);
+        Button declined = (Button)dialog.findViewById(R.id.filterButtonDeclined);
+        Button owner = (Button)dialog.findViewById(R.id.filterButtonOwner);
+        Button showAll = (Button)dialog.findViewById(R.id.filterButtonAll);
 
-
-    class Event {
-        String name;
-        String owner;
-        String description;
-        int photoId;
-        String date;
-        IsAttending isAttending;
-        boolean itemList;
-        boolean messageBoard;
-
-        Event(String name, String owner, String description, int photoId, String date, IsAttending isAttending, boolean itemList, boolean messageBoard) {
-            this.name = name;
-            this.owner = owner;
-            this.description = description;
-            this.photoId = photoId;
-            this.date = date;
-            this.isAttending = isAttending;
-            this.itemList = itemList;
-            this.messageBoard = messageBoard;
+        invited.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EventsListAdapter.filter = "INVITED";
+                Log.d("Filter: ", EventsListAdapter.filter);
+                dialog.dismiss();
+            }
+        });
+        attending.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            EventsListAdapter.filter = "ATTENDING";
+            Log.d("Filter: ", EventsListAdapter.filter);
+            dialog.dismiss();
         }
+    });
+        declined.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            EventsListAdapter.filter = "DECLINED";
+            Log.d("Filter: ", EventsListAdapter.filter);
+            dialog.dismiss();
+        }
+    });
+        owner.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            EventsListAdapter.filter = "OWNER";
+            Log.d("Filter: ", EventsListAdapter.filter);
+            dialog.dismiss();
+        }
+    });
+        showAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EventsListAdapter.filter = "NONE";
+                Log.d("Filter: ", EventsListAdapter.filter);
+                dialog.dismiss();
+            }
+        });
     }
 
 }
