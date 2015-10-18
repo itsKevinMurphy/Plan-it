@@ -77,25 +77,25 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
         if(events.get(i).isAttending == IsAttending.INVITED){
             eventsViewHolder.button1.setImageResource(R.drawable.ic_thumb_up_green_24dp);
             eventsViewHolder.button2.setImageResource(R.drawable.ic_thumb_down_red_24dp);
-            eventsViewHolder.cv.setBackgroundColor(Color.argb(125, 249, 255, 145));
+            eventsViewHolder.cv.setCardBackgroundColor(Color.argb(125, 249, 255, 145));
         }
         else if(events.get(i).isAttending == IsAttending.ATTENDING)
         {
             eventsViewHolder.button2.setImageResource(R.drawable.ic_delete_grey_24dp);
-            eventsViewHolder.cv.setBackgroundColor(Color.argb(125, 155, 255, 118));
+            eventsViewHolder.cv.setCardBackgroundColor(Color.argb(125, 155, 255, 118));
         }
         else if(events.get(i).isAttending == IsAttending.LEFT)
         {
-            eventsViewHolder.cv.setBackgroundColor(Color.argb(125, 255, 165, 171));
+            eventsViewHolder.cv.setCardBackgroundColor(Color.argb(125, 255, 165, 171));
         }
         else if(events.get(i).isAttending == IsAttending.DECLINED)
         {
-            eventsViewHolder.cv.setBackgroundColor(Color.argb(125, 255, 165, 171));
+            eventsViewHolder.cv.setCardBackgroundColor(Color.argb(125, 255, 165, 171));
         }
         else
         {
             eventsViewHolder.button2.setImageResource(R.drawable.ic_edit_blue_24dp);
-            eventsViewHolder.cv.setBackgroundColor(Color.argb(125, 255, 254, 199));
+            eventsViewHolder.cv.setCardBackgroundColor(Color.argb(125, 255, 254, 199));
         }
         if(filter == "NONE") {
             eventsViewHolder.name.setText(events.get(i).name);
