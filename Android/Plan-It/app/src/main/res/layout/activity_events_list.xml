@@ -8,7 +8,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/events_list_recycler_view"
-         />
+        android:paddingBottom="100dp"
+        android:clipToPadding="false"
+        />
 
     <ImageView
         android:layout_width="50dp"

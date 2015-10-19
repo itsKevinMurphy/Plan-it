@@ -49,16 +49,23 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
         }
         public void bind(Event event) {
             name.setText(event.name);
+            owner.setText(event.owner);
+            description.setText(event.description);
+            photo.setImageResource(event.photoId);
+            date.setText(event.date);
+            IsAttending isAttending = event.isAttending;
+            boolean itemList = event.itemList;
+            boolean messageBoard = event.messageBoard;
         }
     }
-    List<Event> events;
 
-    EventsListAdapter(Context context, List<Event> events){
-        this.events = events;
+    EventsListAdapter(Context context, List<Event> events)
+    {
+        mEvents = new ArrayList<>(events);
     }
     @Override
     public int getItemCount() {
-        return events.size();
+        return mEvents.size();
     }
     public void setEvents(List<Event> events) {
         mEvents = new ArrayList<>(events);
@@ -72,69 +79,32 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
              return pvh;
     }
     @Override
-    public void onBindViewHolder(EventsViewHolder eventsViewHolder, int i) {
+    public void onBindViewHolder(EventsViewHolder eventsViewHolder, int i)
+    {
+        final Event event = mEvents.get(i);
+        eventsViewHolder.bind(event);
 
-        if(events.get(i).isAttending == IsAttending.INVITED){
+        if(mEvents.get(i).isAttending == IsAttending.INVITED){
             eventsViewHolder.button1.setImageResource(R.drawable.ic_thumb_up_green_24dp);
             eventsViewHolder.button2.setImageResource(R.drawable.ic_thumb_down_red_24dp);
-            eventsViewHolder.cv.setBackgroundColor(Color.argb(125, 249, 255, 145));
+            eventsViewHolder.cv.setCardBackgroundColor(Color.argb(125, 249, 255, 145));
         }
-        else if(events.get(i).isAttending == IsAttending.ATTENDING)
+        else if(mEvents.get(i).isAttending == IsAttending.ATTENDING)
         {
             eventsViewHolder.button2.setImageResource(R.drawable.ic_delete_grey_24dp);
-            eventsViewHolder.cv.setBackgroundColor(Color.argb(125, 155, 255, 118));
+            eventsViewHolder.cv.setCardBackgroundColor(Color.argb(125, 155, 255, 118));
         }
-        else if(events.get(i).isAttending == IsAttending.LEFT)
+        else if(mEvents.get(i).isAttending == IsAttending.LEFT)
         {
-            eventsViewHolder.cv.setBackgroundColor(Color.argb(125, 255, 165, 171));
+            eventsViewHolder.cv.setCardBackgroundColor(Color.argb(125, 255, 165, 171));
         }
-        else if(events.get(i).isAttending == IsAttending.DECLINED)
+        else if(mEvents.get(i).isAttending == IsAttending.DECLINED)
         {
-            eventsViewHolder.cv.setBackgroundColor(Color.argb(125, 255, 165, 171));
+            eventsViewHolder.cv.setCardBackgroundColor(Color.argb(125, 255, 165, 171));
         }
-        else
-        {
+        else {
             eventsViewHolder.button2.setImageResource(R.drawable.ic_edit_blue_24dp);
-            eventsViewHolder.cv.setBackgroundColor(Color.argb(125, 255, 254, 199));
-        }
-        if(filter == "NONE") {
-            eventsViewHolder.name.setText(events.get(i).name);
-            eventsViewHolder.description.setText(events.get(i).description);
-            eventsViewHolder.date.setText(events.get(i).date);
-            eventsViewHolder.owner.setText(events.get(i).owner);
-            eventsViewHolder.photo.setImageResource(events.get(i).photoId);
-        }
-        if(filter == "INVITED" && events.get(i).isAttending == IsAttending.INVITED)
-        {
-            eventsViewHolder.name.setText(events.get(i).name);
-            eventsViewHolder.description.setText(events.get(i).description);
-            eventsViewHolder.date.setText(events.get(i).date);
-            eventsViewHolder.owner.setText(events.get(i).owner);
-            eventsViewHolder.photo.setImageResource(events.get(i).photoId);
-        }
-        if(filter == "ATTENDING" && events.get(i).isAttending == IsAttending.ATTENDING)
-        {
-            eventsViewHolder.name.setText(events.get(i).name);
-            eventsViewHolder.description.setText(events.get(i).description);
-            eventsViewHolder.date.setText(events.get(i).date);
-            eventsViewHolder.owner.setText(events.get(i).owner);
-            eventsViewHolder.photo.setImageResource(events.get(i).photoId);
-        }
-        if(filter == "DECLINED" && events.get(i).isAttending == IsAttending.DECLINED)
-        {
-            eventsViewHolder.name.setText(events.get(i).name);
-            eventsViewHolder.description.setText(events.get(i).description);
-            eventsViewHolder.date.setText(events.get(i).date);
-            eventsViewHolder.owner.setText(events.get(i).owner);
-            eventsViewHolder.photo.setImageResource(events.get(i).photoId);
-        }
-        if(filter == "OWNER" && events.get(i).isAttending == IsAttending.OWNER)
-        {
-            eventsViewHolder.name.setText(events.get(i).name);
-            eventsViewHolder.description.setText(events.get(i).description);
-            eventsViewHolder.date.setText(events.get(i).date);
-            eventsViewHolder.owner.setText(events.get(i).owner);
-            eventsViewHolder.photo.setImageResource(events.get(i).photoId);
+            eventsViewHolder.cv.setCardBackgroundColor(Color.argb(125, 255, 254, 199));
         }
 
     }
@@ -145,8 +115,8 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
     }
 
     private void applyAndAnimateRemovals(List<Event> newEvents) {
-        for (int i = events.size() - 1; i >= 0; i--) {
-            final Event event = events.get(i);
+        for (int i = mEvents.size() - 1; i >= 0; i--) {
+            final Event event = mEvents.get(i);
             if (!newEvents.contains(event)) {
                 removeItem(i);
             }
@@ -155,17 +125,18 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
 
     private void applyAndAnimateAdditions(List<Event> newEvents) {
         for (int i = 0, count = newEvents.size(); i < count; i++) {
-            final Event event = newEvents.get(i);
-            if (!events.contains(event)) {
-                addItem(i, event);
+            final Event mEvent = newEvents.get(i);
+            Log.d("Additions","Position: " + i + " event: " + mEvent.name);
+            if (!mEvents.contains(mEvent)) {
+                addItem(i, mEvent);
             }
         }
     }
 
     private void applyAndAnimateMovedItems(List<Event> newEvents) {
         for (int toPosition = newEvents.size() - 1; toPosition >= 0; toPosition--) {
-            final Event event = newEvents.get(toPosition);
-            final int fromPosition = events.indexOf(event);
+            final Event mEvent = newEvents.get(toPosition);
+            final int fromPosition = mEvents.indexOf(mEvent);
             if (fromPosition >= 0 && fromPosition != toPosition) {
                 moveItem(fromPosition, toPosition);
             }
@@ -173,19 +144,20 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
     }
 
     public Event removeItem(int position) {
-        final Event event = events.remove(position);
+        final Event event = mEvents.remove(position);
         notifyItemRemoved(position);
         return event;
     }
 
     public void addItem(int position, Event event) {
-        events.add(position, event);
+        Log.d("addItem","Position: " + position + " event: " + event);
+        mEvents.add(position, event);
         notifyItemInserted(position);
     }
 
     public void moveItem(int fromPosition, int toPosition) {
-        final Event event = events.remove(fromPosition);
-        events.add(toPosition, event);
+        final Event event = mEvents.remove(fromPosition);
+        mEvents.add(toPosition, event);
         notifyItemMoved(fromPosition, toPosition);
     }
 }
