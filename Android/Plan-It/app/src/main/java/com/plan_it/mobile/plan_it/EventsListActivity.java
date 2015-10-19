@@ -2,6 +2,7 @@ package com.plan_it.mobile.plan_it;
 
 import android.app.Dialog;
 import android.app.SearchManager;
+import android.content.Intent;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -14,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,7 @@ import java.util.List;
 public class EventsListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
 
     private List<Event> events;
-
+    private List<Event> mEvents;
     private EventsListAdapter adapter;
     private RecyclerView events_recycler_view;
     void initializeData() {
@@ -52,7 +54,15 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
         LinearLayoutManager llm = new LinearLayoutManager(this);
         events_recycler_view.setLayoutManager(llm);
         events_recycler_view.setAdapter(adapter);
+
+        mEvents = new ArrayList<>();
+
+        for (Event event: events) {
+            mEvents.add(new Event(event.name, event.owner, event.description, event.photoId,event.date,event.isAttending,event.itemList, event.messageBoard));
+            Log.d("mEvents", "name " + event.name + "owner " + event.owner + "description " + event.description + "photoId " + event.photoId);
+        }
     }
+
 
 
     @Override
@@ -66,9 +76,35 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
     }
     @Override
     public boolean onQueryTextChange(String query) {
-        final List<Event> filteredModelList = filter(events, query);
-        adapter.animateTo(filteredModelList);
-        events_recycler_view.scrollToPosition(0);
+
+        List<Event> filteredModelList;
+        if (query == "INVITED" || query == "ATTENDING" || query == "DECLINED" || query == "OWNER")
+        {
+            filteredModelList = new ArrayList<>();
+            for (Event event : mEvents) {
+                final String text = event.isAttending.toString();
+                if (text.contains(query)) {
+                    filteredModelList.add(event);
+                }
+            }
+            adapter.animateTo(filteredModelList);
+            events_recycler_view.scrollToPosition(0);
+
+        } else if (query == "NONE") {
+            filteredModelList = new ArrayList<>();
+            for (Event event : mEvents)
+            {
+
+                filteredModelList.add(event);
+            }
+            adapter.animateTo(mEvents);
+            events_recycler_view.scrollToPosition(0);
+        }
+        else{
+            filteredModelList = filter(mEvents, query);
+            adapter.animateTo(filteredModelList);
+            events_recycler_view.scrollToPosition(0);
+        }
         return true;
     }
 
@@ -77,16 +113,18 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
         return false;
     }
     private List<Event> filter(List<Event> events, String query) {
+
         query = query.toLowerCase();
 
-        final List<Event> filteredModelList = new ArrayList<>();
-        for (Event event : events) {
-            final String text = event.name.toLowerCase();
-            if (text.contains(query)) {
-                filteredModelList.add(event);
+            final List<Event> filteredModelList = new ArrayList<>();
+            for (Event event : events) {
+                final String text = event.name.toLowerCase();
+                if (text.contains(query)) {
+                    filteredModelList.add(event);
+                    Log.d("event filtered", "name " + event.name + "owner " + event.owner + "description " + event.description + "photoId " + event.photoId);
+                }
             }
-        }
-        return filteredModelList;
+           return filteredModelList;
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -105,7 +143,13 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
         }
         if (id == R.id.action_friendsList)
         {
-
+            Intent intent = new Intent(this, FriendsListActivity.class);
+            startActivity(intent);
+        }
+        if (id == R.id.action_create_new_event)
+        {
+            Intent intent = new Intent(this, CreateEventActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -126,6 +170,7 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
             public void onClick(View v) {
                 EventsListAdapter.filter = "INVITED";
                 Log.d("Filter: ", EventsListAdapter.filter);
+                onQueryTextChange("INVITED");
                 dialog.dismiss();
             }
         });
@@ -134,6 +179,7 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
         public void onClick(View v) {
             EventsListAdapter.filter = "ATTENDING";
             Log.d("Filter: ", EventsListAdapter.filter);
+            onQueryTextChange("ATTENDING");
             dialog.dismiss();
         }
     });
@@ -142,6 +188,7 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
         public void onClick(View v) {
             EventsListAdapter.filter = "DECLINED";
             Log.d("Filter: ", EventsListAdapter.filter);
+            onQueryTextChange("DECLINED");
             dialog.dismiss();
         }
     });
@@ -149,6 +196,7 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
         @Override
         public void onClick(View v) {
             EventsListAdapter.filter = "OWNER";
+            onQueryTextChange("OWNER");
             Log.d("Filter: ", EventsListAdapter.filter);
             dialog.dismiss();
         }
@@ -157,6 +205,7 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
             @Override
             public void onClick(View v) {
                 EventsListAdapter.filter = "NONE";
+                onQueryTextChange("NONE");
                 Log.d("Filter: ", EventsListAdapter.filter);
                 dialog.dismiss();
             }
