@@ -1,0 +1,46 @@
+
+<div class="row">
+    <form class="form-group col-md-offset-1">
+
+    <h3>What <small>shall we call the event?</small></h3>
+    <input class="form-control" type="text" ng-model="" pattern="^[A-Z][a-z0-9_-]{2,19}$" required />
+    <br />
+
+    <h3>Why <small>are we having an event?</small></h3>
+    <input class="form-control" type="text" ng-model="" pattern="^[A-Z][a-z0-9_-]{2,19}$" required />
+    <br />
+
+    <h3>Where <small>is the event taking place?</small></h3>
+    <input class="form-control" type="text" ng-model="" pattern="^[A-Z][a-z0-9_-]{2,19}$" required />
+    <br />
+
+    <h3>When <small>does the event</small></h3>
+    <h4 style="float:left;">start</h4><h4 style="float:right;">end</h4>
+    <div class="form-group">
+        <div class="input-group date" id="datetimepicker1">
+            <input type='text' class="form-control" style="float:left;" />
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+            <input type='text' class="form-control" style="float:right;" />
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+    </div>
+    <br />
+
+    <div class="col-md-offset-5">
+    <input class="btn btn-default btn-lg" type="reset" ng-click="reset()" value="Clear" />
+    <input class="btn btn-primary btn-lg" type="submit" ng-click="" value="Create" />
+    </div>
+    
+    </form>
+</div>
+
+<!-- install bootstrap datepicker first? -->
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker1').datetimepicker();
+    });
+</script>
