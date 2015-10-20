@@ -1,0 +1,15 @@
+{
+  "name": "Plan-It",
+  "version": "0.0.1",
+  "description": "Plan-It Web App",
+  "author": "Team Planiteers",
+  "private": true,
+  "dependencies": {
+    "express": "3.4.x",
+    "socket.io": "0.9.x",
+    "angular": "^1.3.12"
+  },
+  "devDependencies": {
+    "mongoose": "^3.8.24"
+  }
+}
