@@ -26,8 +26,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
     public static View view;
     private List<Event>mEvents;
     private Context context;
-    private OnClickListener mOnClickListener;
-    public class EventsViewHolder extends RecyclerView.ViewHolder {
+    public class EventsViewHolder extends RecyclerView.ViewHolder{
         CardView cv;
         TextView name;
         TextView owner;
@@ -51,8 +50,6 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
             button2 = (ImageView)itemView.findViewById(R.id.event_list_button_right);
             addEvent = (ImageView)itemView.findViewById(R.id.event_list_add_button);
             view = itemView;
-
-
 
            view.setOnClickListener(new View.OnClickListener() {
                @Override public void onClick(View v) {
@@ -98,8 +95,22 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
     @Override
     public void onBindViewHolder(EventsViewHolder eventsViewHolder, int i)
     {
+        final int j = i;
         final Event event = mEvents.get(i);
         eventsViewHolder.bind(event);
+
+        eventsViewHolder.button1.setOnClickListener(new View.OnClickListener(){
+            @Override public void onClick(View v) {
+                Toast.makeText(context, mEvents.get(j).name,
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+        eventsViewHolder.button2.setOnClickListener(new View.OnClickListener(){
+            @Override public void onClick(View v) {
+                Toast.makeText(context,mEvents.get(j).description,
+                        Toast.LENGTH_LONG).show();
+            }
+        });
 
         if(mEvents.get(i).isAttending == IsAttending.INVITED){
             eventsViewHolder.button1.setImageResource(R.drawable.ic_thumb_up_green_24dp);

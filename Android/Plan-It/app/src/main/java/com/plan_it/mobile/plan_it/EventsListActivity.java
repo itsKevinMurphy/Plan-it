@@ -41,8 +41,6 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
         events.add(new Event("Let Us Camp", "Coolio McCampington", "Hey Guys, Let's go listen to some Music", R.drawable.canot_camp_000, "12/25/2015", IsAttending.LEFT, true, false));
     }
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,8 +143,7 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
         }
         if (id == R.id.action_create_new_event)
         {
-            Intent intent = new Intent(this, CreateEventActivity.class);
-            startActivity(intent);
+            navCreateNewEvent(view);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -218,8 +215,9 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
             }
         });
     }
-    public void onEventSelect(Context event)
+    public void navCreateNewEvent(View v)
     {
-
+        Intent intent = new Intent(this, CreateEventActivity.class);
+        startActivity(intent);
     }
 }
