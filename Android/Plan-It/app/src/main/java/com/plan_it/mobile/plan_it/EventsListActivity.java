@@ -1,12 +1,11 @@
 package com.plan_it.mobile.plan_it;
 
 import android.app.Dialog;
-import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
-import android.widget.SearchView.OnQueryTextListener;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventsListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
-
+    public View view;
     private List<Event> events;
     private List<Event> mEvents;
     private EventsListAdapter adapter;
@@ -54,7 +53,6 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
         LinearLayoutManager llm = new LinearLayoutManager(this);
         events_recycler_view.setLayoutManager(llm);
         events_recycler_view.setAdapter(adapter);
-
         mEvents = new ArrayList<>();
 
         for (Event event: events) {
@@ -62,7 +60,6 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
             Log.d("mEvents", "name " + event.name + "owner " + event.owner + "description " + event.description + "photoId " + event.photoId);
         }
     }
-
 
 
     @Override
@@ -78,7 +75,7 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
     public boolean onQueryTextChange(String query) {
 
         List<Event> filteredModelList;
-        if (query == "INVITED" || query == "ATTENDING" || query == "DECLINED" || query == "OWNER")
+        if (query == "INVITED" || query == "ATTENDING" || query == "DECLINED" || query == "OWNER" || query == "LEFT")
         {
             filteredModelList = new ArrayList<>();
             for (Event event : mEvents) {
@@ -164,6 +161,7 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
         Button declined = (Button)dialog.findViewById(R.id.filterButtonDeclined);
         Button owner = (Button)dialog.findViewById(R.id.filterButtonOwner);
         Button showAll = (Button)dialog.findViewById(R.id.filterButtonAll);
+        Button past = (Button)dialog.findViewById(R.id.filterButtonPast);
 
         invited.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,6 +190,15 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
             dialog.dismiss();
         }
     });
+        past.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EventsListAdapter.filter = "LEFT";
+                Log.d("Filter: ", EventsListAdapter.filter);
+                onQueryTextChange("LEFT");
+                dialog.dismiss();
+            }
+        });
         owner.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -211,5 +218,8 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
             }
         });
     }
+    public void onEventSelect(Context event)
+    {
 
+    }
 }

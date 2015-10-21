@@ -1,6 +1,7 @@
 package com.plan_it.mobile.plan_it;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
@@ -8,10 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.view.View.OnClickListener;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +23,11 @@ import java.util.List;
  */
 public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.EventsViewHolder> {
     public static String filter = "NONE";
+    public static View view;
     private List<Event>mEvents;
-    public static class EventsViewHolder extends RecyclerView.ViewHolder{
+    private Context context;
+    private OnClickListener mOnClickListener;
+    public class EventsViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
         TextView name;
         TextView owner;
@@ -34,7 +39,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
         ImageView addEvent;
 
 
-       EventsViewHolder(View itemView) {
+       public EventsViewHolder(final View itemView) {
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.events_list_cv);
             name = (TextView)itemView.findViewById(R.id.event_list_name);
@@ -45,7 +50,18 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
             button1 = (ImageView)itemView.findViewById(R.id.event_list_button_left);
             button2 = (ImageView)itemView.findViewById(R.id.event_list_button_right);
             addEvent = (ImageView)itemView.findViewById(R.id.event_list_add_button);
+            view = itemView;
 
+
+
+           view.setOnClickListener(new View.OnClickListener() {
+               @Override public void onClick(View v) {
+                   Intent intent = new Intent(context, ViewEventActvity.class);
+                   context.startActivity(intent);
+                   Toast.makeText(context, name.getText() + " " + description.getText(),
+                           Toast.LENGTH_LONG).show();
+               }
+           });
         }
         public void bind(Event event) {
             name.setText(event.name);
@@ -61,6 +77,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
 
     EventsListAdapter(Context context, List<Event> events)
     {
+        this.context = context;
         mEvents = new ArrayList<>(events);
     }
     @Override
@@ -87,22 +104,28 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
         if(mEvents.get(i).isAttending == IsAttending.INVITED){
             eventsViewHolder.button1.setImageResource(R.drawable.ic_thumb_up_green_24dp);
             eventsViewHolder.button2.setImageResource(R.drawable.ic_thumb_down_red_24dp);
-            eventsViewHolder.cv.setCardBackgroundColor(Color.argb(125, 249, 255, 145));
+            eventsViewHolder.cv.setCardBackgroundColor(Color.argb(125, 250, 255, 85));
         }
         else if(mEvents.get(i).isAttending == IsAttending.ATTENDING)
         {
-            eventsViewHolder.button2.setImageResource(R.drawable.ic_delete_grey_24dp);
+            eventsViewHolder.button1.setImageResource(R.drawable.ic_thumb_down_red_24dp);
+            eventsViewHolder.button2.setImageResource(R.drawable.ic_photo_library_blue_24dp);
             eventsViewHolder.cv.setCardBackgroundColor(Color.argb(125, 155, 255, 118));
         }
         else if(mEvents.get(i).isAttending == IsAttending.LEFT)
         {
-            eventsViewHolder.cv.setCardBackgroundColor(Color.argb(125, 255, 165, 171));
+            eventsViewHolder.button1.setImageResource(R.drawable.ic_photo_library_blue_24dp);
+            eventsViewHolder.button2.setImageResource(R.drawable.ic_delete_grey_24dp);
+            eventsViewHolder.cv.setCardBackgroundColor(Color.argb(125, 255, 191, 92));
         }
         else if(mEvents.get(i).isAttending == IsAttending.DECLINED)
         {
+            eventsViewHolder.button1.setImageResource(R.drawable.ic_thumb_up_green_24dp);
+            eventsViewHolder.button2.setImageResource(R.drawable.ic_delete_grey_24dp);
             eventsViewHolder.cv.setCardBackgroundColor(Color.argb(125, 255, 165, 171));
         }
         else {
+            eventsViewHolder.button1.setImageResource(R.drawable.ic_delete_grey_24dp);
             eventsViewHolder.button2.setImageResource(R.drawable.ic_edit_blue_24dp);
             eventsViewHolder.cv.setCardBackgroundColor(Color.argb(125, 255, 254, 199));
         }
