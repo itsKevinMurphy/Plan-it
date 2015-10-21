@@ -15,7 +15,18 @@
     <br />
 
     <h3>When <small>does the event</small></h3>
-    <h4 style="float:left;">start</h4><h4 style="float:right;">end</h4>
+    <span style="float:left;">
+        <h4>start</h4>
+        <input style="width:250px;" class="form-control" type="date" ng-model="" required />
+    </span>
+    <span style="float:right;">
+        <h4>end</h4>
+        <input style="width:250px;" class="form-control" type="date" ng-model="" required />
+    </span>
+    <br />
+
+    
+    <!-- <h4 style="float:left;">start</h4><h4 style="float:right;">end</h4>
     <div class="form-group">
         <div class="input-group date" id="datetimepicker1">
             <input type='text' class="form-control" style="float:left;" />
@@ -28,19 +39,20 @@
             </span>
         </div>
     </div>
-    <br />
-
-    <div class="col-md-offset-5">
-    <input class="btn btn-default btn-lg" type="reset" ng-click="reset()" value="Clear" />
-    <input class="btn btn-primary btn-lg" type="submit" ng-click="" value="Create" />
+    <br /> -->
+    <br /><br /><br /><br />
+    
+    <div class="col-md-offset-4">
+        <input class="btn btn-default btn-lg" type="reset" ng-click="reset()" value="Clear" />
+        <input class="btn btn-primary btn-lg" type="submit" ng-click="" value="Create" />
     </div>
     
     </form>
 </div>
 
-<!-- install bootstrap datepicker first? -->
-<script type="text/javascript">
+<!-- IF USING BOOTSTRAP DATEPICKER -->
+<!-- <script type="text/javascript">
     $(function () {
         $('#datetimepicker1').datetimepicker();
     });
-</script>
+</script> -->

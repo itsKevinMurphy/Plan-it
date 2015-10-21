@@ -5,9 +5,13 @@
   "author": "Team Planiteers",
   "private": true,
   "dependencies": {
+    "angular": "^1.3.12",
+    "bootstrap": "^3.3.5",
+    "bootstrap-datetimepicker": "0.0.7",
     "express": "3.4.x",
-    "socket.io": "0.9.x",
-    "angular": "^1.3.12"
+    "jquery": "^2.1.4",
+    "moment": "^2.10.6",
+    "socket.io": "0.9.x"
   },
   "devDependencies": {
     "mongoose": "^3.8.24"
