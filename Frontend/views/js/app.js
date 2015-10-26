@@ -51,6 +51,14 @@ app.config(['$stateProvider',
                 'rightView': {
                     templateUrl: 'event.create.html'
                 }
+           }
+        })
+        .state('event.edit', {
+            url: '',
+            views: {
+                'rightView': {
+                    templateUrl: 'event.edit.html'
+                }
             }
         })
         .state('contact', {

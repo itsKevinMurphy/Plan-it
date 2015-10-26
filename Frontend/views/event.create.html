@@ -1,53 +1,48 @@
 
 <div class="row">
-    <form class="form-group col-md-offset-1">
+<form class="form-group col-md-offset-1" id="createEvent">
 
-    <h3>What <small>shall we call the event?</small></h3>
-    <input class="form-control" type="text" ng-model="" pattern="^[A-Z][a-z0-9_-]{2,19}$" required />
-    <br />
+    <h4>What <small>shall we call the event?</small></h4>
+    <input class="form-control" type="text" ng-model="" placeholder="Title" pattern="^[A-Z][a-z0-9_-]{2,19}$" required>
 
-    <h3>Why <small>are we having an event?</small></h3>
-    <input class="form-control" type="text" ng-model="" pattern="^[A-Z][a-z0-9_-]{2,19}$" required />
-    <br />
+    <h4>Where <small>is the event taking place?</small></h4>
+    <input class="form-control" type="text" ng-model="" placeholder="Location" pattern="^[A-Z][a-z0-9_-]{2,19}$" required>
 
-    <h3>Where <small>is the event taking place?</small></h3>
-    <input class="form-control" type="text" ng-model="" pattern="^[A-Z][a-z0-9_-]{2,19}$" required />
-    <br />
-
-    <h3>When <small>does the event</small></h3>
-    <span style="float:left;">
-        <h4>start</h4>
-        <input style="width:250px;" class="form-control" type="date" ng-model="" required />
+    <span class="start">
+        <h4>When <small>is the event</small></h4>
+        <input class="form-control" type="date" ng-model="" required>
     </span>
-    <span style="float:right;">
-        <h4>end</h4>
-        <input style="width:250px;" class="form-control" type="date" ng-model="" required />
+    <span class="end">
+        <h4><small>until</small></h4>
+        <input class="form-control" type="date" ng-model="" required>
     </span>
-    <br />
 
-    
-    <!-- <h4 style="float:left;">start</h4><h4 style="float:right;">end</h4>
-    <div class="form-group">
-        <div class="input-group date" id="datetimepicker1">
-            <input type='text' class="form-control" style="float:left;" />
-            <span class="input-group-addon">
-                <span class="glyphicon glyphicon-calendar"></span>
-            </span>
-            <input type='text' class="form-control" style="float:right;" />
-            <span class="input-group-addon">
-                <span class="glyphicon glyphicon-calendar"></span>
-            </span>
-        </div>
+    <h4>Why <small>are we having an event?</small></h4>
+    <textarea class="form-control" rows="3" ng-model"" form="createEvent">Description</textarea>
+
+    <h4>Invite <small>people</small></h4>
+    <!-- <div class="invitee"> -->
+    <ul class="invitee">
+        <li><span class="input-group-addon"><input type="checkbox"> Amina Abbasi</span></li>
+        <li><span class="input-group-addon"><input type="checkbox"> Clark Kent</span></li>
+        <li><span class="input-group-addon"><input type="checkbox"> Kamran Syed</span></li>
+        <li><span class="input-group-addon"><input type="checkbox"> Kevin Murphy</span></li>
+        <li><span class="input-group-addon"><input type="checkbox"> Kristian Castaneda</span></li>
+        <li><span class="input-group-addon"><input type="checkbox"> Luke Skywalker</span></li>
+        <li><span class="input-group-addon"><input type="checkbox"> Luke Farnell</span></li>
+        <li><span class="input-group-addon"><input type="checkbox"> Mohammed Sumon</span></li>
+        <li><span class="input-group-addon"><input type="checkbox"> Patrick Star</span></li>
+    </ul>
+    <!-- </div> -->
+
+    <br>
+
+    <div class="col-md-offset-8">
+        <input class="btn btn-default btn-md" type="reset" ng-click="reset()" value="Clear">
+        <input class="btn btn-primary btn-md" type="submit" ng-click="" value="Create">
     </div>
-    <br /> -->
-    <br /><br /><br /><br />
-    
-    <div class="col-md-offset-4">
-        <input class="btn btn-default btn-lg" type="reset" ng-click="reset()" value="Clear" />
-        <input class="btn btn-primary btn-lg" type="submit" ng-click="" value="Create" />
-    </div>
-    
-    </form>
+
+</form>
 </div>
 
 <!-- IF USING BOOTSTRAP DATEPICKER -->
