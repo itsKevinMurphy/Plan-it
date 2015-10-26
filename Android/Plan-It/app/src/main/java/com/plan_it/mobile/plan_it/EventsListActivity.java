@@ -145,6 +145,11 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
         {
             navCreateNewEvent(view);
         }
+        if(id == R.id.action_item_list)
+        {
+            Intent intent = new Intent(this, ItemListActivity.class);
+            startActivity(intent);
+        }
         return super.onOptionsItemSelected(item);
     }
 
