@@ -2,20 +2,35 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
+var increment = require('mongoose-auto-increment');
+
+var database = require('./database');
+//import config file
+var config = require('./config');
 
 //import all controllers
 var eventCtrl = require('./controllers/event');
-
-//import all models
-var eventModel = require('./models/event');
-
+var userCtrl = require('./controllers/user');
 
 var app = express();
-app.use(bodyParser.urlencoded({ extended: false }));
 
-app.post("/events", eventCtrl.postEvent);
-app.get("/events/:id", eventCtrl.createEvent);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
+app.disable('etag');
 
-app.listen(80, function(){
+
+database.createConnection();
+
+app.post("/events", eventCtrl.createEvent);
+app.get("/events/:id", eventCtrl.getEventById);
+app.get("/events", eventCtrl.getAllEvents);
+app.post("/user", userCtrl.createUser);
+app.post('/events/:id/list', eventCtrl.createListItem);
+app.get('/events/:id/list', eventCtrl.getListItems);
+
+
+app.listen(80, function() {
   console.log("Server is running on port 80");
 });
