@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html ng-app="planItApp">
+<head>
+    <title>Plan-It</title>
+        <link rel="stylesheet" href="style.css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+        <!-- <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css"> -->
+
+        <script src="socket.io/socket.io.js"></script>
+        <script src="js/angular.min.js"></script>
+        <script src="js/angular-route.min.js"></script>
+        <!-- <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script> -->
+        <script src="js/angular-ui-router.js"></script>
+        <script src="js/app.js"></script>
+
+        <!-- MOMENT.JS BOOSTRAP DATEPICKER DOESN'T WORK -->
+<!--         <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+        <script src="/node_modules/moment/moment.js"></script>
+        <script src="/node_modules/bootstrap/js/transition.js"></script>
+        <script src="/node_modules/bootstrap/js/collapse.js"></script>
+        <script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="/node_modules/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"></script> -->
+
+</head>
+
+<body>
+
+<div class="row">
+
+    <div class="col-md-2 user">
+        <a href="/"><h1>Plan-It <small> v1.0</small></h1></a>
+        <hr style="height:1px; background-color:#666; margin-bottom:15px; margin-top:5px;">
+        <h2><span class="glyphicon glyphicon-picture img-circle"></span></h2>
+        <p class="lead">Captain Planet</p>
+
+        <button ui-sref="event" class="menu glyphicon glyphicon-list-alt"> Events</button>
+        <button ui-sref="contact" class="menu glyphicon glyphicon-user"> Contacts</button>
+        <button ui-sref="setting" class="menu glyphicon glyphicon-cog"> Account</button>
+        <button ui-sref="index" class="menu glyphicon glyphicon-off"> Logout</button>
+
+    </div>
+
+    <div class="col-md-9 general">
+        <div ui-view="generalView">
+            <div class="row hello">
+            <span style="color:#2B2D32; font-size:4em;" class="glyphicon glyphicon-globe"></span>
+            <span style="color:#4B4342; font-size: 4em;">l</span>
+            <span style="color:#706460; font-size: 4em;">o</span>
+            <span style="color:#B1A08F; font-size: 4em;">g</span>
+            <span style="color:#C8B1AB; font-size: 4em;">i</span>
+            <span style="color:#99A7A2; font-size: 4em;">n</span>
+            </div>
+            <div class="row col-md-offset-4 login">
+            <form class="form-group" action="/login" method="post">
+                <input type="text" placeholder="Email or Username" class="form-control">
+                <input type="password" placeholder="Password" class="form-control">
+                <!-- hardcoded to go to event view on button-click -->
+                <button type="submit" ui-sref="event" class="btn btn-lg btn-default">
+                    <span class="glyphicon glyphicon-ok"></span>
+                </button>
+          </form>
+          <a ui-sref="signup">No account yet? Sign up here.</a>
+          </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
