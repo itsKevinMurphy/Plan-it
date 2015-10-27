@@ -14,7 +14,7 @@ var userSchema = new Schema(
     friendlyName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     hashPassword: { type: String, required: true},
-    friendList: [{ userID: Number, friendlyName: String, isFavorite: {type: Boolean, default: true } }],
+    friendList: [{_id: false, userID: {type: Number, required: true}, isFavorite: {type: Boolean, default: true } }],
     events: [{ eventID:Number }]
   }
 );
