@@ -59,5 +59,50 @@ user.updateUser = function(req, res, next)
 //Add a friend to an existing user
 user.addNewFriend = function(req, res, next)
 {
+  //Find and return the data for the selected user and find if the user exists
+  database.userModel.findOne({"UserID": req.params.id}, function(err, data){
+    if(!err){
+      if(!data)
+      {
+        console.log("User was not found.")
+        res.status(409).send("User not found.");
+      }
+      else {
+        //If the User exists find if the friend has already been added to the friends list
+        database.userModel.findOne({"friendList.userID": req.body.userID}, function(err, friend){
+          if(friend)
+          {
+            res.status(409).send("User is already in friends list.");
+            console.log("User is already a friend.");
+          }
+          else {
+              //If the friend is not already on the friends list then
+              //Create a new friend list item
+              var item = {userID: req.body.userID};
 
+              //Add the item to the friends list and then save it to the user
+              data.friendList.push(item);
+              data.save(function(err) {
+                if (err)
+                {
+                  console.log(err);
+                  res.sendStatus(500);
+                }
+                else{
+                  console.log('Friend added.')
+                  res.sendStatus(201);
+                }
+              });
+          }
+        }
+      );
+
+      }
+    }
+    else{
+          res.sendStatus(500);
+        }
+
+  }
+);
 }

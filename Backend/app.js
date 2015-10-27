@@ -29,6 +29,7 @@ app.get("/events", eventCtrl.getAllEvents);
 app.post("/user", userCtrl.createUser);
 app.post('/events/:id/list', eventCtrl.createListItem);
 app.get('/events/:id/list', eventCtrl.getListItems);
+app.post("/user/:id/friend", userCtrl.addNewFriend);
 
 
 app.listen(80, function() {
