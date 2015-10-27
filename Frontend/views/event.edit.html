@@ -1,0 +1,53 @@
+
+<div class="row">
+<form class="form-group col-md-offset-1" id="createEvent">
+
+    <h4>What <small>shall we call the event?</small></h4>
+    <input class="form-control" type="text" ng-model="" placeholder="Camping Trip" pattern="^[A-Z][a-z0-9_-]{2,19}$" required />
+
+    <h4>Where <small>is the event taking place?</small></h4>
+    <input class="form-control" type="text" ng-model="" placeholder="Tobemory" pattern="^[A-Z][a-z0-9_-]{2,19}$" required />
+
+    <span class="start">
+        <h4>When <small>is the event</small></h4>
+        <input class="form-control" type="date" ng-model="" required />
+    </span>
+    <span class="end">
+        <h4><small>until</small></h4>
+        <input class="form-control" type="date" ng-model="" required />
+    </span>
+
+    <h4>Why <small>are we having an event?</small></h4>
+    <textarea class="form-control" rows="3" ng-model"" form="createEvent">I would love to meet up and go to Tobemory! It is one of my favourite places to camp because it is incredibly beautiful with crystal clear water.</textarea>
+    
+    <h4>Invite <small>people</small></h4>
+    <!-- <div class="invitee"> -->
+    <ul class="invitee">
+        <li><span class="input-group-addon"><input type="checkbox" checked="checked"> Amina Abbasi</span></li>
+        <li><span class="input-group-addon"><input type="checkbox"> Clark Kent</span></li>
+        <li><span class="input-group-addon"><input type="checkbox" checked="checked"> Kamran Syed</span></li>
+        <li><span class="input-group-addon"><input type="checkbox" checked="checked"> Kevin Murphy</span></li>
+        <li><span class="input-group-addon"><input type="checkbox" checked="checked"> Kristian Castaneda</span></li>
+        <li><span class="input-group-addon"><input type="checkbox"> Luke Skywalker</span></li>
+        <li><span class="input-group-addon"><input type="checkbox" checked="checked"> Luke Farnell</span></li>
+        <li><span class="input-group-addon"><input type="checkbox" checked="checked"> Mohammed Sumon</span></li>
+        <li><span class="input-group-addon"><input type="checkbox"> Patrick Star</span></li>
+    </ul>
+    <!-- </div> -->
+
+    <br>
+
+    <div class="col-md-offset-8">
+        <input class="btn btn-default btn-md" type="reset" ng-click="reset()" value="Clear" />
+        <input class="btn btn-primary btn-md" type="submit" ng-click="" value="Create" />
+    </div>
+
+</form>
+</div>
+
+<!-- IF USING BOOTSTRAP DATEPICKER -->
+<!-- <script type="text/javascript">
+    $(function () {
+        $('#datetimepicker1').datetimepicker();
+    });
+</script> -->
