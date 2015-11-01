@@ -1,5 +1,5 @@
 // var app = angular.module('planItApp', ['ngRoute']);
-var app = angular.module('planItApp', ['ui.router']);
+var app = angular.module('planItApp', ['ui.router', 'services', 'eventController']);
 
 //to route views on single page
 app.config(['$stateProvider',
@@ -63,7 +63,7 @@ app.config(['$stateProvider',
             url: '',
             views: {
                 'rightView': {
-                    templateUrl: 'event.create.html'
+                    templateUrl: 'event.create.html', controller: 'CreateEventController'
                 }
            }
         })
@@ -83,7 +83,7 @@ app.config(['$stateProvider',
                 }
             }
         })
-    
+
     }]);
 
 //to extract socket object to be used in controller
