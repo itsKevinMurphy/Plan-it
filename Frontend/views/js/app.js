@@ -5,6 +5,20 @@ var app = angular.module('planItApp', ['ui.router']);
 app.config(['$stateProvider',
   function ($stateProvider) {
     $stateProvider
+        .state('/', {
+            url: '',
+            views: {
+                    templateUrl: 'index.html'
+            }
+        })
+        .state('signup', {
+            url: '/signup',
+            views: {
+                'generalView': {
+                    templateUrl: 'signup.html'
+                }
+            }
+        })
         .state('event', {
             url: '/event',
             views: {
