@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.disable('etag');
 
-//Enable CORS
+//Enable CORS on server
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -38,6 +38,6 @@ app.get('/events/:id/list', eventCtrl.getListItems);
 app.post("/user/:id/friend", userCtrl.addNewFriend);
 
 
-app.listen(3000, function() {
+app.listen(80, function() {
   console.log("Server is running on port 80");
 });
