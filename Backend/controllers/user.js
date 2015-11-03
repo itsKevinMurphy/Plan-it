@@ -106,3 +106,9 @@ user.addNewFriend = function(req, res, next)
   }
 );
 }
+
+//Retrieving User's Friend List
+user.getFriends = function(req, res, next)
+{
+
+};
