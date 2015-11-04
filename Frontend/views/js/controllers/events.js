@@ -1,5 +1,5 @@
 angular.module('eventController', [])
-.controller('CreateEventController', function ($scope, $location, ServiceForEvents){
+.controller('CreateEventController', function ($scope, ServiceForEvents){
   //Create a scope to determine if form has been submitted
   $scope.submitted = false;
 
@@ -20,4 +20,24 @@ else {
 }
 }
 
+})
+.controller('EventListController', function ($scope, ServiceForEvents){
+  ServiceForEvents.getAllEvents().success(function (data)
+  {
+      $scope.eventList = data;
+      console.log(data);
+  }
+  );
+
+})
+.controller('EventDetailsController', function ($scope, $stateParams, ServiceForEvents){
+  $scope.id = $stateParams.eventID;
+
+
+  console.log($scope.id);
+  ServiceForEvents.getEventById($scope.id).success(function (data)
+  {
+    $scope.event = data;
+  }
+);
 });

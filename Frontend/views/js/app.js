@@ -23,15 +23,15 @@ app.config(['$stateProvider',
             url: '/event',
             views: {
                 'generalView': {
-                    templateUrl: 'event.html'
+                    templateUrl: 'event.html', controller: 'EventListController'
                 }
             }
         })
         .state('event.details', {
-            url: '',
+            url: '/eventinfo/:eventID',
             views: {
                 'rightView': {
-                    templateUrl: 'event.details.html'
+                    templateUrl: 'event.details2.html', controller:'EventDetailsController'
                 }
             }
         })
