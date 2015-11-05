@@ -102,13 +102,23 @@ user.addNewFriend = function(req, res, next)
     else{
           res.sendStatus(500);
         }
-
   }
 );
 }
 
 //Retrieving User's Friend List
-user.getFriends = function(req, res, next)
+user.getAllFriends = function(req, res, next)
 {
-
+  //console.log("hit");
+  database.userModel.find({"UserID": req.params.id}, function(err, events) {
+    if (err)
+      console.log(err);
+    else {
+      res.json(events[0].friendList);
+    }
+  });
 };
+
+user.searchFriend = function(req, res, next){
+
+}
