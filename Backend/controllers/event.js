@@ -88,3 +88,15 @@ event.getListItems = function(req, res, next) {
     }
   });
 }
+
+event.claimItem = function(req, res, next){
+  //console.log("req params: " + JSON.stringify(req.params, 4, null));
+  database.eventModel.update({"itemList.ListID" : req.params.item, "EventID" : req.params.id},
+  {$set : { "itemList.$.whoseBringing": 2}},
+  function(err, item){
+    if(err)
+      console.log(err);
+    else
+      res.sendStatus(201);
+    });
+}
