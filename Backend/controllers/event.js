@@ -100,3 +100,14 @@ event.claimItem = function(req, res, next){
       res.sendStatus(201);
     });
 }
+
+event.deleteItem = function(req, res, next){
+  database.eventModel.findOneAndUpdate({"itemList.ListID" : req.params.item, "EventID" : req.params.id},
+  {$pull: {"itemList": {"ListID" : req.params.item}}},
+  function(err, item){
+    if(err)
+      console.log(err);
+    else
+      res.sendStatus(201);
+  });
+}

@@ -36,6 +36,7 @@ app.post("/user", userCtrl.createUser);
 app.post('/events/:id/list', eventCtrl.createListItem);
 app.get('/events/:id/list', eventCtrl.getListItems);
 app.post('/events/:id/list/:item', eventCtrl.claimItem);
+app.delete('/events/:id/list/:item', eventCtrl.deleteItem);
 app.post("/user/:id/friend", userCtrl.addNewFriend);
 app.get("/user/:id/friend", userCtrl.getAllFriends);
 
