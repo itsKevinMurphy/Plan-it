@@ -108,6 +108,21 @@ event.deleteItem = function(req, res, next){
     if(err)
       console.log(err);
     else
-      res.sendStatus(201);
+      database.eventModel.calculateEst(req.params.id, function(result) {
+        item.totalEstCost = result[0].estCost;
+        item.totalActCost = result[0].actCost;
+        item.save(function(err) {
+          if (err)
+            console.log(err);
+          else
+            res.sendStatus(201);
+        });
+      });
+  });
+}
+
+event.updateItem = function(req, res, next){
+  database.eventModel.findOneAndUpdate({}, function(err, result){
+
   });
 }
