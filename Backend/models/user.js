@@ -2,7 +2,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 //Load Bcrypt
-var bcrypt = require("bcrypt");
+var bcrypt = require("bcrypt-nodejs");
 var SALT_WORK_FACTOR = 10;
 //Load Database Configuration file
 var database = require('../database');
@@ -11,10 +11,13 @@ var database = require('../database');
 var userSchema = new Schema(
   {
     UserID: Number,
-    friendlyName: { type: String, required: true },
+    friendlyName: { type: String, required: true, unique: true },
+    firstName: {type: String, required: false},
+    lastName: {type: String, required: false},
+    profilePic: {type: String, required: false},
     email: { type: String, required: true, unique: true },
     hashPassword: { type: String, required: true},
-    friendList: [{ userID: Number, friendlyName: String, isFavorite: {type: Boolean, default: true } }],
+    friendList: [{_id: false, userID: {type: Number, required: true}, isFavorite: {type: Boolean, default: true } }],
     events: [{ eventID:Number }]
   }
 );
@@ -28,7 +31,7 @@ userSchema.pre('save', function(next) {
 	bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
 		if(err) return next(err);
 
-		bcrypt.hash(user.hashPassword, salt, function(err, hash) {
+		bcrypt.hash(user.hashPassword, salt,null, function(err, hash) {
 			if(err) return next(err);
 			user.hashPassword = hash;
 			next();

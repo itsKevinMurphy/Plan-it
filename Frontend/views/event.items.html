@@ -1,43 +1,47 @@
-<div ng-controller="eventItemsController">
-    <br>
-    
+<div class="row" ng-controller="eventItemsController">
+
     <div style="text-align:right;">
-        <h2>Total: <small>$248.50</small></h2>
+        <h2>Total: <small>$249.75</small></h2>
     </div>
 
     <hr style="height:1px; background-color:#999;">
-    
-    <table class="list">
+
+    <table class="items">
     <tr>
         <th>Items</th>
         <th>Qty</th>
         <th>Expected Cost</th>
         <th>Actual Cost</th>
     </tr><tr>
-        <td><input type="checkbox" ng-model=""/> Tent</td>
-        <td><input type="text" value="2" ng-model=""/></td>
-        <td><input type="text" value="$110.00" ng-model=""/></td>
-        <td><input type="text" value="86.00" ng-model=""/></td>
+        <!-- <td><span class="input-group-addon"><input type="checkbox"> Tent</span></td> -->
+        <td>Tent</td>
+        <td><input type="text" value="2"></td>
+        <td><input type="text" value="$110.00"></td>
+        <td><input type="text" value="86.00"></td>
     </tr><tr>
-        <td><input type="checkbox" ng-model=""/> Firewood</td>
-        <td><input type="text" value="20" ng-model=""/></td>
-        <td><input type="text" value="$50.00" ng-model=""/></td>
-        <td><input type="text" value="$31.00" ng-model=""/></td>
+        <!-- <td><span class="input-group-addon"><input type="checkbox"> Firewood</span></td> -->
+        <td>Firewood</td>
+        <td><input type="text" value="20"></td>
+        <td><input type="text" value="$50.00"></td>
+        <td><input type="text" value="$31.00"></td>
     </tr><tr>
-        <td><input type="checkbox" ng-model=""/> Hotdogs</td>
-        <td><input type="text" value="5 packs" ng-model=""/></td>
-        <td><input type="text" value="$40.00" ng-model=""/></td>
-        <td><input type="text" value="$28.00" ng-model=""/></td>
+        <!-- <td><span class="input-group-addon"><input type="checkbox"> Hotdogs</span></td> -->
+        <td>Hotdogs</td>
+        <td><input type="text" value="5 packs"></td>
+        <td><input type="text" value="$40.00"></td>
+        <td><input type="text" value="$28.00"></td>
     </tr><tr>
-        <td><input type="checkbox" ng-model=""/> Beer</td>
-        <td><input type="text" value="5 cases" ng-model=""/></td>
-        <td><input type="text" value="$110.00" ng-model=""/></td>
-        <td><input type="text" value="$104.75" ng-model=""/></td>
+        <!-- <td><span class="input-group-addon"><input type="checkbox"> Beer</span></td> -->
+        <td>Beer</td>
+        <td><input type="text" value="5 cases"></td>
+        <td><input type="text" value="$110.00"></td>
+        <td><input type="text" value="$104.75"></td>
     </tr><tr>
-        <td><input type="checkbox" ng-model=""/> (Add Item)</td>
-        <td><input type="text" value=" " ng-model=""/></td>
-        <td><input type="text" value=" " ng-model=""/></td>
-        <td><input type="text" value=" " ng-model=""/></td>
+        <!-- <td><span class="input-group-addon"><input type="checkbox"> (Add Item)</span></td> -->
+        <td><input type="text" placeholder="Add Item"></td>
+        <td><input type="text" placeholder=""></td>
+        <td><input type="text" placeholder=""></td>
+        <td><input type="text" placeholder=""></td>
     </tr>
     </table>
 

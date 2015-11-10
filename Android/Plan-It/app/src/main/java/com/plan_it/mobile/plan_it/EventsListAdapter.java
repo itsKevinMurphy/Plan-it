@@ -37,7 +37,6 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
         ImageView button2;
         ImageView addEvent;
 
-
        public EventsViewHolder(final View itemView) {
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.events_list_cv);

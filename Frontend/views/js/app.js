@@ -1,23 +1,37 @@
 // var app = angular.module('planItApp', ['ngRoute']);
-var app = angular.module('planItApp', ['ui.router']);
+var app = angular.module('planItApp', ['ui.router', 'services', 'eventController']);
 
 //to route views on single page
 app.config(['$stateProvider',
   function ($stateProvider) {
     $stateProvider
+        .state('/', {
+            url: '',
+            views: {
+                    templateUrl: 'index.html'
+            }
+        })
+        .state('signup', {
+            url: '/signup',
+            views: {
+                'generalView': {
+                    templateUrl: 'signup.html'
+                }
+            }
+        })
         .state('event', {
             url: '/event',
             views: {
                 'generalView': {
-                    templateUrl: 'event.html'
+                    templateUrl: 'event.html', controller: 'EventListController'
                 }
             }
         })
         .state('event.details', {
-            url: '',
+            url: '/eventinfo/:eventID',
             views: {
                 'rightView': {
-                    templateUrl: 'event.details.html'
+                    templateUrl: 'event.details.html', controller:'EventDetailsController'
                 }
             }
         })
@@ -49,19 +63,59 @@ app.config(['$stateProvider',
             url: '',
             views: {
                 'rightView': {
-                    templateUrl: 'event.create.html'
+                    templateUrl: 'event.create.html', controller: 'CreateEventController'
+                }
+           }
+        })
+        .state('event.edit', {
+            url: '',
+            views: {
+                'rightView': {
+                    templateUrl: 'event.edit.html'
                 }
             }
         })
-        .state('contact', {
-            url: '/contact',
+        .state('friends', {
+            url: '/friends',
             views: {
                 'generalView': {
-                    templateUrl: 'contact.html'
+                    templateUrl: 'friends.html'
                 }
             }
         })
-    
+        .state('friends.profile', {
+            url: '',
+            views: {
+                'rightView': {
+                    templateUrl: 'friends.profile.html'
+                }
+            }
+        })
+        .state('users', {
+            url: '/users',
+            views: {
+                'generalView': {
+                    templateUrl: 'users.html'
+                }
+            }
+        })
+        .state('users.profile', {
+            url: '',
+            views: {
+                'rightView': {
+                    templateUrl: 'users.profile.html'
+                }
+            }
+        })
+        .state('account', {
+            url: '/account',
+            views: {
+                'generalView': {
+                    templateUrl: 'account.html'
+                }
+            }
+        })
+
     }]);
 
 //to extract socket object to be used in controller
