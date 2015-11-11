@@ -27,7 +27,7 @@
         android:layout_height="match_parent"
         android:text="@string/item"
         android:id="@+id/item_list_label_item"
-        android:textSize="15sp"/>
+        android:textSize="13sp"/>
     <TextView
         android:background="@drawable/back"
         android:gravity="center"
@@ -37,7 +37,7 @@
         android:layout_height="match_parent"
         android:text="@string/supplying"
         android:id="@+id/item_list_label_supplying"
-        android:textSize="15sp"/>
+        android:textSize="13sp"/>
     <TextView
         android:background="@drawable/back"
         android:gravity="center"
@@ -47,7 +47,7 @@
         android:layout_height="match_parent"
         android:text="@string/estimated_cost"
         android:id="@+id/item_list_label_estimated_cost"
-        android:textSize="15sp"/>
+        android:textSize="13sp"/>
     <TextView
         android:background="@drawable/back"
         android:gravity="center"
@@ -57,7 +57,7 @@
         android:layout_height="match_parent"
         android:text="@string/actual_cost"
         android:id="@+id/item_list_label_estimated_actual_cost"
-        android:textSize="15sp"/>
+        android:textSize="13sp"/>
 </LinearLayout>
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
@@ -86,7 +86,7 @@
             android:text="@string/add_item"
             android:textStyle="bold"
             android:id="@+id/item_list_add_item_button"
-            android:textSize="20sp"/>
+            android:textSize="18sp"/>
         <TextView
             android:background="@drawable/back"
             android:padding="5dp"
@@ -95,7 +95,7 @@
             android:layout_height="50dp"
             android:text="@string/total"
             android:id="@+id/item_list_text_total"
-            android:textSize="15sp"/>
+            android:textSize="13sp"/>
         <TextView
             android:background="@drawable/back"
             android:padding="5dp"
@@ -104,7 +104,7 @@
             android:layout_height="50dp"
             android:text="$120.00"
             android:id="@+id/item_list_text_estimated_cost"
-            android:textSize="15sp"/>
+            android:textSize="13sp"/>
         <TextView
             android:background="@drawable/back"
             android:padding="5dp"
@@ -113,7 +113,7 @@
             android:layout_height="50dp"
             android:text="$100.00"
             android:id="@+id/item_list_text_estimated_actual_cost"
-            android:textSize="15sp"/>
+            android:textSize="13sp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -126,7 +126,7 @@
         <LinearLayout
             android:background="@drawable/back"
             android:id="@+id/layout_item_list_split"
-            android:layout_width="211dp"
+            android:layout_width="200dp"
             android:layout_height="50dp"
             android:orientation="horizontal"
             android:layout_alignParentBottom="true">
