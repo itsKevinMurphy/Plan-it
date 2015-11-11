@@ -16,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -215,26 +214,23 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
                 // Pull out the first event on the public timeline
                 JSONObject firstEvent = null;
                 try {
+                    mEvents = new ArrayList<>();
                     for(int i = 0; i < eventsList.length(); i++){
                         firstEvent = eventsList.getJSONObject(i);
                         String eventImge = firstEvent.getString("picture");
                         Bitmap eventimg = base64ToBitmap(eventImge);
-                        Toast.makeText(getApplicationContext(), Integer.toString(i), Toast.LENGTH_LONG).show();
                         mEvents.add(new Event(firstEvent.getString("what"), "Kevin Murphy", firstEvent.getString("why"),firstEvent.getString("where"), eventimg, firstEvent.getString("when"),firstEvent.getString("endDate"),"2:00 PM","3:00 PM", IsAttending.INVITED, true, true));
-                        adapter.animateTo(mEvents);
                         Log.d("RestD", firstEvent.toString());
                     }
-
+                    adapter = new EventsListAdapter(getApplicationContext(), mEvents);
+                    setContentView(R.layout.activity_events_list);
+                    events_recycler_view = (RecyclerView)findViewById(R.id.events_list_recycler_view);
+                    LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
+                    events_recycler_view.setLayoutManager(llm);
+                    events_recycler_view.setAdapter(adapter);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                adapter = new EventsListAdapter(getApplicationContext(), mEvents);
-                setContentView(R.layout.activity_events_list);
-                events_recycler_view = (RecyclerView)findViewById(R.id.events_list_recycler_view);
-                LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
-                events_recycler_view.setLayoutManager(llm);
-                events_recycler_view.setAdapter(adapter);
-                mEvents = new ArrayList<>();
             }
         });
     }
