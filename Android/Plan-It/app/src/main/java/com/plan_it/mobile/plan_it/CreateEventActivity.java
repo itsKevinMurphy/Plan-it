@@ -25,11 +25,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -38,13 +36,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-
-import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class CreateEventActivity extends AppCompatActivity {
 
@@ -60,6 +54,8 @@ public class CreateEventActivity extends AppCompatActivity {
     String e_toTime;
     EditText create_fromdate;
     EditText create_todate;
+    EditText create_fromtime;
+    EditText create_totime;
     Calendar myCalendar = Calendar.getInstance();
 
     ImageView viewImage;
@@ -79,6 +75,9 @@ public class CreateEventActivity extends AppCompatActivity {
         final EditText event_location = (EditText) findViewById((R.id.event_location));
         create_fromdate = (EditText) findViewById(R.id.event_createfromdate);
         create_todate = (EditText) findViewById(R.id.event_createtodate);
+        create_fromtime=(EditText) findViewById(R.id.event_createfromtime);
+        create_totime=(EditText) findViewById(R.id.event_createfromtime);
+
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,8 +87,12 @@ public class CreateEventActivity extends AppCompatActivity {
                 e_loc = event_location.getText().toString();
                 e_fromdate = create_fromdate.getText().toString();
                 e_todate = create_todate.getText().toString();
+                e_fromTime = create_fromtime.getText().toString();
+                e_toTime = create_totime.getText().toString();
 
-                if (e_name.equals("") || e_reason.equals("") || e_loc.equals("") || e_fromdate.equals("") || e_todate.equals("")) {
+                if (e_name.equals("") || e_reason.equals("") || e_loc.equals("") || e_fromdate.equals("")
+                        || e_todate.equals("")|| e_toTime.equals("")|| e_fromTime.equals("")) {
+                    
                     Toast toast = Toast.makeText(getApplicationContext(), "Please fill in all fields!", Toast.LENGTH_LONG);
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
@@ -241,8 +244,6 @@ public class CreateEventActivity extends AppCompatActivity {
                 imageByte = bytes.toByteArray();
                 base64Image = Base64.encodeToString(imageByte, Base64.NO_WRAP);
                 viewImage.setImageBitmap(bm);
-
-
             }
         }
     }
