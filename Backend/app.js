@@ -37,6 +37,7 @@ app.post('/events/:id/list', eventCtrl.createListItem);
 app.get('/events/:id/list', eventCtrl.getListItems);
 app.post('/events/:id/list/:item', eventCtrl.claimItem);
 app.delete('/events/:id/list/:item', eventCtrl.deleteItem);
+app.put('/events/:id/list/:item', eventCtrl.updateItem);
 app.post("/user/:id/friend", userCtrl.addNewFriend);
 app.get("/user/:id/friend", userCtrl.getAllFriends);
 app.get("/search/:id/user", userCtrl.findUserByID);
