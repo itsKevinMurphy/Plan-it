@@ -198,7 +198,7 @@ public class CreateEventActivity extends AppCompatActivity {
             if (requestCode == 0) {
                 Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                thumbnail.compress(Bitmap.CompressFormat.JPEG, 10, bytes);
                 File destination = new File(Environment.getExternalStorageDirectory(),
                         System.currentTimeMillis() + ".jpg");
                 FileOutputStream fo;
@@ -237,7 +237,7 @@ public class CreateEventActivity extends AppCompatActivity {
                 bm = BitmapFactory.decodeFile(selectedImagePath, options);
 
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                bm.compress(Bitmap.CompressFormat.JPEG, 90,bytes);
+                bm.compress(Bitmap.CompressFormat.JPEG, 10,bytes);
                 imageByte = bytes.toByteArray();
                 base64Image = Base64.encodeToString(imageByte, Base64.NO_WRAP);
                 viewImage.setImageBitmap(bm);
