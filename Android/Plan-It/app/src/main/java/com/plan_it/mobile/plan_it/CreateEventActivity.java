@@ -92,7 +92,7 @@ public class CreateEventActivity extends AppCompatActivity {
 
                 if (e_name.equals("") || e_reason.equals("") || e_loc.equals("") || e_fromdate.equals("")
                         || e_todate.equals("")|| e_toTime.equals("")|| e_fromTime.equals("")) {
-                    
+
                     Toast toast = Toast.makeText(getApplicationContext(), "Please fill in all fields!", Toast.LENGTH_LONG);
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
