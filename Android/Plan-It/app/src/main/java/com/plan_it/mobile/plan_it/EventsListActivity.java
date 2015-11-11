@@ -1,16 +1,15 @@
 package com.plan_it.mobile.plan_it;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
@@ -39,24 +38,12 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initializeData();
-        adapter = new EventsListAdapter(this, mEvents);
-        setContentView(R.layout.activity_events_list);
-        events_recycler_view = (RecyclerView)findViewById(R.id.events_list_recycler_view);
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        events_recycler_view.setLayoutManager(llm);
-        events_recycler_view.setAdapter(adapter);
-        mEvents = new ArrayList<>();
-    }
-    public void initializeData(){
-        mEvents = new ArrayList<>();
         try {
             getEventsList();
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -224,12 +211,6 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
     public void getEventsList() throws JSONException {
         RestClient.get("events", null, new JsonHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                // If the response is JSONObject instead of expected JSONArray
-                Toast.makeText(getApplicationContext(), "HIT 1", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray eventsList) {
                 // Pull out the first event on the public timeline
                 JSONObject firstEvent = null;
@@ -247,6 +228,13 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                adapter = new EventsListAdapter(getApplicationContext(), mEvents);
+                setContentView(R.layout.activity_events_list);
+                events_recycler_view = (RecyclerView)findViewById(R.id.events_list_recycler_view);
+                LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
+                events_recycler_view.setLayoutManager(llm);
+                events_recycler_view.setAdapter(adapter);
+                mEvents = new ArrayList<>();
             }
         });
     }
