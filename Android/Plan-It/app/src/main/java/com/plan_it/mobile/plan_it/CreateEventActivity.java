@@ -38,13 +38,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class CreateEventActivity extends AppCompatActivity {
 
     String base64Image;
     byte[] imageByte;
-
+    static Uri  picUri;
+    static File imageFile;
     String e_name;
     String e_reason;
     String e_loc;
@@ -64,9 +66,6 @@ public class CreateEventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
-
-        e_fromTime = "12:00 PM";
-        e_toTime = "5:00 PM";
 
         ImageButton submit = (ImageButton) findViewById(R.id.add_event);
         ImageButton clear = (ImageButton) findViewById(R.id.clear_event);
@@ -166,7 +165,6 @@ public class CreateEventActivity extends AppCompatActivity {
                 break;
         }
     }
-
     public void imageOptions(View c) {
         viewImage = (ImageView) findViewById(R.id.create_eventphoto);
         final CharSequence[] items = {"Take Photo", "Choose from Library", "Cancel"};
@@ -218,6 +216,7 @@ public class CreateEventActivity extends AppCompatActivity {
                 imageByte = bytes.toByteArray();
                 base64Image = Base64.encodeToString(imageByte, Base64.NO_WRAP);
                 viewImage.setImageBitmap(thumbnail);
+
             } else if (requestCode == 1) {
                 Uri selectedImageUri = data.getData();
                 String[] projection = {MediaStore.MediaColumns.DATA};
