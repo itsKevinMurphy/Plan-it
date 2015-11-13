@@ -1,6 +1,7 @@
 package com.plan_it.mobile.plan_it;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -39,6 +40,7 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
         super.onCreate(savedInstanceState);
         try {
             getEventsList();
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -213,17 +215,21 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
             public void onSuccess(int statusCode, Header[] headers, JSONArray eventsList) {
                 // Pull out the first event on the public timeline
                 JSONObject firstEvent = null;
-                try {
+                 try {
                     mEvents = new ArrayList<>();
                     for(int i = 0; i < eventsList.length(); i++){
                         firstEvent = eventsList.getJSONObject(i);
                         String eventImge = firstEvent.getString("picture");
                         Bitmap eventimg = base64ToBitmap(eventImge);
-                        mEvents.add(new Event(firstEvent.getString("what"), "Kevin Murphy", firstEvent.getString("why"),firstEvent.getString("where"), eventimg, firstEvent.getString("when"),firstEvent.getString("endDate"),"2:00 PM","3:00 PM", IsAttending.INVITED, true, true));
+
+                        Bitmap scaledImage = Bitmap.createScaledBitmap(eventimg, 140, 150, true);
+
+                        mEvents.add(new Event(firstEvent.getInt("EventID"), firstEvent.getString("what"), "Kevin Murphy", firstEvent.getString("why"), firstEvent.getString("where"), scaledImage, firstEvent.getString("when"), firstEvent.getString("endDate"), "2:00 PM", "3:00 PM", IsAttending.OWNER, true, true));
                         Log.d("RestD", firstEvent.toString());
                     }
-                    adapter = new EventsListAdapter(getApplicationContext(), mEvents);
                     setContentView(R.layout.activity_events_list);
+
+                    adapter = new EventsListAdapter( getApplicationContext(), mEvents);
                     events_recycler_view = (RecyclerView)findViewById(R.id.events_list_recycler_view);
                     LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
                     events_recycler_view.setLayoutManager(llm);
