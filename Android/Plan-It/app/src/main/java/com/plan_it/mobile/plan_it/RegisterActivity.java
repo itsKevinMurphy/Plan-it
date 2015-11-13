@@ -2,6 +2,7 @@ package com.plan_it.mobile.plan_it;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -11,8 +12,6 @@ import com.loopj.android.http.RequestParams;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import cz.msebera.android.httpclient.Header;
 
 
 public class RegisterActivity extends AppCompatActivity {
@@ -56,35 +55,28 @@ public class RegisterActivity extends AppCompatActivity {
             // When Email entered is Valid
             if (RegValidation.validate(emailReg)) {
                 if (passwordReg.equals(confPass)) {
-
                     // Instantiate Http Request Param Object
                     RequestParams params = new RequestParams();
                     params.put("firstName", fNameReg);
-                    params.put("lastName",lNameReg);
+                    params.put("lastName", lNameReg);
                     params.put("email", emailReg);
                     params.put("hashPassword", passwordReg);
-                    params.put("friendlyName",nameReg);
+                    params.put("friendlyName", nameReg);
 
                     RestClient.post("user", params, new JsonHttpResponseHandler() {
-                        // When the response returned by REST has Http response code '200'
-
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, String response) {
-                           try{
-                                    Toast.makeText(getApplicationContext(), "You are successfully registered!", Toast.LENGTH_LONG).show();
-
-                                // Else display error message
-                                else {
-                                    Toast.makeText(getApplicationContext(), obj.getString("Error, try again"), Toast.LENGTH_LONG).show();
-                                }
+                        public void onSuccess(String response) {
+                            JSONObject res;
+                            try {
+                                res = new JSONObject(response);
+                                Log.d("debug", res.getString("some_key")); // this is how you get a value out
+                                Toast.makeText(getApplicationContext(), "You are successfully registered!", Toast.LENGTH_LONG).show();
                             } catch (JSONException e) {
                                 // TODO Auto-generated catch block
-                                Toast.makeText(getApplicationContext(), "Error Occured [Server's JSON response might be invalid]!", Toast.LENGTH_LONG).show();
                                 e.printStackTrace();
                             }
+
                         }
                     });
-
                 } else {
                     //When passwords do not match
                     Toast.makeText(getApplicationContext(), "Passwords do not match", Toast.LENGTH_LONG).show();
