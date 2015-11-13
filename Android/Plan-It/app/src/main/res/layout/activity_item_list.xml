@@ -59,6 +59,7 @@
         android:id="@+id/item_list_label_estimated_actual_cost"
         android:textSize="13sp"/>
 </LinearLayout>
+    
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
