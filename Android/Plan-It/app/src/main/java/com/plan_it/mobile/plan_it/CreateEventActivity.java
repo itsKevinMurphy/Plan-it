@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -199,7 +202,9 @@ public class CreateEventActivity extends AppCompatActivity {
             if (requestCode == 0) {
                 Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                thumbnail.compress(Bitmap.CompressFormat.JPEG, 10, bytes);
+                //thumbnail.compress(Bitmap.CompressFormat.JPEG, 10, bytes);
+                Bitmap scaled = Bitmap.createScaledBitmap(thumbnail, 256, 256, true);
+                scaled.compress(Bitmap.CompressFormat.JPEG, 10, bytes);
                 File destination = new File(Environment.getExternalStorageDirectory(),
                         System.currentTimeMillis() + ".jpg");
                 FileOutputStream fo;
@@ -215,7 +220,7 @@ public class CreateEventActivity extends AppCompatActivity {
                 }
                 imageByte = bytes.toByteArray();
                 base64Image = Base64.encodeToString(imageByte, Base64.NO_WRAP);
-                viewImage.setImageBitmap(thumbnail);
+                viewImage.setImageBitmap(scaled);
 
             } else if (requestCode == 1) {
                 Uri selectedImageUri = data.getData();
@@ -236,13 +241,14 @@ public class CreateEventActivity extends AppCompatActivity {
                     scale *= 2;
                 options.inSampleSize = scale;
                 options.inJustDecodeBounds = false;*/
-                bm = BitmapFactory.decodeFile(selectedImagePath, options);
-
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                bm.compress(Bitmap.CompressFormat.JPEG, 10,bytes);
+                Bitmap d = new BitmapDrawable(getApplicationContext().getResources() , selectedImagePath).getBitmap();
+                Bitmap scaled = Bitmap.createScaledBitmap(d,140, 150, true);
+                scaled.compress(Bitmap.CompressFormat.JPEG, 10, bytes);
+
                 imageByte = bytes.toByteArray();
                 base64Image = Base64.encodeToString(imageByte, Base64.NO_WRAP);
-                viewImage.setImageBitmap(bm);
+                viewImage.setImageBitmap(scaled);
             }
         }
     }
