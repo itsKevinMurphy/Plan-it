@@ -1,5 +1,5 @@
 // var app = angular.module('planItApp', ['ngRoute']);
-var app = angular.module('planItApp', ['ui.router', 'services', 'eventController']);
+var app = angular.module('planItApp', ['ui.router', 'services', 'controller']);
 
 //to route views on single page
 app.config(['$stateProvider',
@@ -67,11 +67,11 @@ app.config(['$stateProvider',
                 }
            }
         })
-        .state('event.edit', {
-            url: '/eventinfo/:eventID/edit',
+        .state('event.update', {
+            url: '/update/:eventID',
             views: {
                 'rightView': {
-                    templateUrl: 'event.edit.html'
+                    templateUrl: 'event.update.html', controller: 'UpdateEventController'
                 }
             }
         })

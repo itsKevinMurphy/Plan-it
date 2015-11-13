@@ -1,7 +1,7 @@
 
 
 <div class="row">
-<form class="form-group col-md-offset-1" name="new_event_form" id="createEvent" novalidate ng-submit="createEvent()">
+<form class="form-group col-md-offset-1" name="update_event_form" id="updateEvent" novalidate ng-submit="updateEvent()">
 
     <h4 class="wh">What <small>shall we call the event</small></h4>
     <span class="error" ng-show="new_event_form.what.$error.required && new_event_form.submitted">Cannot leave what field empty.</span>
@@ -31,7 +31,7 @@
     <h4 class="wh">Why <small>are we having an event?</small></h4>
     <span class="error" ng-show="new_event_form.why.$error.required && new_event_form.submitted">Cannot leave why field empty.</span>
     <span class="error" ng-show="new_event_form.why.$error.pattern"></span>
-    <textarea class="form-control" rows="3" ng-model="event.why" name="why" id="why" form="createEvent" required>Description</textarea>
+    <textarea class="form-control" rows="3" ng-model="event.why" name="why" id="why" form="updateEvent" required>Description</textarea>
 
     <h4 class="wh">Event <small>icon</small></h4>
     <!-- <input class="form-control" type="text" ng-model="event.picture" name="picture" id="picture" placeholder="Picture string"> -->
@@ -43,7 +43,7 @@
 
     <div style="text-align: center;">
         <input class="btn btn-default" type="reset" ng-click="reset()" value="Clear">
-        <input class="btn btn-primary" type="submit" ng-click="" value="Create">
+        <input class="btn btn-primary" type="submit" ng-click="" value="Save">
     </div>
 
 </form>
