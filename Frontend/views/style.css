@@ -76,7 +76,7 @@ nav {
 /* EVENT LIST */
 .events {
   overflow: auto;
-  height: 590px;
+  height: 620px;
 }
 .events button {
   text-align: left;
@@ -94,13 +94,8 @@ nav {
 }
 
 /* EVENT DETAILS */
-.eventphoto {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  min-height: 100px;
-  max-height: 100px;
-  min-width: 100px;
-  max-width: 100px;
+.details {
+
 }
 .invitee {
   /*table-layout: fixed;*/
@@ -182,7 +177,7 @@ nav {
 /* CONTACT LIST */
 .contacts {
   overflow: auto;
-  height: 530px;
+  height: 570px;
 }
 .searchfriend input {
   margin:5px 30px 5px 30px;
