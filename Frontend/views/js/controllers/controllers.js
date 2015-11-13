@@ -1,27 +1,90 @@
-angular.module('eventController', [])
+angular.module('controller', [])
 .controller('CreateEventController', function ($window, $scope, ServiceForEvents){
   //Create a scope to determine if form has been submitted
   $scope.submitted = false;
 
-//Method called when the form is submitted
-$scope.createEvent = function(){
-  console.log($scope.event);
-    //If the form fields are all valid
-  if ($scope.new_event_form.$valid) {
-    console.log($scope.new_event_form);
-    //Call the addEvent method of Event Service to create a new event.
-  ServiceForEvents.addEvent($scope.event).success(function (data)
-  {
-    console.log("Event Created.")
-    $window.location.reload();  
-  });
-}
-else {
-    $scope.new_event_form.submitted = true;
-}
-}
+  $scope.imageUpload = function(event){
+    var file = event.target.files[0];
+    var reader = new FileReader();
+    reader.onload = $scope.imageIsLoaded; 
+    reader.readAsDataURL(file);
+  }
+  $scope.imageIsLoaded = function(e){
+    $scope.$apply(function() {
+      $scope.step = e.target.result;
+      // console.log(e.target.result);
+    });
+   }
+
+  //Method called when the form is submitted
+  $scope.createEvent = function(){
+
+    $scope.event.picture =  $scope.step.replace('data:image/jpeg;base64,', '');
+            
+    console.log($scope.event);
+      //If the form fields are all valid
+    if ($scope.new_event_form.$valid)
+    {
+      console.log($scope.new_event_form);
+      //Call the addEvent method of Event Service to create a new event.
+      ServiceForEvents.addEvent($scope.event).success(function (data)
+      {
+        console.log("Event Created.")
+        $window.location.reload(); 
+      });
+    }
+    else {
+        $scope.new_event_form.submitted = true;
+    }
+  }
 
 })
+
+.controller('UpdateEventController', function ($window, $scope, $stateParams, ServiceForEvents){
+  $scope.event = [];
+  $scope.id = $stateParams.eventID; 
+  $scope.submitted = false;
+  
+  console.log($scope.id);
+  //Retrieve selected Event info based on the id
+  ServiceForEvents.getEventById($scope.id).success(function (data) {
+      //Store the event details in the event model
+      $scope.event = data;
+  });
+  
+  console.log($scope.event);
+
+  $scope.updateEvent = function () {
+    $scope.event.picture =  $scope.step.replace('data:image/jpeg;base64,', '');
+    if ($scope.update_event_form.$valid) {
+      // Submit as normal
+      console.log($scope.update_event_form);
+      ServiceForEvents.updateEvent($scope.id, $scope.event).success(function (data)
+      {
+        console.log($scope.event);
+        $window.location.reload();
+        //should redirect to events
+      });            
+    } else {
+        $scope.update_event_form.submitted = true;
+    }
+  }
+
+  $scope.imageUpload = function(event){
+    var file = event.target.files[0];
+    var reader = new FileReader();
+    reader.onload = $scope.imageIsLoaded; 
+    reader.readAsDataURL(file);
+  }
+  $scope.imageIsLoaded = function(e){
+    $scope.$apply(function() {
+      $scope.step = e.target.result;
+      // console.log(e.target.result);
+    });
+  }
+
+})
+
 .controller('EventListController', function ($scope, ServiceForEvents){
   ServiceForEvents.getAllEvents().success(function (data)
   {
@@ -31,6 +94,7 @@ else {
   );
 
 })
+
 .controller('EventDetailsController', function ($window, $scope, $stateParams, ServiceForEvents){
   $scope.id = $stateParams.eventID;
 

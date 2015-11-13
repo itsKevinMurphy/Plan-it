@@ -16,6 +16,9 @@ angular.module('services', [])
     this.deleteEvent = function (data){
       return $http({ url: 'http://localhost:3000/events/' + data , method: "DELETE"});
     }
+    this.updateEvent = function (id, data){
+      return $http({ url: 'http://localhost:3000/events/' + id , method: "PUT", data: data});
+    }
 
 }
 ])
