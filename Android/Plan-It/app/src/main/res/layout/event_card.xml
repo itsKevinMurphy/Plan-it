@@ -25,7 +25,7 @@
                 android:id="@+id/event_list_photo"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginRight="16dp"
+                android:layout_marginRight="5dp"
                 android:src="@drawable/ic_perm_identity_black_24dp"
                 />
 

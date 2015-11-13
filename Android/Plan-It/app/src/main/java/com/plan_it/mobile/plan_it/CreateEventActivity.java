@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -38,13 +41,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class CreateEventActivity extends AppCompatActivity {
 
     String base64Image;
     byte[] imageByte;
-
+    static Uri  picUri;
+    static File imageFile;
     String e_name;
     String e_reason;
     String e_loc;
@@ -64,9 +69,6 @@ public class CreateEventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
-
-        e_fromTime = "12:00 PM";
-        e_toTime = "5:00 PM";
 
         ImageButton submit = (ImageButton) findViewById(R.id.add_event);
         ImageButton clear = (ImageButton) findViewById(R.id.clear_event);
@@ -166,7 +168,6 @@ public class CreateEventActivity extends AppCompatActivity {
                 break;
         }
     }
-
     public void imageOptions(View c) {
         viewImage = (ImageView) findViewById(R.id.create_eventphoto);
         final CharSequence[] items = {"Take Photo", "Choose from Library", "Cancel"};
@@ -201,7 +202,9 @@ public class CreateEventActivity extends AppCompatActivity {
             if (requestCode == 0) {
                 Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                thumbnail.compress(Bitmap.CompressFormat.JPEG, 10, bytes);
+                //thumbnail.compress(Bitmap.CompressFormat.JPEG, 10, bytes);
+                Bitmap scaled = Bitmap.createScaledBitmap(thumbnail, 256, 256, true);
+                scaled.compress(Bitmap.CompressFormat.JPEG, 10, bytes);
                 File destination = new File(Environment.getExternalStorageDirectory(),
                         System.currentTimeMillis() + ".jpg");
                 FileOutputStream fo;
@@ -217,7 +220,8 @@ public class CreateEventActivity extends AppCompatActivity {
                 }
                 imageByte = bytes.toByteArray();
                 base64Image = Base64.encodeToString(imageByte, Base64.NO_WRAP);
-                viewImage.setImageBitmap(thumbnail);
+                viewImage.setImageBitmap(scaled);
+
             } else if (requestCode == 1) {
                 Uri selectedImageUri = data.getData();
                 String[] projection = {MediaStore.MediaColumns.DATA};
@@ -237,13 +241,14 @@ public class CreateEventActivity extends AppCompatActivity {
                     scale *= 2;
                 options.inSampleSize = scale;
                 options.inJustDecodeBounds = false;*/
-                bm = BitmapFactory.decodeFile(selectedImagePath, options);
-
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                bm.compress(Bitmap.CompressFormat.JPEG, 10,bytes);
+                Bitmap d = new BitmapDrawable(getApplicationContext().getResources() , selectedImagePath).getBitmap();
+                Bitmap scaled = Bitmap.createScaledBitmap(d,140, 150, true);
+                scaled.compress(Bitmap.CompressFormat.JPEG, 10, bytes);
+
                 imageByte = bytes.toByteArray();
                 base64Image = Base64.encodeToString(imageByte, Base64.NO_WRAP);
-                viewImage.setImageBitmap(bm);
+                viewImage.setImageBitmap(scaled);
             }
         }
     }

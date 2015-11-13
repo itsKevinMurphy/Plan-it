@@ -1,219 +1,373 @@
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.plan_it.mobile.plan_it.ViewEventActvity">
+    tools:context="com.example.vieweventactvity.ViewEventActvity" >
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Camping Trip"
-        android:imeOptions="actionDone"
-        android:singleLine="true"
-        android:id="@+id/etViewEventTitle"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:textStyle="bold"/>
-
-    <RelativeLayout
-        android:id="@+id/imageLayout"
-        android:layout_width="match_parent"
-        android:layout_height="125dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@id/etViewEventTitle"
-        android:layout_toEndOf="@+id/tvViewEventTo"
-        android:layout_toRightOf="@+id/tvViewEventTo" >
-
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:text="Change Picture"
-            android:textSize="10dp"
-            android:id="@+id/btnChngPic"
-            android:layout_below="@+id/ivViewEventImage"
-            android:layout_centerHorizontal="true" />
-
-        <ImageView
-            android:id="@+id/ivViewEventImage"
-            android:layout_width="fill_parent"
-            android:layout_height="90dp"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/no_image"
-            android:layout_centerHorizontal="true"
-            />
-
-    </RelativeLayout>
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/lblViewEventDescription"
-        android:textSize="20dp"
-        android:text="Description:"
-        android:layout_below="@id/etViewEventTitle"
-        android:layout_toLeftOf="@id/imageLayout"
-        android:layout_alignParentLeft="true"
-        android:textStyle="bold" />
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Let's go camping. It's gonna be fun"
-        android:id="@+id/etViewEventDescription"
-        android:layout_below="@id/lblViewEventDescription"
-        android:layout_toLeftOf="@id/imageLayout"/>
     <LinearLayout
-        android:id="@+id/locationLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_below="@+id/imageLayout">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15dp"
-            android:text="Location:"
-            android:id="@+id/lblViewEventLocation"
-            android:textStyle="bold"
-            />
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.10"
+        android:orientation="vertical" >
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15dp"
-            android:text="123 Address Avenue A1A 1A1 Niagara, Ontario"
-            android:id="@+id/etViewEventLocation"
-            android:layout_toRightOf="@+id/lblViewEventLocation"
-            android:layout_marginLeft="5dp"
-            />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnViewDeleteEvent"
+                android:text="Delete"
+                android:visibility="visible"/>
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Camping Trip"
+                android:textSize="20dp"
+                android:imeOptions="actionDone"
+                android:singleLine="true"
+                android:id="@+id/etViewEventTitle"
+                android:layout_centerHorizontal="true"
+                android:textStyle="bold"/>
+        </RelativeLayout>
     </LinearLayout>
-    <EditText
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:textSize="15dp"
-        android:text="Dec/25/2015"
-        android:id="@+id/etViewEventFromDate"
-        android:layout_toLeftOf="@+id/tvViewEventTo"
-        android:layout_below="@+id/locationLayout"
-        android:layout_toStartOf="@id/tvViewEventTo"
-        android:layout_marginRight="10dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.40"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4"
+            android:orientation="horizontal" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lblViewEventDescription"
+                    android:textSize="15dp"
+                    android:text="Description:"
+                    android:layout_alignParentLeft="true"
+                    android:textStyle="bold" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionDone"
+                    android:textSize="15dp"
+                    android:singleLine="true"
+                    android:text="Let's go camping. It's gonna be fun"
+                    android:id="@+id/etViewEventDescription"
+                    android:layout_below="@id/lblViewEventDescription"/>
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20dp"
-        android:text="TO"
-        android:id="@+id/tvViewEventTo"
-        android:layout_below="@+id/locationLayout"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"
+                    android:text="Location:"
+                    android:id="@+id/lblViewEventLocation"
+                    android:textStyle="bold"
+                    android:layout_below="@id/etViewEventDescription"
+                    />
 
-    <EditText
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:textSize="15dp"
-        android:text="Jan/1/2016"
-        android:id="@+id/etViewEventEndDate"
-        android:layout_toRightOf="@+id/tvViewEventTo"
-        android:layout_below="@+id/locationLayout"
-        android:layout_toEndOf="@id/tvViewEventTo"
-        android:layout_marginLeft="10dp"/>
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"
+                    android:imeOptions="actionDone"
+                    android:singleLine="true"
+                    android:text="123 Address Avenue A1A 1A1 Niagara, Ontario"
+                    android:id="@+id/etViewEventLocation"
+                    android:layout_below="@+id/lblViewEventLocation"
+                    android:layout_marginLeft="5dp"
+                    />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="15dp"
-        android:text="Who is coming?"
-        android:id="@+id/tvWhoIsComing"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/tvViewEventTo"
-        android:layout_marginTop="10dp"
-        android:textStyle="bold" />
+            </RelativeLayout>
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="190dp"
-        android:id="@android:id/list"
-        android:layout_below="@+id/tvWhoIsComing"
-        android:layout_centerHorizontal="true"
-        android:dividerHeight="0.1dp"
-        android:divider="#0000CC"/>
+        </LinearLayout>
 
-    <EditText
-        android:layout_width="220dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/edit_addInvitee"
-        android:text="Enter Name"
-        android:layout_alignLeft="@android:id/list"
-        android:layout_below="@android:id/list"
-        android:layout_marginBottom="10dp"
-        android:visibility="gone"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:text="Add"
-        android:textSize="15dp"
-        android:id="@+id/btnInviteMore"
-        android:layout_below="@android:id/list"
-        android:layout_toRightOf="@id/edit_addInvitee"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@id/edit_addInvitee"
-        android:layout_marginBottom="10dp"
-        android:visibility="gone"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.6"
+            android:orientation="horizontal" >
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
 
-    <Button
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:text="Item List"
-        android:id="@+id/btnViewItemList"
-        android:height="20dp"
-        android:layout_below="@id/edit_addInvitee"
-        android:layout_alignParentBottom="true"/>
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:text="Change Picture"
+                    android:textSize="8dp"
+                    android:id="@+id/btnChngPic"
+                    android:layout_below="@+id/ivViewEventImage"
+                    android:layout_centerHorizontal="true" />
 
-    <Button
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:text="Messages"
-        android:id="@+id/btnViewMsgBoard"
-        android:height="20dp"
-        android:layout_alignTop="@id/btnViewItemList"
-        android:layout_below="@id/btnInviteMore"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"/>
+                <ImageView
+                    android:id="@+id/ivViewEventImage"
+                    android:layout_width="fill_parent"
+                    android:layout_height="90dp"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/no_image"
+                    android:layout_centerHorizontal="true"
+                    />
 
-    <Button
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:text="Going"
-        android:id="@+id/btnAccept"
-        android:height="20dp"
-        android:layout_below="@id/edit_addInvitee"
-        android:layout_alignParentBottom="true"
-        android:visibility="gone"/>
+            </RelativeLayout>
 
-    <Button
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:text="Not Going"
-        android:id="@+id/btnDecline"
-        android:height="20dp"
-        android:layout_alignTop="@id/btnViewItemList"
-        android:layout_below="@id/btnInviteMore"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:visibility="gone"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.25"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
 
 
 
+            <EditText
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:textSize="15dp"
+                android:text="Dec/25/2015"
+                android:imeOptions="actionDone"
+                android:singleLine="true"
+                android:id="@+id/etViewEventFromDate"
+                android:layout_toLeftOf="@+id/tvViewEventTo"
+                android:layout_toStartOf="@id/tvViewEventTo"
+                android:layout_marginRight="10dp"/>
 
-</RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:text="TO"
+                android:id="@+id/tvViewEventTo"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"/>
+
+            <EditText
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:textSize="15dp"
+                android:text="Jan/1/2016"
+                android:imeOptions="actionDone"
+                android:singleLine="true"
+                android:id="@+id/etViewEventEndDate"
+                android:layout_toRightOf="@+id/tvViewEventTo"
+                android:layout_toEndOf="@id/tvViewEventTo"
+                android:layout_marginLeft="10dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:text="From"
+                android:layout_marginTop="5dp"
+                android:id="@+id/tvFrom"
+                android:layout_below="@+id/etViewEventFromDate"/>
+
+            <EditText
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:textSize="15dp"
+                android:text="2:00 PM"
+                android:imeOptions="actionDone"
+                android:singleLine="true"
+                android:id="@+id/etFromTime"
+                android:layout_toRightOf="@+id/tvFrom"
+                android:layout_below="@+id/etViewEventFromDate"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:text="To"
+                android:id="@+id/tvTimeSeparator"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@+id/etFromTime"
+                android:layout_below="@+id/etViewEventFromDate"/>
+
+            <EditText
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:textSize="15dp"
+                android:text="5:00 PM"
+                android:imeOptions="actionDone"
+                android:singleLine="true"
+                android:id="@+id/etToTime"
+                android:layout_toRightOf="@+id/tvTimeSeparator"
+                android:layout_below="@+id/etViewEventFromDate"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.50"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.80"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15dp"
+                android:text="Who is coming?"
+                android:id="@+id/tvWhoIsComing"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold" />
+
+            <ListView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@android:id/list"
+                android:layout_below="@+id/tvWhoIsComing"
+                android:layout_centerHorizontal="true"
+                android:dividerHeight="0.1dp"
+                android:divider="#0000CC"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.20"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.7" >
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/edit_addInvitee"
+                    android:textSize="15dp"
+                    android:text="Enter Name"
+                    android:layout_alignLeft="@android:id/list"
+                    android:layout_below="@android:id/list"
+                    android:layout_marginBottom="10dp"
+                    android:visibility="gone"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3" >
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="Add"
+                    android:textSize="15dp"
+                    android:id="@+id/btnInviteMore"
+                    android:layout_below="@android:id/list"
+                    android:layout_toRightOf="@id/edit_addInvitee"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignTop="@id/edit_addInvitee"
+                    android:layout_marginBottom="10dp"
+                    android:visibility="gone"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.10"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:orientation="horizontal" >
+
+            <Button
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="Item List"
+                android:id="@+id/btnViewItemList"
+                android:height="20dp"
+                android:layout_below="@id/edit_addInvitee"
+                android:layout_alignParentBottom="true"/>
+
+            <Button
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="Going"
+                android:id="@+id/btnAccept"
+                android:height="20dp"
+                android:layout_below="@id/edit_addInvitee"
+                android:layout_alignParentBottom="true"
+                android:visibility="gone"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:orientation="horizontal" >
+
+
+            <Button
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="Messages"
+                android:id="@+id/btnViewMsgBoard"
+                android:height="20dp"
+                android:layout_below="@id/btnInviteMore"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"/>
+
+            <Button
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="Not Going"
+                android:id="@+id/btnDecline"
+                android:height="20dp"
+                android:layout_alignTop="@id/btnViewItemList"
+                android:layout_below="@id/btnInviteMore"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

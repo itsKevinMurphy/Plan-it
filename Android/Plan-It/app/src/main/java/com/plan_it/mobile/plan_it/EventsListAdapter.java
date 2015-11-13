@@ -46,6 +46,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
         ImageView button2;
         ImageView addEvent;
 
+        int eveID;
         String location;
         String toDate;
         String toTime;
@@ -80,6 +81,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
                    byteArray = stream.toByteArray();
 
                    Bundle eventBundle = new Bundle();
+                   eventBundle.putInt("eventID", eveID);
                    eventBundle.putString("eventName", name.getText().toString());
                    eventBundle.putString("eventDescription", description.getText().toString());
                    eventBundle.putString("eventLocation", location);
@@ -94,6 +96,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
                    eventBundle.putByteArray("eventPhoto", byteArray);
 
                    Intent intent = new Intent(context, ViewEventActvity.class);
+                   intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                    intent.putExtras(eventBundle);
                    context.startActivity(intent);
                }
@@ -112,6 +115,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
             itemList = event.itemList;
             messageBoard = event.messageBoard;
             eventPhoto = event.photoId;
+            eveID = event.eventID;
             photo.setImageBitmap(event.photoId);
         }
     }
