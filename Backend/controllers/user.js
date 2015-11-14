@@ -2,7 +2,10 @@
 var database = require('../database');
 //Load the user model Schema
 var userSchema = require('../models/user');
-
+//Load JSON WEB TOKEN DEPENDANCY
+var jwt = require('jsonwebtoken');
+//import config file
+var config = require('../config');
 
 var user = module.exports;
 
@@ -25,7 +28,7 @@ user.createUser = function(req, res, next ){
     if(!err)
     {
       //If email already exists
-      if (data) 
+      if (data)
       {
         if(data.email == userObj.email)
         {
@@ -196,7 +199,78 @@ user.getAllFriends = function(req, res, next)
 };
 
 //Delete Friend from a User's friend list
-user.remove = function(req, res, next)
+user.removeFriend = function(req, res, next)
 {
+  database.userModel.findOneAndUpdate({"UserID": req.params.id, "friendList.userID": req.params.friendId},
+  {$pull: {"friendList": {"userID" : req.params.friendId}}}, function(err, friend)
+  {
+    if(!err)
+    {
+      if(friend)
+      {
+        console.log('Deleting Friend.')
+        console.log(friend.friendList);
+        friend.save(function(err){
+          if(err)
+          {
+            console.log(err);
+            res.status(409).send("Friend could not be deleted.");
+          }
+          else {
+            console.log("Friend deleted.");
+            res.status(201).send("Friend deleted from list.");
+          }
+        })
+      }
+      else {
+        console.log("Friend not in friends list.");
+        res.status(409).send("Friend was not found.");
+      }
+    }
+    else
+    {
+      res.sendStatus(500);
+    }
+  }
+)
+}
 
+//Login User method to verify an existing user.
+user.loginUser = function(req, res, next)
+{
+  database.userModel.findOne({$or:[{"email": req.body.username},{"friendlyName": req.body.username}]}, function(err,user)
+  {
+    if(!err)
+    {
+      if(!user)
+      {
+        res.json({ success: false, message: 'Authentication failed. User not found.' });
+      }
+      else if(user)
+      {
+        user.comparePassword(req.body.password, function(err, isMatch)
+        {
+          if(err)
+          {
+            console.log(err);
+          }
+          else if(isMatch)
+          {
+            var token = jwt.sign(user, config.secret);
+            res.json({success: true, message: 'Enjoy your token!', token: token, userID: user.UserID});
+          }
+          else
+          {
+            res.json({ success: false, message: 'Authentication failed. Wrong password.' });
+          }
+        }
+        )
+      }
+    }
+    else
+    {
+      res.sendStatus(500);
+    }
+  }
+  )
 }
