@@ -4,8 +4,9 @@ var list = require('./list');
 
 var event = new mongoose.Schema({
   EventID: Number,
-  Members: [{
-    UserId: mongoose.Schema.ObjectId,
+  members: [{
+    _id : false,
+    UserId: Number,
     isAttending: { type: String, enum: ['Invited', 'Attending', 'Declined', 'Left', 'Owner'] },
     Nofications: [{
         itemList: Boolean,

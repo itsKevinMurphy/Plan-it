@@ -154,7 +154,7 @@ user.getAllFriends = function(req, res, next){
         }
       }
     }
-    )
+  );
 };
 
 //Delete Friend from a User's friend list
@@ -197,6 +197,11 @@ user.loginUser = function(req, res, next){
             console.log(err);
           }else if(isMatch){
             var token = jwt.sign(user, config.secret);
+            user.token = token;
+            user.save(function(err, result){
+              if(err)
+                console.log(err);
+            });
             res.json({success: true, message: 'Enjoy your token!', token: token, userID: user.UserID});
           }else{
             res.json({ success: false, message: 'Authentication failed. Wrong password.' });

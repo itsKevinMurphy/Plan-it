@@ -3,6 +3,7 @@ var database = require('../database');
 var event = module.exports;
 
 event.createEvent = function(req, res, next) {
+  //create the event model from request object
   var event = new database.eventModel({
     "what": req.body.what,
     "why": req.body.why,
@@ -13,7 +14,15 @@ event.createEvent = function(req, res, next) {
     "toTime" : req.body.toTime,
     "picture": req.body.picture
   });
-
+  //search the user document for the userid based on there token
+  database.userModel.findOne({token : req.headers["x-access-token"]}, function(err, token){
+    if(err)
+      console.log(err);
+    else
+      //set the user as the event owner
+      event.members.push({UserId: parseInt(token.UserID), isAttending: "Owner"});
+  });
+  //save the event
   event.save(function(err) {
     if (err)
       console.log(err);
@@ -39,6 +48,25 @@ event.getAllEvents = function(req, res, next) {
       console.log(err);
     else {
       res.json(events);
+    }
+  });
+}
+
+event.getUsersEvents = function(req, res, next) {
+  //console.log(req.headers["x-access-token"]);
+  //search the user document for the userid based on there token
+  database.userModel.findOne({token : req.headers["x-access-token"]}, function(err, token){
+    if(err)
+      console.log("error"  + err);
+    else{
+      console.log(token);
+      database.eventModel.find({"members.UserId": token.UserID}, function(err, events) {
+        if (err)
+          console.log(err);
+        else {
+          res.json(events);
+        }
+      });
     }
   });
 }
@@ -69,7 +97,6 @@ event.updateEvent = function(req, res, next) {
 }
 
 event.deleteEvent = function(req, res, next) {
-  console.log("inside deleteEvent in backend");
   database.eventModel.remove({
     "EventID": req.params.id
   }, function (err, event) {
@@ -81,8 +108,6 @@ event.deleteEvent = function(req, res, next) {
 }
 
 event.createListItem = function(req, res, next) {
-
-  console.log(req.body);
   database.eventModel.findOne({
     "EventID": req.params.id
   }, function(err, event) {

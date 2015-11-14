@@ -3,7 +3,7 @@ var config = module.exports;
 var app = require('./app');
 var bodyParser = require('body-parser');
 
-config.db = 'mongodb://admin:password@ds042138.mongolab.com:42138/teamawesome';
+config.db = 'MONGOURL';
 config.secret = 'captainplanet'
 
 app.set('superSecret', config.secret); // secret variable
