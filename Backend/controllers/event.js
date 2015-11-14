@@ -1,5 +1,4 @@
 var database = require('../database');
-
 var event = module.exports;
 
 event.createEvent = function(req, res, next) {
@@ -42,8 +41,10 @@ event.getEventById = function(req, res, next) {
   }, function(err, event) {
     if (err)
       console.log(err);
-    else
+    else{
       res.json(event);
+      res.sendStatus(200);
+    }
   });
 }
 
@@ -53,12 +54,12 @@ event.getAllEvents = function(req, res, next) {
       console.log(err);
     else {
       res.json(events);
+      res.sendStatus(200);
     }
   });
 }
 
 event.getUsersEvents = function(req, res, next) {
-  //console.log(req.headers["x-access-token"]);
   //search the user document for the userid based on there token
   database.userModel.findOne({token : req.headers["x-access-token"]}, function(err, token){
     if(err)
@@ -70,6 +71,7 @@ event.getUsersEvents = function(req, res, next) {
           console.log(err);
         else {
           res.json(events);
+          res.sendStatus(200);
         }
       });
     }
@@ -109,6 +111,7 @@ event.deleteEvent = function(req, res, next) {
       console.log(err);
     else
       res.json(event);
+      res.sendStatus(200);
   });
 }
 
@@ -133,7 +136,6 @@ event.createListItem = function(req, res, next) {
           if (err)
             console.log(err);
           else{
-            console.log("Hit");
             res.sendStatus(201);
           }
         });
@@ -150,6 +152,7 @@ event.getListItems = function(req, res, next) {
       console.log(err);
     else {
       res.json(events.itemList);
+      res.sendStatus(200);
     }
   });
 }
@@ -204,6 +207,29 @@ event.updateItem = function(req, res, next){
           res.sendStatus(200);
         }
       });
+    }
+  });
+}
+
+event.inviteFriend = function(req, res, next){
+  //console.log("hit")
+  database.eventModel.findOne({"EventID" : req.params.id}, function(err, event){
+    if(err)
+      console.log(err);
+    else{
+      database.userModel.findOne({"UserID" : req.params.friendId}, function(err, result){
+        if(err)
+          console.log(err);
+        else{
+          console.log(result);
+          event.members.push({UserId: result.UserID, isAttending: "Invited"});
+          event.save(function(err){
+            if(err)
+              console.log(err);
+          });
+        }
+      });
+      res.sendStatus(200);
     }
   });
 }
