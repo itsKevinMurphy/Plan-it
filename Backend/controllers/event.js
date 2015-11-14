@@ -18,16 +18,21 @@ event.createEvent = function(req, res, next) {
   database.userModel.findOne({token : req.headers["x-access-token"]}, function(err, token){
     if(err)
       console.log(err);
-    else
+    else{
       //set the user as the event owner
       event.members.push({UserId: parseInt(token.UserID), isAttending: "Owner"});
-  });
-  //save the event
-  event.save(function(err) {
-    if (err)
-      console.log(err);
-    else
-      res.sendStatus(201);
+      //save the event to the user model
+      //save the event
+      event.save(function(err, result) {
+        if (err)
+          console.log(err);
+        else{
+          token.events.push({eventID: result.EventID});
+          token.save();
+          res.sendStatus(201);
+        }
+      });
+    }
   });
 }
 

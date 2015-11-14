@@ -2,6 +2,7 @@ var config = module.exports;
 
 var app = require('./app');
 var bodyParser = require('body-parser');
+var jwt = require('jsonwebtoken');
 
 config.db = 'MONGOURL';
 config.secret = 'captainplanet'
