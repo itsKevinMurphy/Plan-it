@@ -9,8 +9,8 @@ event.createEvent = function(req, res, next) {
     "where": req.body.where,
     "when": req.body.when,
     "endDate": req.body.endDate,
-    "fromTime" : req.body.from,
-    "toTime" : req.body.to,
+    "fromTime" : req.body.fromTime,
+    "toTime" : req.body.toTime,
     "picture": req.body.picture
   });
 
