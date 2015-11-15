@@ -1,24 +1,37 @@
 var database = require('../database');
-
 var event = module.exports;
 
 event.createEvent = function(req, res, next) {
+  //create the event model from request object
   var event = new database.eventModel({
     "what": req.body.what,
     "why": req.body.why,
     "where": req.body.where,
     "when": req.body.when,
     "endDate": req.body.endDate,
-    "fromTime" : req.body.from,
-    "toTime" : req.body.to,
+    "fromTime" : req.body.fromTime,
+    "toTime" : req.body.toTime,
     "picture": req.body.picture
   });
-
-  event.save(function(err) {
-    if (err)
+  //search the user document for the userid based on there token
+  database.userModel.findOne({token : req.headers["x-access-token"]}, function(err, token){
+    if(err)
       console.log(err);
-    else
-      res.sendStatus(201);
+    else{
+      //set the user as the event owner
+      event.members.push({UserId: parseInt(token.UserID), isAttending: "Owner"});
+      //save the event to the user model
+      //save the event
+      event.save(function(err, result) {
+        if (err)
+          console.log(err);
+        else{
+          token.events.push({eventID: result.EventID});
+          token.save();
+          res.sendStatus(201);
+        }
+      });
+    }
   });
 }
 
@@ -28,8 +41,10 @@ event.getEventById = function(req, res, next) {
   }, function(err, event) {
     if (err)
       console.log(err);
-    else
+    else{
       res.json(event);
+      res.sendStatus(200);
+    }
   });
 }
 
@@ -39,6 +54,26 @@ event.getAllEvents = function(req, res, next) {
       console.log(err);
     else {
       res.json(events);
+      res.sendStatus(200);
+    }
+  });
+}
+
+event.getUsersEvents = function(req, res, next) {
+  //search the user document for the userid based on there token
+  database.userModel.findOne({token : req.headers["x-access-token"]}, function(err, token){
+    if(err)
+      console.log("error"  + err);
+    else{
+      console.log(token);
+      database.eventModel.find({"members.UserId": token.UserID}, function(err, events) {
+        if (err)
+          console.log(err);
+        else {
+          res.json(events);
+          res.sendStatus(200);
+        }
+      });
     }
   });
 }
@@ -69,7 +104,6 @@ event.updateEvent = function(req, res, next) {
 }
 
 event.deleteEvent = function(req, res, next) {
-  console.log("inside deleteEvent in backend");
   database.eventModel.remove({
     "EventID": req.params.id
   }, function (err, event) {
@@ -77,12 +111,11 @@ event.deleteEvent = function(req, res, next) {
       console.log(err);
     else
       res.json(event);
+      res.sendStatus(200);
   });
 }
 
 event.createListItem = function(req, res, next) {
-
-  console.log(req.body);
   database.eventModel.findOne({
     "EventID": req.params.id
   }, function(err, event) {
@@ -103,7 +136,6 @@ event.createListItem = function(req, res, next) {
           if (err)
             console.log(err);
           else{
-            console.log("Hit");
             res.sendStatus(201);
           }
         });
@@ -120,6 +152,7 @@ event.getListItems = function(req, res, next) {
       console.log(err);
     else {
       res.json(events.itemList);
+      res.sendStatus(200);
     }
   });
 }
@@ -174,6 +207,29 @@ event.updateItem = function(req, res, next){
           res.sendStatus(200);
         }
       });
+    }
+  });
+}
+
+event.inviteFriend = function(req, res, next){
+  //console.log("hit")
+  database.eventModel.findOne({"EventID" : req.params.id}, function(err, event){
+    if(err)
+      console.log(err);
+    else{
+      database.userModel.findOne({"UserID" : req.params.friendId}, function(err, result){
+        if(err)
+          console.log(err);
+        else{
+          console.log(result);
+          event.members.push({UserId: result.UserID, isAttending: "Invited"});
+          event.save(function(err){
+            if(err)
+              console.log(err);
+          });
+        }
+      });
+      res.sendStatus(200);
     }
   });
 }
