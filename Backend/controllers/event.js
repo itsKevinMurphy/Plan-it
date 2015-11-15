@@ -221,7 +221,6 @@ event.inviteFriend = function(req, res, next){
         if(err)
           console.log(err);
         else{
-          console.log(result);
           event.members.push({UserId: result.UserID, isAttending: "Invited"});
           event.save(function(err){
             if(err)
@@ -230,6 +229,24 @@ event.inviteFriend = function(req, res, next){
         }
       });
       res.sendStatus(200);
+    }
+  });
+}
+
+event.invitation = function(req, res, next){
+  database.userModel.findOne({token: req.headers["x-access-token"]}, function(err, user){
+    if(err)
+      console.log(err);
+    else{
+      database.eventModel.update({"members.$.UserID" : user.UserId , "EventID" : req.params.id},
+       {$set: {"members.$.isAttending" : req.params.answer}},
+       function(err, event){
+        if(err)
+          console.log(err);
+        else{
+          res.sendStatus(200);
+        }
+      });
     }
   });
 }
