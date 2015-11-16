@@ -20,7 +20,8 @@ app.post('/events', eventCtrl.createEvent);
 //app.get('/events/:id([0-9]*$)', eventCtrl.getEventById);
 app.put('/events/:id', eventCtrl.updateEvent);
 app.get('/events/user', eventCtrl.getUsersEvents);
-app.post('/events/:id/invite/:friendId', eventCtrl.inviteFriend);
+app.post('/events/:id/invite/:friendId([0-9]*$)', eventCtrl.inviteFriend);
+app.post('/events/:id/invite/:answer(Attending|Declined)', eventCtrl.invitation);
 app.delete('/events/:id', eventCtrl.deleteEvent);
 app.post('/events/:id/list', eventCtrl.createListItem);
 app.get('/events/:id/list', eventCtrl.getListItems);
@@ -39,4 +40,7 @@ app.post("/login", userCtrl.loginUser);
 
 app.listen(3000, function() {
   console.log("Server is running on port 3000");
+  // var socket = io.connect('http://localhost:9000', {
+  // 'query': 'token=' + your_jwt
+  // });
 });
