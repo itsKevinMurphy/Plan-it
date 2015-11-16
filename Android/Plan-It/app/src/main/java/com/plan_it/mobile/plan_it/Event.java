@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
  */
 enum IsAttending{INVITED, ATTENDING, DECLINED, LEFT, OWNER}
 public class Event {
+    int eventID;
     String name;
     String owner;
     String description;
@@ -20,7 +21,8 @@ public class Event {
     boolean itemList;
     boolean messageBoard;
 
-    Event(String name, String owner, String description,String location, Bitmap photoId, String fromDate, String toDate, String fromTime, String toTime, IsAttending isAttending, boolean itemList, boolean messageBoard) {
+    Event(int eventID,String name, String owner, String description,String location, Bitmap photoId, String fromDate, String toDate, String fromTime, String toTime, IsAttending isAttending, boolean itemList, boolean messageBoard) {
+        this.eventID = eventID;
         this.name = name;
         this.owner = owner;
         this.description = description;

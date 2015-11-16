@@ -2,19 +2,20 @@ package com.plan_it.mobile.plan_it;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.app.ListActivity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
-import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -23,22 +24,27 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
 public class ViewEventActvity extends Activity{
-
-
+    String base64ImageUpdate;
     Bitmap bmp;
+
+    int eventID;
 
     String eTitle;
     String eDesc;
@@ -50,6 +56,7 @@ public class ViewEventActvity extends Activity{
     String eOwner;
     IsAttending status;
     byte[] byteArray;
+    Bitmap eImage;
 
     EditText addInvitee;
     Button addMore;
@@ -58,6 +65,8 @@ public class ViewEventActvity extends Activity{
     EditText etLocation;
     EditText etFromDate;
     EditText etToDate;
+    EditText etFromTime;
+    EditText etToTime;
     TextView tvWhoIsComing;
     Button itemList;
     Button messageBoard;
@@ -65,6 +74,7 @@ public class ViewEventActvity extends Activity{
     Button btnNotGoing;
     Button btnLoadImg;
     ImageView eventImage;
+    Button deleteEvent;
 
     Calendar myCalendar = Calendar.getInstance();
 
@@ -112,10 +122,13 @@ public class ViewEventActvity extends Activity{
         etLocation = (EditText)findViewById(R.id.etViewEventLocation);
         etFromDate = (EditText)findViewById(R.id.etViewEventFromDate);
         etToDate = (EditText)findViewById(R.id.etViewEventEndDate);
+        etFromTime = (EditText)findViewById(R.id.etFromTime);
+        etToTime = (EditText)findViewById(R.id.etToTime);
         itemList = (Button)findViewById(R.id.btnViewItemList);
         messageBoard = (Button)findViewById(R.id.btnViewMsgBoard);
         btnGoing = (Button)findViewById(R.id.btnAccept);
         btnNotGoing = (Button)findViewById(R.id.btnDecline);
+        deleteEvent = (Button)findViewById(R.id.btnViewDeleteEvent);
 
 
 
@@ -134,7 +147,7 @@ public class ViewEventActvity extends Activity{
                 startActivityForResult(photoPickerIntent, 1);
             }
         });
-
+        onEdit();
         initializeData();
 
         if(status == IsAttending.ATTENDING){isAttending();}
@@ -145,6 +158,7 @@ public class ViewEventActvity extends Activity{
     public void getBundleValues(){
         Intent intent = getIntent();
         Bundle eventBundle = intent.getExtras();
+        eventID = eventBundle.getInt("eventID");
         eTitle = eventBundle.getString("eventName");
         eDesc = eventBundle.getString("eventDescription");
         eLocation = eventBundle.getString("eventLocation");
@@ -162,10 +176,158 @@ public class ViewEventActvity extends Activity{
         etTitle.setText(eTitle);
         etDesc.setText(eDesc);
         etLocation.setText(eLocation);
-        etFromDate.setText(eFromDate + " - " + eFromTime);
-        etToDate.setText(eToDate + " - " + eToTime);
-        bmp = BitmapFactory.decodeByteArray(byteArray, 0 ,byteArray.length);
+        etFromDate.setText(eFromDate);
+        etToDate.setText(eToDate);
+        etFromTime.setText(eFromTime);
+        etToTime.setText(eToTime);
+        bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
         eventImage.setImageBitmap(bmp);
+    }
+
+    public void onEdit(){
+       etTitle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+
+                    try {
+                        eTitle = etTitle.getText().toString();
+                        updateEvent(eTitle);
+                        Toast.makeText(getApplicationContext(), "Successfully Updated", Toast.LENGTH_LONG).show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        etDesc.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+
+                    try {
+                        eDesc = etDesc.getText().toString();
+                        updateEvent(eDesc);
+                        Toast.makeText(getApplicationContext(), "Successfully Updated", Toast.LENGTH_LONG).show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        etLocation.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+
+                    try {
+                        eLocation = etLocation.getText().toString();
+                        updateEvent(eLocation);
+                        Toast.makeText(getApplicationContext(), "Successfully Updated", Toast.LENGTH_LONG).show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        etFromDate.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                //Your query to fetch Data
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                    eFromDate = etFromDate.getText().toString();
+                    updateEvent(eFromDate);
+                    Toast.makeText(getApplicationContext(), "Successfully Updated", Toast.LENGTH_LONG).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        etToDate.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                //Your query to fetch Data
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                    eToDate = etToDate.getText().toString();
+                    updateEvent(eToDate);
+                    Toast.makeText(getApplicationContext(), "Successfully Updated", Toast.LENGTH_LONG).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        etFromTime.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+
+                    try {
+                        eFromTime = etFromTime.getText().toString();
+                        updateEvent(eFromTime);
+                        Toast.makeText(getApplicationContext(), "Successfully Updated", Toast.LENGTH_LONG).show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    return true;
+                }
+                return false;
+            }
+        });
+        etToTime.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+
+                    try {
+                        eToTime = etToTime.getText().toString();
+                        updateEvent(eToTime);
+                        Toast.makeText(getApplicationContext(), "Successfully Updated", Toast.LENGTH_LONG).show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -191,10 +353,23 @@ public class ViewEventActvity extends Activity{
                 {
                     bmp = null;
                 }
-
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 bmp = BitmapFactory.decodeFile(filePath);
-                eventImage.setBackgroundResource(0);
-                eventImage.setImageBitmap(bmp);
+
+
+                Bitmap d = new BitmapDrawable(getApplicationContext().getResources() , filePath).getBitmap();
+                Bitmap scaled = Bitmap.createScaledBitmap(d, 140, 150, true);
+                scaled.compress(Bitmap.CompressFormat.JPEG, 10, bytes);
+                byte[] imageByte = bytes.toByteArray();
+                base64ImageUpdate = Base64.encodeToString(imageByte, Base64.NO_WRAP);
+
+                eventImage.setImageBitmap(scaled);
+                try {
+                    updateEvent(base64ImageUpdate);
+                    Toast.makeText(getApplicationContext(), "Image Successfully Updated", Toast.LENGTH_LONG).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
             else
             {
@@ -262,11 +437,12 @@ public class ViewEventActvity extends Activity{
 
     }
 
-    public void isOwner(){
+    public void isOwner() {
         tvWhoIsComing.setText("Invite or Uninvite People");
 
         addInvitee.setVisibility(View.VISIBLE);
         addMore.setVisibility(View.VISIBLE);
+        deleteEvent.setVisibility(View.VISIBLE);
 
         eTitle = etTitle.getText().toString();
         eDesc = etDesc.getText().toString();
@@ -280,6 +456,18 @@ public class ViewEventActvity extends Activity{
         etToDate.setInputType(InputType.TYPE_NULL);
         etToDate.setOnTouchListener(listener);
 
+        deleteEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    deleteEvent();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Intent i = new Intent(ViewEventActvity.this, EventsListActivity.class);
+                startActivity(i);
+            }
+        });
 
     }
     View.OnTouchListener listener = new View.OnTouchListener(){
@@ -325,7 +513,60 @@ public class ViewEventActvity extends Activity{
         }
     }
 
+    public void updateEvent(String change) throws JSONException {
+        RequestParams jdata = new RequestParams();
+        if(change == eTitle) {
+            jdata.put("what", eTitle);
+        }
+        else if(change == eDesc) {
+            jdata.put("why", eDesc);
+        }
+        else if(change == eLocation) {
+            jdata.put("where", eLocation);
+        }
+        else if(change == eFromDate) {
+            jdata.put("when", eFromDate);
+        }
+        else if(change == eToTime) {
+            jdata.put("toTime", eToTime);
+        }
+        else if(change == eFromTime) {
+            jdata.put("fromTime", eFromTime);
+        }
+        else if(change == eToDate) {
+            jdata.put("endDate", eToDate);
+        }
+        else if(change == base64ImageUpdate){
+            jdata.put("picture", base64ImageUpdate);
+        }
+        RestClient.put("events/" + eventID, jdata, new JsonHttpResponseHandler() {
+            public void onSuccess(String response) {
+                JSONObject res;
+                try {
+                    res = new JSONObject(response);
+                    Log.d("debug", res.getString("some_key")); // this is how you get a value out
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
+    public void deleteEvent() throws JSONException {
+        RestClient.delete("events/" + eventID, null, new JsonHttpResponseHandler() {
+            public void onSuccess(String response) {
+                JSONObject res;
+                try {
+                    res = new JSONObject(response);
+                    Log.d("debug", res.getString("some_key")); // this is how you get a value out
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
 
 }
