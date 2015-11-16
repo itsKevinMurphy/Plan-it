@@ -151,7 +151,7 @@ public class ViewEventActvity extends Activity{
         initializeData();
 
         if(status == IsAttending.ATTENDING){isAttending();}
-        else if(status == IsAttending.INVITED){isInvited();}
+        else if(status == IsAttending.INVITED || status == IsAttending.DECLINED || status == IsAttending.LEFT){isInvited();}
         else if(status == IsAttending.OWNER){isOwner();}
     }
 
@@ -428,7 +428,7 @@ public class ViewEventActvity extends Activity{
         etToDate.setFocusable(false);
 
 
-        itemList.setVisibility(View.INVISIBLE);
+        itemList.setVisibility(View.GONE);
         messageBoard.setVisibility(View.GONE);
         btnLoadImg.setVisibility(View.GONE);
 
