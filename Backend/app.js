@@ -40,4 +40,7 @@ app.post("/login", userCtrl.loginUser);
 
 app.listen(3000, function() {
   console.log("Server is running on port 3000");
+  // var socket = io.connect('http://localhost:9000', {
+  // 'query': 'token=' + your_jwt
+  // });
 });
