@@ -25,6 +25,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -224,7 +225,7 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
 
                         Bitmap scaledImage = Bitmap.createScaledBitmap(eventimg, 140, 150, true);
 
-                        mEvents.add(new Event(firstEvent.getInt("EventID"), firstEvent.getString("what"), "Kevin Murphy", firstEvent.getString("why"), firstEvent.getString("where"), scaledImage, firstEvent.getString("when"), firstEvent.getString("endDate"), "2:00 PM", "3:00 PM", IsAttending.OWNER, true, true));
+                        mEvents.add(new Event(firstEvent.getInt("EventID"), firstEvent.getString("what"), "Kevin Murphy", firstEvent.getString("why"), firstEvent.getString("where"), scaledImage, firstEvent.getString("when"), firstEvent.getString("endDate"), "2:00 PM", "3:00 PM", randomStatus(), true, true));
                         Log.d("RestD", firstEvent.toString());
                     }
                     setContentView(R.layout.activity_events_list);
@@ -239,6 +240,10 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
                 }
             }
         });
+    }
+
+    public IsAttending randomStatus(){
+        return IsAttending.values()[new Random().nextInt(IsAttending.values().length)];
     }
 
     public void navCreateNewEvent(View v)
