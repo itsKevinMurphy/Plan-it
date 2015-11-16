@@ -11,7 +11,7 @@ public class RestClient {
     private static AsyncHttpClient client = new AsyncHttpClient();
 
     public static void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
-        //client.addHeader("token", "tertrtrt");
+        client.addHeader("x-access-token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjQ5NTA3NjI2MWE2YTQxN2JiOWYwNmEiLCJVc2VySUQiOjE5LCJmcmllbmRseU5hbWUiOiJUZXN0IiwiZW1haWwiOiJUZXN0QGdtYWlsLmNvbSIsImhhc2hQYXNzd29yZCI6IiQyYSQxMCRmWEUzbzRMekNkcElTemIwS3FORGR1LlJTNy5xYkxDejR4d1J1M3FhakxsMUIxd1RPMkpsRyIsImZpcnN0TmFtZSI6IlRlc3QiLCJsYXN0TmFtZSI6IlVzZXIiLCJfX3YiOjAsImV2ZW50cyI6W10sImZyaWVuZExpc3QiOltdfQ.HfKiDjbqDxfsAFao41BjaiE9pMFB0CLVIIgg_asGUCk");
         client.get(getAbsoluteUrl(url), params, responseHandler);
     }
 
