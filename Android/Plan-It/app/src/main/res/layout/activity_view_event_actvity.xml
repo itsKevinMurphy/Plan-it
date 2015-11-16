@@ -322,7 +322,8 @@
                 android:id="@+id/btnViewItemList"
                 android:height="20dp"
                 android:layout_below="@id/edit_addInvitee"
-                android:layout_alignParentBottom="true"/>
+                android:layout_alignParentBottom="true"
+                android:onClick="navItemList"/>
 
             <Button
                 android:layout_width="150dp"

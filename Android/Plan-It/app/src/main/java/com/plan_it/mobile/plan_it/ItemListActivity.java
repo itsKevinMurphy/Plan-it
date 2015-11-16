@@ -38,7 +38,7 @@ public class ItemListActivity extends AppCompatActivity {
         initializeData();
         adapter = new ItemListAdapter(this, mItems);
         setContentView(R.layout.activity_item_list);
-        items_recycler_view = (RecyclerView)findViewById(R.id.action_item_list);
+        items_recycler_view = (RecyclerView)findViewById(R.id.item_list_recycler_view);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         items_recycler_view.setLayoutManager(llm);
         items_recycler_view.setAdapter(adapter);
