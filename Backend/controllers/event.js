@@ -42,8 +42,7 @@ event.getEventById = function(req, res, next) {
     if (err)
       console.log(err);
     else{
-      res.json(event);
-      res.sendStatus(200);
+      res.status(200).send(event);
     }
   });
 }
@@ -53,8 +52,7 @@ event.getAllEvents = function(req, res, next) {
     if (err)
       console.log(err);
     else {
-      res.json(events);
-      res.sendStatus(200);
+      res.status(200).send(events);
     }
   });
 }
@@ -70,8 +68,7 @@ event.getUsersEvents = function(req, res, next) {
         if (err)
           console.log(err);
         else {
-          res.json(events);
-          res.sendStatus(200);
+          res.status(200).send(events);
         }
       });
     }
@@ -110,7 +107,6 @@ event.deleteEvent = function(req, res, next) {
     if (err)
       console.log(err);
     else
-      res.json(event);
       res.sendStatus(200);
   });
 }
@@ -151,8 +147,7 @@ event.getListItems = function(req, res, next) {
     if (err)
       console.log(err);
     else {
-      res.json(events.itemList);
-      res.sendStatus(200);
+      res.status(200).send(events.itemList);
     }
   });
 }
@@ -203,7 +198,6 @@ event.updateItem = function(req, res, next){
         if(err)
           console.log(err);
         else{
-          console.log(result.itemList);
           res.sendStatus(200);
         }
       });
@@ -221,7 +215,6 @@ event.inviteFriend = function(req, res, next){
         if(err)
           console.log(err);
         else{
-          console.log(result);
           event.members.push({UserId: result.UserID, isAttending: "Invited"});
           event.save(function(err){
             if(err)
@@ -230,6 +223,24 @@ event.inviteFriend = function(req, res, next){
         }
       });
       res.sendStatus(200);
+    }
+  });
+}
+
+event.invitation = function(req, res, next){
+  database.userModel.findOne({token: req.headers["x-access-token"]}, function(err, user){
+    if(err)
+      console.log(err);
+    else{
+      database.eventModel.update({"members.$.UserID" : user.UserId , "EventID" : req.params.id},
+       {$set: {"members.$.isAttending" : req.params.answer}},
+       function(err, event){
+        if(err)
+          console.log(err);
+        else{
+          res.sendStatus(200);
+        }
+      });
     }
   });
 }
