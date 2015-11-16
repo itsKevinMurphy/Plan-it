@@ -568,5 +568,10 @@ public class ViewEventActvity extends Activity{
         });
     }
 
+    public void navItemList(View v)
+    {
+        Intent intent = new Intent(this, ItemListActivity.class);
+        startActivity(intent);
+    }
 
 }

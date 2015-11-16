@@ -59,7 +59,7 @@
         android:id="@+id/item_list_label_estimated_actual_cost"
         android:textSize="13sp"/>
 </LinearLayout>
-    
+
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -113,7 +113,7 @@
             android:layout_weight=".2"
             android:layout_height="50dp"
             android:text="$100.00"
-            android:id="@+id/item_list_text_estimated_actual_cost"
+            android:id="@+id/item_list_text_actual_cost"
             android:textSize="13sp"/>
     </LinearLayout>
 
@@ -166,7 +166,7 @@
             android:layout_weight=".2"
             android:layout_height="50dp"
             android:text="$120.00"
-            android:id="@+id/item_list_text_cost"
+            android:id="@+id/item_list_text_estimated_cost_split"
             android:textSize="15sp"/>
         <TextView
             android:background="@drawable/back"
@@ -175,7 +175,7 @@
             android:layout_weight=".2"
             android:layout_height="50dp"
             android:text="$100.00"
-            android:id="@+id/item_list_text_actual_cost"
+            android:id="@+id/item_list_text_actual_cost_split"
             android:textSize="15sp"/>
 
     </LinearLayout>
