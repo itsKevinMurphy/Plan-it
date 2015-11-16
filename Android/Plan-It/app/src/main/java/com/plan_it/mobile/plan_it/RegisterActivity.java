@@ -2,16 +2,16 @@ package com.plan_it.mobile.plan_it;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONException;
-import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 
 
 public class RegisterActivity extends AppCompatActivity {
@@ -49,35 +49,25 @@ public class RegisterActivity extends AppCompatActivity {
         String emailReg = email.getText().toString();
         String passwordReg = pwd.getText().toString();
         String confPass=pwdConfirm.getText().toString();
+        // Instantiate Http Request Param Object
+        RequestParams rdate = new RequestParams();
 
         // When Name Edit View, Email Edit View and Password Edit View have values other than Null
         if (RegValidation.isNotNull(nameReg) && RegValidation.isNotNull(emailReg) && RegValidation.isNotNull(passwordReg)) {
             // When Email entered is Valid
             if (RegValidation.validate(emailReg)) {
-                if (passwordReg.equals(confPass)) {
-                    // Instantiate Http Request Param Object
-                    RequestParams params = new RequestParams();
-                    params.put("firstName", fNameReg);
-                    params.put("lastName", lNameReg);
-                    params.put("email", emailReg);
-                    params.put("hashPassword", passwordReg);
-                    params.put("friendlyName", nameReg);
-
-                    RestClient.post("user", params, new JsonHttpResponseHandler() {
-                        public void onSuccess(String response) {
-                            JSONObject res;
-                            try {
-                                res = new JSONObject(response);
-                                Log.d("debug", res.getString("some_key")); // this is how you get a value out
-                                Toast.makeText(getApplicationContext(), "You are successfully registered!", Toast.LENGTH_LONG).show();
-                            } catch (JSONException e) {
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
-                            }
-
+                    if (passwordReg.equals(confPass)) {
+                    rdate.put("firstName", fNameReg);
+                    rdate.put("lastName", lNameReg);
+                    rdate.put("email", emailReg);
+                    rdate.put("hashPassword", passwordReg);
+                    rdate.put("friendlyName", nameReg);
+                        try {
+                            invokeWS(rdate);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                    });
-                } else {
+                    } else {
                     //When passwords do not match
                     Toast.makeText(getApplicationContext(), "Passwords do not match", Toast.LENGTH_LONG).show();
                 }
@@ -99,6 +89,22 @@ public class RegisterActivity extends AppCompatActivity {
         pwd.setText("");
     }
 
+    public void invokeWS(RequestParams params)throws JSONException{
+
+            RestClient.post("user",params, new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                    Toast.makeText(getApplicationContext(),responseBody.toString(),Toast.LENGTH_LONG).show();
+
+                    //Intent intent=new Intent(RegisterActivity.this,EventsListActivity.class);
+                    //startActivity(intent);
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+                }
+
+        });
+    }
 }
-
-
