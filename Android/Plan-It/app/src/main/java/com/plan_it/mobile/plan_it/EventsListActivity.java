@@ -1,7 +1,6 @@
 package com.plan_it.mobile.plan_it;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -210,6 +209,7 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
         return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
     }
     public void getEventsList() throws JSONException {
+
         RestClient.get("events", null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray eventsList) {
