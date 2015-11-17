@@ -3,21 +3,21 @@ angular.module('services', ['ngCookies'])
 .service("ServiceForEvents" , ['$http', function ($http) {
     this.addEvent = function(data, token)
     {
-      return $http({url:'http://localhost:3000/events', method: "POST", data: data, headers: {'x-access-token': token}});
+      return $http({url:'http://planit.lukefarnell.CA:3000/events', method: "POST", data: data, headers: {'x-access-token': token}});
     }
     this.getAllEvents = function(data)
     {
-      return $http({url:'http://localhost:3000/events', method: "GET", headers: {'x-access-token': data}});
+      return $http({url:'http://planit.lukefarnell.CA:3000/events', method: "GET", headers: {'x-access-token': data}});
     }
     this.getEventById = function(data, token)
     {
-      return $http({url:'http://localhost:3000/events/' + data , method: "GET", headers: {'x-access-token': token}});
+      return $http({url:'http://planit.lukefarnell.CA:3000/events/' + data , method: "GET", headers: {'x-access-token': token}});
     }
     this.deleteEvent = function (data, token){
-      return $http({ url: 'http://localhost:3000/events/' + data , method: "DELETE", headers: {'x-access-token': token}});
+      return $http({ url: 'http://planit.lukefarnell.CA:3000/events/' + data , method: "DELETE", headers: {'x-access-token': token}});
     }
     this.updateEvent = function (id, data, token){
-      return $http({ url: 'http://localhost:3000/events/' + id , method: "PUT", data: data, headers: {'x-access-token': token}});
+      return $http({ url: 'http://planit.lukefarnell.CA:3000/events/' + id , method: "PUT", data: data, headers: {'x-access-token': token}});
     }
 
 }
@@ -27,11 +27,11 @@ angular.module('services', ['ngCookies'])
 
     this.registerUser = function(data)
     {
-      return $http({url:'http://localhost:3000/user', method: "POST", data: data});
+      return $http({url:'http://planit.lukefarnell.CA:3000/user', method: "POST", data: data});
     }
     this.loginUser = function(data)
     {
-      return $http({url:'http://localhost:3000/login', method: "POST", data: data});
+      return $http({url:'http://planit.lukefarnell.CA:3000/login', method: "POST", data: data});
     }
     this.setToken = function(value)
     {
