@@ -73,7 +73,7 @@ angular.module('controller', [])
       //Call the addEvent method of Event Service to create a new event.
       ServiceForEvents.addEvent($scope.event, $scope.token).success(function (data)
       {
-        console.log("Event Created.")        
+        console.log("Event Created.")
         $window.location.reload();
       });
     }
@@ -84,7 +84,7 @@ angular.module('controller', [])
 
 })
 
-.controller('UpdateEventController', function ($window, $scope, $stateParams, ServiceForEvents){
+.controller('UpdateEventController', function ($window, $scope, $stateParams, ServiceForEvents, ServiceForUser){
   $scope.event = [];
   $scope.id = $stateParams.eventID;
   $scope.submitted = false;
@@ -92,7 +92,7 @@ angular.module('controller', [])
 
   console.log($scope.id);
   //Retrieve selected Event info based on the id
-  ServiceForEvents.getEventById($scope.id).success(function (data) {
+  ServiceForEvents.getEventById($scope.id, $scope.token).success(function (data) {
       //Store the event details in the event model
       $scope.event = data;
   });
@@ -100,7 +100,13 @@ angular.module('controller', [])
   console.log($scope.event);
 
   $scope.updateEvent = function () {
-    $scope.event.picture =  $scope.step.replace('data:image/jpeg;base64,', '');
+    if($scope.event)
+    {
+      if($scope.event.picture)
+      {
+      $scope.event.picture =  $scope.step.replace('data:image/jpeg;base64,', '');
+      }
+    }
     if ($scope.update_event_form.$valid) {
       // Submit as normal
       console.log($scope.update_event_form);
@@ -112,6 +118,7 @@ angular.module('controller', [])
       });
     } else {
         $scope.update_event_form.submitted = true;
+        console.log("Form is not complete.")
     }
   }
 
