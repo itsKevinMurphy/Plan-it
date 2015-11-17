@@ -3,8 +3,11 @@ var config = module.exports;
 var app = require('./app');
 var bodyParser = require('body-parser');
 var jwt = require('jsonwebtoken');
+var cors = require('cors');
 
-config.db = 'MONGOURL';
+//config.db = 'MONGOURL';
+config.db = 'mongodb://kamran:password@ds039684.mongolab.com:39684/plan-it'
+
 config.secret = 'captainplanet'
 
 app.set('superSecret', config.secret); // secret variable
@@ -14,11 +17,13 @@ app.use(bodyParser.urlencoded({
 }));
 app.disable('etag');
 
+app.use(cors());
+
 //Enable CORS on server
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header('Access-Control-Allow-Methods', 'DELETE, PUT');
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header('Access-Control-Allow-Methods', 'DELETE, PUT', 'OPTIONS');
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-access-token");
   next();
 });
 

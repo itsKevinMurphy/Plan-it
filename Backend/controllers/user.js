@@ -196,7 +196,7 @@ user.loginUser = function(req, res, next){
           if(err){
             console.log(err);
           }else if(isMatch){
-            var token = jwt.sign(user, config.secret);
+            var token = jwt.sign(user.friendlyName, config.secret);
             user.token = token;
             user.save(function(err, result){
               if(err)

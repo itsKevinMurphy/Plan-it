@@ -1,12 +1,51 @@
 angular.module('controller', [])
-.controller('CreateEventController', function ($window, $scope, ServiceForEvents){
+.controller('MainController', function($scope)
+{
+  console.log('Hello from Main controller');
+
+  $scope.testClick = function()
+  {
+    console.log('Clicking button from Main Ctrl.')
+  }
+})
+.controller('ParentController', function($scope, ServiceForUser, $location){
+  $scope.token;
+  $scope.currentUserID;
+  $scope.submitted = false;
+  console.log("Hello from ParentController");
+
+  $scope.loginUser = function(){
+    console.log("In Login User method.");
+
+    if ($scope.login_form.$valid) {
+
+    ServiceForUser.loginUser($scope.user).success(function(data){
+      console.log(data);
+      ServiceForUser.setToken(data.token);
+      $location.path('/account');
+    });
+    }
+    else {
+            $scope.login_form.submitted = true;
+            console.log($scope.login_form);
+            console.log($scope.submitted);
+        }
+
+  }
+
+})
+.controller('CreateEventController', function ($window, $scope, ServiceForEvents, ServiceForUser){
+  //Retrive token from service.
+  $scope.token = ServiceForUser.getToken();
+  console.log("Token :" + $scope.token)
+
   //Create a scope to determine if form has been submitted
   $scope.submitted = false;
 
   $scope.imageUpload = function(event){
     var file = event.target.files[0];
     var reader = new FileReader();
-    reader.onload = $scope.imageIsLoaded; 
+    reader.onload = $scope.imageIsLoaded;
     reader.readAsDataURL(file);
   }
   $scope.imageIsLoaded = function(e){
@@ -19,18 +58,23 @@ angular.module('controller', [])
   //Method called when the form is submitted
   $scope.createEvent = function(){
 
-    $scope.event.picture =  $scope.step.replace('data:image/jpeg;base64,', '');
-            
+    if($scope.event)
+    {
+      if($scope.event.picture)
+      {
+      $scope.event.picture =  $scope.step.replace('data:image/jpeg;base64,', '');
+      }
+    }
     console.log($scope.event);
       //If the form fields are all valid
     if ($scope.new_event_form.$valid)
     {
       console.log($scope.new_event_form);
       //Call the addEvent method of Event Service to create a new event.
-      ServiceForEvents.addEvent($scope.event).success(function (data)
+      ServiceForEvents.addEvent($scope.event, $scope.token).success(function (data)
       {
-        console.log("Event Created.")
-        $window.location.reload(); 
+        console.log("Event Created.")        
+        $window.location.reload();
       });
     }
     else {
@@ -42,16 +86,17 @@ angular.module('controller', [])
 
 .controller('UpdateEventController', function ($window, $scope, $stateParams, ServiceForEvents){
   $scope.event = [];
-  $scope.id = $stateParams.eventID; 
+  $scope.id = $stateParams.eventID;
   $scope.submitted = false;
-  
+  $scope.token = ServiceForUser.getToken();
+
   console.log($scope.id);
   //Retrieve selected Event info based on the id
   ServiceForEvents.getEventById($scope.id).success(function (data) {
       //Store the event details in the event model
       $scope.event = data;
   });
-  
+
   console.log($scope.event);
 
   $scope.updateEvent = function () {
@@ -59,12 +104,12 @@ angular.module('controller', [])
     if ($scope.update_event_form.$valid) {
       // Submit as normal
       console.log($scope.update_event_form);
-      ServiceForEvents.updateEvent($scope.id, $scope.event).success(function (data)
+      ServiceForEvents.updateEvent($scope.id, $scope.event, $scope.token).success(function (data)
       {
         console.log($scope.event);
         $window.location.reload();
         //should redirect to events
-      });            
+      });
     } else {
         $scope.update_event_form.submitted = true;
     }
@@ -73,7 +118,7 @@ angular.module('controller', [])
   $scope.imageUpload = function(event){
     var file = event.target.files[0];
     var reader = new FileReader();
-    reader.onload = $scope.imageIsLoaded; 
+    reader.onload = $scope.imageIsLoaded;
     reader.readAsDataURL(file);
   }
   $scope.imageIsLoaded = function(e){
@@ -85,8 +130,11 @@ angular.module('controller', [])
 
 })
 
-.controller('EventListController', function ($scope, ServiceForEvents){
-  ServiceForEvents.getAllEvents().success(function (data)
+.controller('EventListController', function ($scope, ServiceForEvents, ServiceForUser){
+  $scope.token = ServiceForUser.getToken();
+  console.log($scope.token);
+
+  ServiceForEvents.getAllEvents($scope.token).success(function (data)
   {
       $scope.eventList = data;
       console.log(data);
@@ -95,33 +143,35 @@ angular.module('controller', [])
 
 })
 
-.controller('EventDetailsController', function ($window, $scope, $stateParams, ServiceForEvents){
+.controller('EventDetailsController', function ($window, $scope, $stateParams, ServiceForEvents, ServiceForUser){
   $scope.id = $stateParams.eventID;
-
+  $scope.token = ServiceForUser.getToken();
 
   console.log($scope.id);
-  ServiceForEvents.getEventById($scope.id).success(function (data)
+  ServiceForEvents.getEventById($scope.id, $scope.token).success(function (data)
   {
     $scope.event = data;
   }
   );
 
   $scope.deleteEvent = function () {
+    $scope.token = ServiceForUser.getToken();
+
     console.log("about to delete event")
     if (confirm("Are you sure you want to delete the event?") == true)
-        ServiceForEvents.deleteEvent($scope.id).success(function (data) {});
-    $window.location.reload();  
+        ServiceForEvents.deleteEvent($scope.id, $scope.token).success(function (data) {});
+    $window.location.reload();
   };
 
 })
 
 // angular.module('userController', [])
 .controller('RegisterUserController', function ($scope, $location, ServiceForUser) {
-    
+
     //Create a scope to determine if form as been submitted
     $scope.submitted = false;
     //Method that is called when the form is submitted
-    $scope.signupForm = function () {  
+    $scope.signupForm = function () {
         //If the form is fields are valid
         if ($scope.register_form.$valid) {
             console.log($scope.register_form);
@@ -142,9 +192,9 @@ angular.module('controller', [])
                 $scope.register_form.submitted = false;
                 //$location.path('/Login');
             }
-            );           
-           
-          //If the form is not valid, tell that the form has been submitted to display validations  
+            );
+
+          //If the form is not valid, tell that the form has been submitted to display validations
         } else {
             $scope.register_form.submitted = true;
             console.log($scope.register_form);
@@ -153,4 +203,3 @@ angular.module('controller', [])
     }
 
 });
-
