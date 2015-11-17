@@ -5,9 +5,7 @@ var bodyParser = require('body-parser');
 var jwt = require('jsonwebtoken');
 var cors = require('cors');
 
-//config.db = 'MONGOURL';
-config.db = 'mongodb://kamran:password@ds039684.mongolab.com:39684/plan-it'
-
+config.db = 'MONGOURL';
 config.secret = 'captainplanet'
 
 app.set('superSecret', config.secret); // secret variable
