@@ -58,13 +58,14 @@ angular.module('controller', [])
   //Method called when the form is submitted
   $scope.createEvent = function(){
 
-    if($scope.event)
-    {
-      if($scope.event.picture)
+      if($scope.step != null && $scope.event)
       {
-      $scope.event.picture =  $scope.step.replace('data:image/jpeg;base64,', '');
+        console.log($scope.event.picture);
+        $scope.event.picture =  $scope.step.replace('data:image/jpeg;base64,', '');
+        console.log($scope.event.picture);
       }
-    }
+
+
     console.log($scope.event);
       //If the form fields are all valid
     if ($scope.new_event_form.$valid)
@@ -100,13 +101,12 @@ angular.module('controller', [])
   console.log($scope.event);
 
   $scope.updateEvent = function () {
-    if($scope.event)
-    {
-      if($scope.event.picture)
-      {
-      $scope.event.picture =  $scope.step.replace('data:image/jpeg;base64,', '');
-      }
-    }
+    if($scope.step != null && $scope.event)
+        {
+          console.log("Bfore" + $scope.event.picture);
+          $scope.event.picture =  $scope.step.replace('data:image/jpeg;base64,', '');
+          console.log("After" + $scope.event.picture);
+        }
     if ($scope.update_event_form.$valid) {
       // Submit as normal
       console.log($scope.update_event_form);
@@ -157,9 +157,14 @@ angular.module('controller', [])
   console.log($scope.id);
   ServiceForEvents.getEventById($scope.id, $scope.token).success(function (data)
   {
+    console.log(data);
     $scope.event = data;
+    $scope.event.thumbnail = 'data:image/jpeg;base64,' + $scope.event.picture;
   }
   );
+
+
+  //$scope.event.picture = "data:image/jpeg;base64," + $scope.event.picture;
 
   $scope.deleteEvent = function () {
     $scope.token = ServiceForUser.getToken();
