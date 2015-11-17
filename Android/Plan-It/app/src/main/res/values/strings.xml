@@ -35,6 +35,15 @@
     <string name="login">Login</string>
     <string name="email_user">Email/User</string>
     <string name="split">Split</string>
+    <string name="create">Create</string>
+    <string name="clear">Clear</string>
+    <string name="click_image_to_add">Click image box to add or change picture</string>
+    <string name="enter_username">Please Enter a Username</string>
+    <string name="enter_your_username_email">Please Enter Your Username/E-mail</string>
+    <string name="enter_password">Please Enter a Password</string>
+    <string name="enter_your_password">Please Enter Your Password</string>
+    <string name="reenter_password">Please Re-Enter Your Password</string>
+    <string name="enter_name">Please enter your full name</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
