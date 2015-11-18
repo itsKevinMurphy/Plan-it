@@ -10,21 +10,23 @@ public class RestClient {
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 
-    public static void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
-        client.addHeader("x-access-token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjQ5NTA3NjI2MWE2YTQxN2JiOWYwNmEiLCJVc2VySUQiOjE5LCJmcmllbmRseU5hbWUiOiJUZXN0IiwiZW1haWwiOiJUZXN0QGdtYWlsLmNvbSIsImhhc2hQYXNzd29yZCI6IiQyYSQxMCRmWEUzbzRMekNkcElTemIwS3FORGR1LlJTNy5xYkxDejR4d1J1M3FhakxsMUIxd1RPMkpsRyIsImZpcnN0TmFtZSI6IlRlc3QiLCJsYXN0TmFtZSI6IlVzZXIiLCJfX3YiOjAsImV2ZW50cyI6W10sImZyaWVuZExpc3QiOltdfQ.HfKiDjbqDxfsAFao41BjaiE9pMFB0CLVIIgg_asGUCk");
+    public static void get(String url, RequestParams params,String header, AsyncHttpResponseHandler responseHandler) {
+        client.addHeader("x-access-token", header);
         client.get(getAbsoluteUrl(url), params, responseHandler);
     }
 
-    public static void post(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
-        client.addHeader("x-access-token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjQ5NTA3NjI2MWE2YTQxN2JiOWYwNmEiLCJVc2VySUQiOjE5LCJmcmllbmRseU5hbWUiOiJUZXN0IiwiZW1haWwiOiJUZXN0QGdtYWlsLmNvbSIsImhhc2hQYXNzd29yZCI6IiQyYSQxMCRmWEUzbzRMekNkcElTemIwS3FORGR1LlJTNy5xYkxDejR4d1J1M3FhakxsMUIxd1RPMkpsRyIsImZpcnN0TmFtZSI6IlRlc3QiLCJsYXN0TmFtZSI6IlVzZXIiLCJfX3YiOjAsImV2ZW50cyI6W10sImZyaWVuZExpc3QiOltdfQ.HfKiDjbqDxfsAFao41BjaiE9pMFB0CLVIIgg_asGUCk");
+    public static void post(String url, RequestParams params,String header, AsyncHttpResponseHandler responseHandler) {
+        client.addHeader("x-access-token", header);
         client.post(getAbsoluteUrl(url), params, responseHandler);
 
     }
-    public static void put(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+    public static void put(String url, RequestParams params,String header, AsyncHttpResponseHandler responseHandler) {
+        client.addHeader("x-access-token", header);
         client.put(getAbsoluteUrl(url), params, responseHandler);
     }
 
-    public static void delete(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+    public static void delete(String url, RequestParams params,String header, AsyncHttpResponseHandler responseHandler) {
+        client.addHeader("x-access-token", header);
         client.delete(getAbsoluteUrl(url), params, responseHandler);
 
     }

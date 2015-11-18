@@ -35,6 +35,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
     public static View view;
     private List<Event>mEvents;
     private Context context;
+    public String token;
     public class EventsViewHolder extends RecyclerView.ViewHolder{
         CardView cv;
         TextView name;
@@ -61,6 +62,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
 
        public EventsViewHolder(final View itemView) {
             super(itemView);
+
             cv = (CardView)itemView.findViewById(R.id.events_list_cv);
             name = (TextView)itemView.findViewById(R.id.event_list_name);
             description = (TextView)itemView.findViewById(R.id.event_list_description);
@@ -103,6 +105,8 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
            });
         }
         public void bind(Event event) {
+            //Token tokenClass = new Token();
+            token = LoginActivity.token;
             name.setText(event.name);
             owner.setText(event.owner);
             description.setText(event.description);

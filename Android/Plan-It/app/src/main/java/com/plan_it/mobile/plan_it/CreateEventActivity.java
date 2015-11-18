@@ -46,7 +46,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class CreateEventActivity extends AppCompatActivity {
-
+    public String token;
     String base64Image;
     byte[] imageByte;
     static Uri  picUri;
@@ -70,6 +70,8 @@ public class CreateEventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
+
+       // token = EventsListActivity.token;
 
         Button submit = (Button) findViewById(R.id.add_event);
         Button clear = (Button) findViewById(R.id.clear_event);
@@ -264,7 +266,11 @@ public class CreateEventActivity extends AppCompatActivity {
         jdata.put("fromTime",e_fromTime);
         jdata.put("toTime", e_toTime);
         jdata.put("picture", base64Image);
-        RestClient.post("events",jdata, new JsonHttpResponseHandler() {
+
+       // Token tokenClass = new Token();
+        token = LoginActivity.token;
+
+        RestClient.post("events",jdata,token, new JsonHttpResponseHandler() {
             public void onSuccess(String response) {
                 JSONObject res;
                 try {
