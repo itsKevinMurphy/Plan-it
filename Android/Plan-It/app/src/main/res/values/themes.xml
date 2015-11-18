@@ -10,4 +10,6 @@
         <item name="background">@android:color/holo_blue_light</item>
         <item name="android:textColor">#FFFFFF</item>
     </style>
+    <color name="light_red">#FFB5B5</color>
+    <color name="light_green">#B5FFC4</color>
 </resources>

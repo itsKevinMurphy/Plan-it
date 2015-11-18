@@ -22,6 +22,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -72,8 +73,8 @@ public class CreateEventActivity extends AppCompatActivity {
 
        // token = EventsListActivity.token;
 
-        ImageButton submit = (ImageButton) findViewById(R.id.add_event);
-        ImageButton clear = (ImageButton) findViewById(R.id.clear_event);
+        Button submit = (Button) findViewById(R.id.add_event);
+        Button clear = (Button) findViewById(R.id.clear_event);
         final EditText event_name = (EditText) findViewById((R.id.event_name));
         final EditText event_reason = (EditText) findViewById((R.id.event_reason));
         final EditText event_location = (EditText) findViewById((R.id.event_location));
