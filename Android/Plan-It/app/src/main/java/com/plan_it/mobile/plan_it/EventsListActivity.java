@@ -246,7 +246,7 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
 
                         Bitmap scaledImage = Bitmap.createScaledBitmap(eventimg, 140, 150, true);
 
-                        mEvents.add(new Event(firstEvent.getInt("EventID"), firstEvent.getString("what"), "Kevin Murphy", firstEvent.getString("why"), firstEvent.getString("where"), scaledImage, firstEvent.getString("when"), firstEvent.getString("endDate"), "2:00 PM", "3:00 PM", IsAttending.OWNER/*randomStatus()*/, true, true));
+                        mEvents.add(new Event(firstEvent.getInt("EventID"), firstEvent.getString("what"), "Kevin Murphy", firstEvent.getString("why"), firstEvent.getString("where"), scaledImage, firstEvent.getString("when"), firstEvent.getString("endDate"),firstEvent.getString("fromTime"), firstEvent.getString("toTime"), IsAttending.OWNER/*randomStatus()*/, true, true));
                                 Log.d("RestD", firstEvent.toString());
                     }
 
