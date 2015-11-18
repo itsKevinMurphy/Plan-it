@@ -81,7 +81,7 @@ public class CreateEventActivity extends AppCompatActivity {
         create_fromdate = (EditText) findViewById(R.id.event_createfromdate);
         create_todate = (EditText) findViewById(R.id.event_createtodate);
         create_fromtime=(EditText) findViewById(R.id.event_createfromtime);
-        create_totime=(EditText) findViewById(R.id.event_createfromtime);
+        create_totime=(EditText) findViewById(R.id.event_createtotime);
 
 
         submit.setOnClickListener(new View.OnClickListener() {
