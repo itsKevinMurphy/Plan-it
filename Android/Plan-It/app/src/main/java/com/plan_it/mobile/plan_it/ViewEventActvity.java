@@ -539,7 +539,7 @@ public class ViewEventActvity extends Activity{
         else if(change == base64ImageUpdate){
             jdata.put("picture", base64ImageUpdate);
         }
-        RestClient.put("events/" + eventID, jdata, new JsonHttpResponseHandler() {
+        RestClient.put("events/" + eventID, jdata,LoginActivity.token, new JsonHttpResponseHandler() {
             public void onSuccess(String response) {
                 JSONObject res;
                 try {
@@ -554,7 +554,7 @@ public class ViewEventActvity extends Activity{
     }
 
     public void deleteEvent() throws JSONException {
-        RestClient.delete("events/" + eventID, null, new JsonHttpResponseHandler() {
+        RestClient.delete("events/" + eventID,null, LoginActivity.token, new JsonHttpResponseHandler() {
             public void onSuccess(String response) {
                 JSONObject res;
                 try {

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONException;
@@ -25,16 +28,19 @@ import cz.msebera.android.httpclient.Header;
  */
 
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends AppCompatActivity {
 
-        public String token="";
+        public static String token;
+        public int userID;
+        String user;
+        String password;
+
         EditText etUser, etPass;
         ProgressDialog prgDialog;
         // Error Msg TextView Object
         TextView errorMsg;
 
-
-    public void OnCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
@@ -48,6 +54,8 @@ public class LoginActivity extends Activity {
         prgDialog.setMessage("Please wait...");
         // Set Cancelable as False
         prgDialog.setCancelable(false);
+
+
     }
 
     @Override
@@ -73,44 +81,73 @@ public class LoginActivity extends Activity {
     }
 
     public void loginUser(View v) {
-        String user = etUser.getText().toString();
-        String password = etPass.getText().toString();
+        user = etUser.getText().toString();
+        password = etPass.getText().toString();
+
+        login();
+
+
+    }
+
+    public void login(){
         RequestParams params = new RequestParams();
-        // When Email Edit View and Password Edit View have values other than Null
         if ((password != null) && (user != null)) {
             params.put("username", user);
             // Put Http parameter password with value of Password Edit Value control
             params.put("password", password);
-
-            getLogin(params);
         }
+        RestClient.post("login", params, null, new JsonHttpResponseHandler() {
+            public void onSuccess(int statusCode, Header[] header, JSONObject response) {
+                JSONObject res;
+                try {
 
-    }
-
-    public void getLogin(RequestParams params){
-
-        RestClient.get("login", params, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-
-                    try {
-                        JSONObject res = new JSONObject();
-                        token = res.getString("x-access-token");
-
-                        Toast.makeText(getApplicationContext(), "You are successfully logged in!", Toast.LENGTH_LONG).show();
-                        Intent homeIntent = new Intent(getApplicationContext(), ViewEventActvity.class);
-                        startActivity(homeIntent);
-                    } catch (JSONException e1) {
-                        e1.printStackTrace();
-                    }
+                    res = response;
+                    token = res.getString("token");
+                    Log.d("debug", res.getString("token"));
+                    Intent intent = new Intent(LoginActivity.this, EventsListActivity.class);
+                    startActivity(intent);
+                } catch (JSONException ex) {
+                    ex.printStackTrace();
+                }
             }
-
             @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Toast.makeText(getApplicationContext(), "Username and password not found", Toast.LENGTH_LONG).show();
+            public void onFailure(int statusCode, Header[] header,Throwable throwable, JSONObject response){
+
             }
         });
     }
+
+   /* public void getLogin(){
+            RequestParams params = new RequestParams();
+
+            // When Email Edit View and Password Edit View have values other than Null
+            if ((password != null) && (user != null)) {
+                params.put("username", user);
+                // Put Http parameter password with value of Password Edit Value control
+                params.put("password", password);
+            }
+            RestClient.post("login", params, null, new JsonHttpResponseHandler(){
+                @Override
+                public void onSuccess(int statusCode, Header[] header,JSONObject response) {
+                try {
+                    token = response.getString("token"); // this is how you get a value out
+                    userID = response.getInt("userID");
+                    tokenClass.setToken(token);
+                    //Toast.makeText(getApplicationContext(),token, Toast.LENGTH_LONG).show();
+                }
+                    catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+                Log.d("Failed: ", "" + statusCode);
+                Log.d("Error : ", "" + throwable);
+            }
+        });
+    }*/
 
     public void register(View v)
     {
