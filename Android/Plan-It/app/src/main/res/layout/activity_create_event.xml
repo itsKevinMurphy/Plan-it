@@ -38,7 +38,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="What is the name of your event?"
+            android:text="@string/name_event"
             android:id="@+id/textView"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
@@ -59,7 +59,7 @@
             android:imeOptions="actionDone"
             android:singleLine="true"
             android:drawableRight="@drawable/ic_edit_blue_24dp"
-            android:hint="title of event?" />
+            android:hint="@string/event_title" />
         </android.support.design.widget.TextInputLayout>
 
         <TextView
@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Why are we having the event?"
+            android:text="@string/why_event"
             android:id="@+id/textView2"
             android:layout_below="@+id/event_name"
             android:layout_alignParentLeft="true"
@@ -87,7 +87,7 @@
             android:imeOptions="actionDone"
             android:singleLine="true"
             android:drawableRight="@drawable/ic_edit_blue_24dp"
-            android:hint="describe the event?" />
+            android:hint="@string/event_description" />
         </android.support.design.widget.TextInputLayout>
 
         <TextView
@@ -95,7 +95,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="where is the event?"
+            android:text="@string/where_event"
             android:id="@+id/textView3"
             android:layout_below="@+id/event_reason"
             android:layout_alignParentLeft="true"
@@ -115,7 +115,7 @@
             android:imeOptions="actionDone"
             android:singleLine="true"
             android:drawableRight="@drawable/ic_edit_blue_24dp"
-            android:hint="Location of event?" />
+            android:hint="@string/location_event" />
         </android.support.design.widget.TextInputLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -128,7 +128,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Choose Dates:"
+                android:text="@string/event_when"
                 android:id="@+id/textView4"
                 android:layout_below="@+id/event_location"
                 android:gravity="center_horizontal"
@@ -149,7 +149,7 @@
                     android:id="@+id/event_createfromdate"
                     android:imeOptions="actionDone"
                     android:singleLine="true"
-                    android:hint="From Date:"/>
+                    android:hint="@string/start"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -160,7 +160,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/event_createtodate"
-                    android:hint="To Date:"
+                    android:hint="@string/end"
                     android:imeOptions="actionDone"
                     android:singleLine="true" />
                 </android.support.design.widget.TextInputLayout>
@@ -180,7 +180,7 @@
                     android:id="@+id/event_createfromtime"
                     android:imeOptions="actionDone"
                     android:singleLine="true"
-                    android:hint="Start Time"/>
+                    android:hint="@string/from"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -191,7 +191,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/event_createtotime"
-                    android:hint="End Time:"
+                    android:hint="@string/to"
                     android:imeOptions="actionDone"
                     android:singleLine="true"/>
                 </android.support.design.widget.TextInputLayout>
