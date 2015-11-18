@@ -8,7 +8,9 @@ app.config(['$stateProvider',
         .state('/', {
             url: '',
             views: {
-                    templateUrl: 'index.html'
+              '': {templateUrl: 'index.html', controller: 'MainController'},
+              'generalView': {templateUrl: 'login.html', controller: 'ParentController'}
+
             }
         })
         .state('signup', {
@@ -18,6 +20,14 @@ app.config(['$stateProvider',
                     templateUrl: 'signup.html', controller: 'RegisterUserController'
                 }
             }
+        })
+        .state('login', {
+          url: '/login',
+          views: {
+            'generalView': {
+              templateUrl: 'login.html', controller: 'ParentController'
+            }
+          }
         })
         .state('event', {
             url: '/event',

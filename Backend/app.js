@@ -3,6 +3,7 @@ var express = require('express');
 var mongoose = require('mongoose');
 var increment = require('mongoose-auto-increment');
 
+
 module.exports = app = express();
 
 var database = require('./database');
@@ -17,7 +18,7 @@ database.createConnection();
 
 app.get('/events', eventCtrl.getAllEvents);
 app.post('/events', eventCtrl.createEvent);
-//app.get('/events/:id([0-9]*$)', eventCtrl.getEventById);
+
 app.put('/events/:id', eventCtrl.updateEvent);
 app.get('/events/user', eventCtrl.getUsersEvents);
 app.post('/events/:id/invite/:friendId([0-9]*$)', eventCtrl.inviteFriend);
@@ -37,6 +38,7 @@ app.get("/search/:param/friend", userCtrl.findUserByFriendlyNameOrEmail);
 app.delete("/user/:id/friend/:friendId", userCtrl.removeFriend);
 app.post("/user", userCtrl.createUser);
 app.post("/login", userCtrl.loginUser);
+app.get('/events/:id([0-9]*$)', eventCtrl.getEventById);
 
 app.listen(3000, function() {
   console.log("Server is running on port 3000");
