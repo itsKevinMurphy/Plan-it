@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -31,19 +32,35 @@ import cz.msebera.android.httpclient.Header;
 
 public class EventsListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
 
+    Token tokenClass = new Token();
+
     public View view;
     private List<Event> mEvents;
     private EventsListAdapter adapter;
     private RecyclerView events_recycler_view;
+    public String token;
+    public int userid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+        /*Bundle bundle = intent.getExtras();
+        token = bundle.getString("token");
+        userid = bundle.getInt("userID");*/
+        //token = LoginActivity.token;
+        //userid = LoginActivity.userID;
+
+        //token = intent.getStringExtra("toke");
         try {
             getEventsList();
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        setContentView(R.layout.activity_events_list);
+
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -53,6 +70,9 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
         searchView.setOnQueryTextListener(this);
         return super.onCreateOptionsMenu(menu);
+
+
+
     }
     @Override
     public boolean onQueryTextChange(String query) {
@@ -210,8 +230,9 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
         return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
     }
     public void getEventsList() throws JSONException {
-
-        RestClient.get("events", null, new JsonHttpResponseHandler() {
+        //"eyJhbGciOiJIUzI1NiJ9.am9uc25vdw.zO7Yc05XZ46VWWO-F0IUw6WKGivCQMuPjXYC5n8mElM"
+        token = LoginActivity.token;
+        RestClient.get("events/user",null,token , new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray eventsList) {
                 // Pull out the first event on the public timeline
@@ -225,20 +246,26 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
 
                         Bitmap scaledImage = Bitmap.createScaledBitmap(eventimg, 140, 150, true);
 
-                        mEvents.add(new Event(firstEvent.getInt("EventID"), firstEvent.getString("what"), "Kevin Murphy", firstEvent.getString("why"), firstEvent.getString("where"), scaledImage, firstEvent.getString("when"), firstEvent.getString("endDate"), "2:00 PM", "3:00 PM", randomStatus(), true, true));
-                        Log.d("RestD", firstEvent.toString());
+                        mEvents.add(new Event(firstEvent.getInt("EventID"), firstEvent.getString("what"), "Kevin Murphy", firstEvent.getString("why"), firstEvent.getString("where"), scaledImage, firstEvent.getString("when"), firstEvent.getString("endDate"), "2:00 PM", "3:00 PM", IsAttending.OWNER/*randomStatus()*/, true, true));
+                                Log.d("RestD", firstEvent.toString());
                     }
-                    setContentView(R.layout.activity_events_list);
 
-                    adapter = new EventsListAdapter( getApplicationContext(), mEvents);
-                    events_recycler_view = (RecyclerView)findViewById(R.id.events_list_recycler_view);
-                    LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
-                    events_recycler_view.setLayoutManager(llm);
-                    events_recycler_view.setAdapter(adapter);
+                     adapter = new EventsListAdapter( getApplicationContext(), mEvents);
+                     events_recycler_view = (RecyclerView)findViewById(R.id.events_list_recycler_view);
+                     LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
+                     events_recycler_view.setLayoutManager(llm);
+                     events_recycler_view.setAdapter(adapter);
+
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
+            @Override
+            public void onFailure(int statusCode, Header[] header,Throwable throwable, JSONObject response){
+                Toast.makeText(getApplicationContext(),"FAILURE", Toast.LENGTH_LONG).show();
+            }
+
         });
     }
 
