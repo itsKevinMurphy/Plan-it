@@ -100,10 +100,13 @@ public class CreateEventActivity extends AppCompatActivity {
                 } else {
                     try {
                         createEvent();
+
                     }
                     catch (JSONException ex){
                         ex.printStackTrace();
                     }
+                    Intent eIntent = new Intent(CreateEventActivity.this, EventsListActivity.class);
+                    startActivity(eIntent);
                 }
             }
         });
@@ -271,8 +274,7 @@ public class CreateEventActivity extends AppCompatActivity {
                     res = new JSONObject(response);
                     Log.d("debug", res.getString("some_key")); // this is how you get a value out
 
-                    Intent eIntent = new Intent(CreateEventActivity.this, EventsListActivity.class);
-                    startActivity(eIntent);
+
 
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block
