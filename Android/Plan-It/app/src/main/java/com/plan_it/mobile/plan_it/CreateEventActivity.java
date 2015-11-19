@@ -6,9 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -25,7 +23,6 @@ import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -42,7 +39,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 public class CreateEventActivity extends AppCompatActivity {
@@ -108,8 +104,6 @@ public class CreateEventActivity extends AppCompatActivity {
                     catch (JSONException ex){
                         ex.printStackTrace();
                     }
-                    Intent myIntent = new Intent(CreateEventActivity.this, EventsListActivity.class);
-                    startActivity(myIntent);
                 }
             }
         });
@@ -276,6 +270,10 @@ public class CreateEventActivity extends AppCompatActivity {
                 try {
                     res = new JSONObject(response);
                     Log.d("debug", res.getString("some_key")); // this is how you get a value out
+
+                    Intent eIntent = new Intent(CreateEventActivity.this, EventsListActivity.class);
+                    startActivity(eIntent);
+
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
