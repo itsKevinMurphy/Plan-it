@@ -6,8 +6,9 @@ angular.module('services', ['ngCookies'])
       return $http({url:'http://planit.lukefarnell.CA:3000/events', method: "POST", data: data, headers: {'x-access-token': token}});
     }
     this.getAllEvents = function(data)
+    // change to get event by user
     {
-      return $http({url:'http://planit.lukefarnell.CA:3000/events', method: "GET", headers: {'x-access-token': data}});
+      return $http({url:'http://planit.lukefarnell.CA:3000/events/user', method: "GET", headers: {'x-access-token': data}});
     }
     this.getEventById = function(data, token)
     {
