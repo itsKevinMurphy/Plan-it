@@ -70,10 +70,8 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
         searchView.setOnQueryTextListener(this);
         return super.onCreateOptionsMenu(menu);
-
-
-
     }
+
     @Override
     public boolean onQueryTextChange(String query) {
 
