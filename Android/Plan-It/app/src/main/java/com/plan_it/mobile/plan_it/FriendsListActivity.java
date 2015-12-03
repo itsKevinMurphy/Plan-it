@@ -20,8 +20,8 @@ public class FriendsListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends_list);
         fillFriendsList();
-        int resurces;
         list = (ListView)findViewById(R.id.friends_list_view);
+        list.setAdapter(new FriendsListAdapter(this, R.layout.friends_list_item, friendsList));
     }
 
     public void fillFriendsList()
@@ -34,7 +34,6 @@ public class FriendsListActivity extends AppCompatActivity {
         friendsList.add(new FriendListModel("MohammedSumon", R.drawable.ic_perm_identity_black_24dp, true));
         friendsList.add(new FriendListModel("AminaAbbasi", R.drawable.victoria_snowboard_mount_washington_small, true));
         friendsList.add(new FriendListModel("JeffTyber", R.drawable.ic_account_circle_blue_24dp, false));
-
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
