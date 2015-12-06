@@ -5,10 +5,10 @@ angular.module('services', ['ngCookies'])
     {
       return $http({url:'http://planit.lukefarnell.CA:3000/events', method: "POST", data: data, headers: {'x-access-token': token}});
     }
-    this.getAllEvents = function(data)
+    this.getAllEvents = function(token)
     // change to get event by user
     {
-      return $http({url:'http://planit.lukefarnell.CA:3000/events/user', method: "GET", headers: {'x-access-token': data}});
+      return $http({url:'http://planit.lukefarnell.CA:3000/events/user', method: "GET", headers: {'x-access-token': token}});
     }
     this.getEventById = function(id, token)
     {
@@ -38,9 +38,13 @@ angular.module('services', ['ngCookies'])
     {
       return $http({url:'http://planit.lukefarnell.CA:3000/user/' + id + '/friend', method: "POST", data: data, headers: {'x-access-token': token}});
     }
-    this.getAllFriends = function(id)
+    this.getAllFriends = function(id, token)
     {
       return $http({url:'http://planit.lukefarnell.CA:3000/user/' + id + '/friend', method: "GET", headers: {'x-access-token': token}});
+    }
+    this.removeFriend = function(id, friendId, token)
+    {
+      return $http({url:'http://planit.lukefarnell.CA:3000/user/' + id + '/friend/' + friendId, method: "DELETE", headers: {'x-access-token': token}});
     }
 
 

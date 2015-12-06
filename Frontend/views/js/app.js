@@ -88,7 +88,7 @@ app.config(['$stateProvider','$urlRouterProvider',
             }
         })
         .state('friends', {
-            url: '/friends/:myID',
+            url: '/friends',
             views: {
                 'generalView': {
                     templateUrl: 'friends.html', controller: 'ViewFriendsController'
