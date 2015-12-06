@@ -204,10 +204,9 @@ angular.module('controller', [])
   $scope.id = $stateParams.userID;
   $scope.token = ServiceForUser.getToken();
   $scope.currentUserID = ServiceForUser.getUser();
-  console.log($scope.id);
-  $scope.friend = {};
+   console.log($scope.id);
+   $scope.friend = {};
   $scope.friend.userID;
-  // $scope.user;
 
   ServiceForUser.findUserByID($scope.id, $scope.token).success(function (data)
   {
@@ -247,6 +246,21 @@ angular.module('controller', [])
     );
   }
 
+})
+
+
+//view friends
+.controller('ViewFriendsController', function ($scope, $stateParams, ServiceForUser){
+  $scope.token = ServiceForUser.getToken();
+  $scope.id = $stateParams.myID;
+  console.log($scope.id);
+
+    ServiceForUser.getAllFriends($scope.id, $scope.token).success(function (data)
+  {
+      $scope.friendList = data;
+      console.log(data);
+  }
+  );
 })
 
 
