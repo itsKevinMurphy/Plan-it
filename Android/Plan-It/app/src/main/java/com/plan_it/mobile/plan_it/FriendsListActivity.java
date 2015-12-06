@@ -1,6 +1,7 @@
 package com.plan_it.mobile.plan_it;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -87,5 +88,11 @@ public class FriendsListActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void navAddFriend(View v)
+    {
+        Intent intent = new Intent(this, AddFriendActivity.class);
+        startActivity(intent);
     }
 }
