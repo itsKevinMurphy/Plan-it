@@ -1,11 +1,32 @@
 angular.module('controller', [])
-.controller('MainController', function($scope)
+.controller('MainController', function($scope, ServiceForUser, $cookies, $location)
 {
   console.log('Hello from Main controller');
 
-  $scope.testClick = function()
+  $scope.token = $cookies.token;
+  $scope.isLogged = false;
+
+  if($scope.token != "")
   {
-    console.log('Clicking button from Main Ctrl.')
+    $scope.isLogged = true;
+  }
+
+  $scope.checkForUrl = function()
+  {
+    if($scope.isLogged == true)
+    {
+      $location.path('/event');
+    }
+    else
+    {
+      $location.path('/')
+    }
+  }
+
+  $scope.logout = function()
+  {
+    ServiceForUser.logoutUser();
+    $scope.isLogged = false;
   }
 })
 .controller('ParentController', function($scope, ServiceForUser, $location){
@@ -22,7 +43,9 @@ angular.module('controller', [])
     ServiceForUser.loginUser($scope.user).success(function(data){
       console.log(data);
       ServiceForUser.setToken(data.token);
-      $location.path('/account');
+      ServiceForUser.setUser(data.userID);
+      $scope.$parent.isLogged = true;
+      $location.path('/event');
     });
     }
     else {
@@ -163,7 +186,6 @@ angular.module('controller', [])
   }
   );
 
-
   //$scope.event.picture = "data:image/jpeg;base64," + $scope.event.picture;
 
   $scope.deleteEvent = function () {
@@ -176,6 +198,65 @@ angular.module('controller', [])
   };
 
 })
+
+//user profile
+.controller('UserProfileController', function ($scope, $stateParams, ServiceForUser){
+  $scope.id = $stateParams.userID;
+  $scope.token = ServiceForUser.getToken();
+  $scope.currentUserID = ServiceForUser.getUser();
+  console.log($scope.id);
+  $scope.friend = {};
+  $scope.friend.userID;
+  // $scope.user;
+
+  ServiceForUser.findUserByID($scope.id, $scope.token).success(function (data)
+  {
+      $scope.user = data;
+      $scope.friend.userID = data.UserID;
+      console.log($scope.friend);
+      console.log(data);
+  }
+  );
+
+  $scope.addNewFriend = function () {
+    $scope.token = ServiceForUser.getToken();
+
+    console.log($scope.friend);
+    console.log("attempting to add " + $scope.friend.userID);
+    ServiceForUser.addNewFriend($scope.currentUserID, $scope.friend, $scope.token).success(function (data) {
+      console.log("successfully added " + $scope.friend.userID);
+    });
+    // $window.location.reload();
+  };
+
+})
+
+
+//search users
+.controller('SearchUserController', function ($scope, ServiceForUser){
+  $scope.token = ServiceForUser.getToken();
+  console.log($scope.token);
+
+  $scope.searchUser = function () {
+    console.log($scope.user.search);
+    ServiceForUser.searchUser($scope.user.search, $scope.token).success(function (data)
+    {
+        $scope.user = data;
+        console.log(data);
+    }
+    );
+  }
+
+})
+
+
+.controller('AccountController', function ($scope, $location)
+{
+
+}
+)
+
+
 
 // angular.module('userController', [])
 .controller('RegisterUserController', function ($scope, $location, ServiceForUser) {

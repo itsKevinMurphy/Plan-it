@@ -10,12 +10,12 @@ angular.module('services', ['ngCookies'])
     {
       return $http({url:'http://planit.lukefarnell.CA:3000/events/user', method: "GET", headers: {'x-access-token': data}});
     }
-    this.getEventById = function(data, token)
+    this.getEventById = function(id, token)
     {
-      return $http({url:'http://planit.lukefarnell.CA:3000/events/' + data , method: "GET", headers: {'x-access-token': token}});
+      return $http({url:'http://planit.lukefarnell.CA:3000/events/' + id , method: "GET", headers: {'x-access-token': token}});
     }
-    this.deleteEvent = function (data, token){
-      return $http({ url: 'http://planit.lukefarnell.CA:3000/events/' + data , method: "DELETE", headers: {'x-access-token': token}});
+    this.deleteEvent = function (id, token){
+      return $http({ url: 'http://planit.lukefarnell.CA:3000/events/' + id , method: "DELETE", headers: {'x-access-token': token}});
     }
     this.updateEvent = function (id, data, token){
       return $http({ url: 'http://planit.lukefarnell.CA:3000/events/' + id , method: "PUT", data: data, headers: {'x-access-token': token}});
@@ -25,6 +25,24 @@ angular.module('services', ['ngCookies'])
 ])
 .service("ServiceForUser", ['$http', '$cookies', '$location', function ($http, $cookies, $location) {
     var token = "";
+
+    this.searchUser = function(data, token)
+    {
+      return $http({url:'http://planit.lukefarnell.CA:3000/search/' + data + '/friend', method: "GET", data: data, headers: {'x-access-token': token}});
+    }
+    this.findUserByID = function(data, token)
+    {
+      return $http({url:'http://planit.lukefarnell.CA:3000/search/' + data + '/user', method: "GET", headers: {'x-access-token': token}});
+    }
+    this.addNewFriend = function(id, data, token)
+    {
+      return $http({url:'http://planit.lukefarnell.CA:3000/user/' + id + '/friend', method: "POST", data: data, headers: {'x-access-token': token}});
+    }
+    this.getAllFriends = function(data)
+    {
+      return $http({url:'http://planit.lukefarnell.CA:3000/user/' + id + '/friend', method: "GET", headers: {'x-access-token': token}});
+    }
+
 
     this.registerUser = function(data)
     {
@@ -49,6 +67,18 @@ angular.module('services', ['ngCookies'])
         $location.path('/login')
       }
     }
-
+    this.logoutUser = function()
+    {
+      $cookies.token = "";
+      $cookies.userID = "";
+    }
+    this.setUser = function(value)
+    {
+      $cookies.userID = value;
+    }
+    this.getUser = function()
+    {
+      return $cookies.userID;
+    }
 }
 ]);

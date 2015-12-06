@@ -2,11 +2,13 @@
 var app = angular.module('planItApp', ['ui.router', 'services', 'controller']);
 
 //to route views on single page
-app.config(['$stateProvider',
-  function ($stateProvider) {
+app.config(['$stateProvider','$urlRouterProvider',
+  function ($stateProvider, $urlRouterProvider) {
+    $urlRouterProvider.otherwise('/');
+
     $stateProvider
         .state('/', {
-            url: '',
+            url: '/',
             views: {
               '': {templateUrl: 'index.html', controller: 'MainController'},
               'generalView': {templateUrl: 'login.html', controller: 'ParentController'}
@@ -105,15 +107,15 @@ app.config(['$stateProvider',
             url: '/users',
             views: {
                 'generalView': {
-                    templateUrl: 'users.html'
+                    templateUrl: 'users.html', controller: 'SearchUserController'
                 }
             }
         })
         .state('users.profile', {
-            url: '',
+            url: '/users/:userID',
             views: {
                 'rightView': {
-                    templateUrl: 'users.profile.html'
+                    templateUrl: 'users.profile.html', controller:'UserProfileController'
                 }
             }
         })
@@ -121,7 +123,7 @@ app.config(['$stateProvider',
             url: '/account',
             views: {
                 'generalView': {
-                    templateUrl: 'account.html'
+                    templateUrl: 'account.html', controller:'AccountController'
                 }
             }
         })
