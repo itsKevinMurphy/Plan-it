@@ -1,11 +1,32 @@
 angular.module('controller', [])
-.controller('MainController', function($scope)
+.controller('MainController', function($scope, ServiceForUser, $cookies, $location)
 {
   console.log('Hello from Main controller');
 
-  $scope.testClick = function()
+  $scope.token = $cookies.token;
+  $scope.isLogged = false;
+
+  if($scope.token != "")
   {
-    console.log('Clicking button from Main Ctrl.')
+    $scope.isLogged = true;
+  }
+
+  $scope.checkForUrl = function()
+  {
+    if($scope.isLogged == true)
+    {
+      $location.path('/event');
+    }
+    else
+    {
+      $location.path('/')
+    }
+  }
+
+  $scope.logout = function()
+  {
+    ServiceForUser.logoutUser();
+    $scope.isLogged = false;
   }
 })
 .controller('ParentController', function($scope, ServiceForUser, $location){
@@ -22,7 +43,8 @@ angular.module('controller', [])
     ServiceForUser.loginUser($scope.user).success(function(data){
       console.log(data);
       ServiceForUser.setToken(data.token);
-      $location.path('/account');
+      $scope.$parent.isLogged = true;
+      $location.path('/event');
     });
     }
     else {
@@ -208,7 +230,11 @@ angular.module('controller', [])
   );
 
 })
+.controller('AccountController', function ($scope, $location)
+{
 
+}
+)
 
 
 
