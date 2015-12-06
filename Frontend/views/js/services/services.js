@@ -70,7 +70,15 @@ angular.module('services', ['ngCookies'])
     this.logoutUser = function()
     {
       $cookies.token = "";
+      $cookies.userID = "";
     }
-
+    this.setUser = function(value)
+    {
+      $cookies.userID = value;
+    }
+    this.getUser = function()
+    {
+      return $cookies.userID;
+    }
 }
 ]);
