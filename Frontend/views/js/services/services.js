@@ -57,6 +57,10 @@ angular.module('services', ['ngCookies'])
         $location.path('/login')
       }
     }
+    this.logoutUser = function()
+    {
+      $cookies.token = "";
+    }
 
 }
 ]);
