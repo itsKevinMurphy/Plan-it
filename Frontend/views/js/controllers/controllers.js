@@ -199,38 +199,6 @@ angular.module('controller', [])
 
 })
 
-//user profile
-.controller('UserProfileController', function ($scope, $stateParams, ServiceForUser){
-  $scope.id = $stateParams.userID;
-  $scope.token = ServiceForUser.getToken();
-  $scope.currentUserID = ServiceForUser.getUser();
-  console.log($scope.id);
-  $scope.friend = {};
-  $scope.friend.userID;
-  // $scope.user;
-
-  ServiceForUser.findUserByID($scope.id, $scope.token).success(function (data)
-  {
-      $scope.user = data;
-      $scope.friend.userID = data.UserID;
-      console.log($scope.friend);
-      console.log(data);
-  }
-  );
-
-  $scope.addNewFriend = function () {
-    $scope.token = ServiceForUser.getToken();
-
-    console.log($scope.friend);
-    console.log("attempting to add " + $scope.friend.userID);
-    ServiceForUser.addNewFriend($scope.currentUserID, $scope.friend, $scope.token).success(function (data) {
-      console.log("successfully added " + $scope.friend.userID);
-    });
-    // $window.location.reload();
-  };
-
-})
-
 
 //search users
 .controller('SearchUserController', function ($scope, ServiceForUser){
@@ -246,6 +214,66 @@ angular.module('controller', [])
     }
     );
   }
+
+})
+
+//user profile
+.controller('UserProfileController', function ($scope, $stateParams, ServiceForUser){
+  $scope.id = $stateParams.userID;
+  $scope.token = ServiceForUser.getToken();
+  $scope.currentUserID = ServiceForUser.getUser();
+  console.log($scope.id);
+  $scope.friend = {};
+  $scope.friend.userID;
+
+  ServiceForUser.findUserByID($scope.id, $scope.token).success(function (data)
+  {
+      $scope.user = data;
+      $scope.friend.userID = data.UserID;
+      console.log($scope.friend);
+      console.log(data);
+  }
+  );
+
+  $scope.addNewFriend = function () {
+    $scope.token = ServiceForUser.getToken();
+
+    console.log("my id: " + $scope.currentUserID + " | friend id: " + $scope.friend);
+    console.log("attempting to add " + $scope.friend.userID);
+    ServiceForUser.addNewFriend($scope.currentUserID, $scope.friend, $scope.token).success(function (data) {
+      console.log("successfully added " + $scope.friend.userID);
+    });
+    // $window.location.reload();
+  };
+
+
+  $scope.removeFriend = function () {
+    $scope.token = ServiceForUser.getToken();
+
+    console.log("my id: " + $scope.currentUserID + " | friend id: " + $scope.friend);
+    console.log("attempting to remove " + $scope.friend.userID);
+    if (confirm("Are you sure you want to remove friend?") == true)
+        ServiceForUser.removeFriend($scope.currentUserID, $scope.friend.userID, $scope.token).success(function (data) {
+          console.log("successfully removed " + $scope.friend.userID);
+        });
+  };
+
+
+})
+
+//view friends
+.controller('ViewFriendsController', function ($scope, ServiceForUser){
+  $scope.token = ServiceForUser.getToken();
+  // $scope.id = $stateParams.myID;
+  $scope.currentUserID = ServiceForUser.getUser();
+  console.log("my id: " + $scope.currentUserID);
+
+    ServiceForUser.getAllFriends($scope.currentUserID, $scope.token).success(function (data)
+  {
+      $scope.friendList = data;
+      console.log(data);
+  }
+  );
 
 })
 
