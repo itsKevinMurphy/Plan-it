@@ -185,7 +185,6 @@ angular.module('controller', [])
   }
   );
 
-
   //$scope.event.picture = "data:image/jpeg;base64," + $scope.event.picture;
 
   $scope.deleteEvent = function () {
@@ -198,6 +197,35 @@ angular.module('controller', [])
   };
 
 })
+
+//user profile
+.controller('UserProfileController', function ($scope, $stateParams, ServiceForUser){
+  $scope.id = $stateParams.userID;
+  $scope.token = ServiceForUser.getToken();
+  console.log($scope.id);
+  $scope.friend = {};
+  $scope.friend.userID = 1;
+  // $scope.user;
+
+  ServiceForUser.findUserByID($scope.id, $scope.token).success(function (data)
+  {
+      $scope.user = data;
+      console.log(data);
+  }
+  );
+
+  $scope.addNewFriend = function () {
+    $scope.token = ServiceForUser.getToken();
+
+    console.log("attempting to add " + $scope.friend.userID);
+    ServiceForUser.addNewFriend(4, $scope.friend, $scope.token).success(function (data) {
+      console.log("successfully added " + $scope.friend.userID);
+    });
+    // $window.location.reload();
+  };
+
+})
+
 
 //search users
 .controller('SearchUserController', function ($scope, ServiceForUser){
@@ -216,20 +244,7 @@ angular.module('controller', [])
 
 })
 
-//user profile
-.controller('UserProfileController', function ($scope, $stateParams, ServiceForUser){
-  $scope.id = $stateParams.userID;
-  $scope.token = ServiceForUser.getToken();
-  console.log($scope.id);
 
-  ServiceForUser.findUserByID($scope.id, $scope.token).success(function (data)
-  {
-      $scope.user = data;
-      console.log(data);
-  }
-  );
-
-})
 .controller('AccountController', function ($scope, $location)
 {
 

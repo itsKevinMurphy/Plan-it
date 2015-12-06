@@ -112,7 +112,7 @@ app.config(['$stateProvider','$urlRouterProvider',
             }
         })
         .state('users.profile', {
-            url: '',
+            url: '/users/:userID',
             views: {
                 'rightView': {
                     templateUrl: 'users.profile.html', controller:'UserProfileController'
