@@ -209,17 +209,22 @@ event.updateItem = function(req, res, next){
     if(err)
       console.log(err);
     else{
-      console.log(result.itemList[0]);
       result.itemList[0].ListID = result.itemList[0].ListID;
       result.itemList[0].item = req.body.item || result.itemList[0].item;
       result.itemList[0].actCost = req.body.actCost || result.itemList[0].actCost;
       result.itemList[0].estCost = req.body.estCost || result.itemList[0].estCost;
-      result.save(function(err, result){
-        if(err)
-          console.log(err);
-        else{
-          res.sendStatus(200);
-        }
+
+      database.eventModel.calculateEst(parseInt(req.params.id), function(item) {
+        result.totalEstCost = item[0].estCost;
+        result.totalActCost = item[0].actCost;
+
+        result.save(function(err, saved){
+          if(err)
+            console.log(err);
+          else{
+            res.json(saved);
+          }
+        });
       });
     }
   });
