@@ -88,18 +88,18 @@ app.config(['$stateProvider','$urlRouterProvider',
             }
         })
         .state('friends', {
-            url: '/friends',
+            url: '/friends/:myID',
             views: {
                 'generalView': {
-                    templateUrl: 'friends.html'
+                    templateUrl: 'friends.html', controller: 'ViewFriendsController'
                 }
             }
         })
         .state('friends.profile', {
-            url: '',
+            url: '/profile/:userID',
             views: {
                 'rightView': {
-                    templateUrl: 'friends.profile.html'
+                    templateUrl: 'friends.profile.html', controller:'UserProfileController'
                 }
             }
         })
@@ -112,7 +112,7 @@ app.config(['$stateProvider','$urlRouterProvider',
             }
         })
         .state('users.profile', {
-            url: '/users/:userID',
+            url: '/profile/:userID',
             views: {
                 'rightView': {
                     templateUrl: 'users.profile.html', controller:'UserProfileController'

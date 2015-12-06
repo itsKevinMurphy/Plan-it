@@ -38,7 +38,7 @@ angular.module('services', ['ngCookies'])
     {
       return $http({url:'http://planit.lukefarnell.CA:3000/user/' + id + '/friend', method: "POST", data: data, headers: {'x-access-token': token}});
     }
-    this.getAllFriends = function(data)
+    this.getAllFriends = function(id)
     {
       return $http({url:'http://planit.lukefarnell.CA:3000/user/' + id + '/friend', method: "GET", headers: {'x-access-token': token}});
     }
@@ -70,15 +70,7 @@ angular.module('services', ['ngCookies'])
     this.logoutUser = function()
     {
       $cookies.token = "";
-      $cookies.userID = "";
     }
-    this.setUser = function(value)
-    {
-      $cookies.userID = value;
-    }
-    this.getUser = function()
-    {
-      return $cookies.userID;
-    }
+
 }
 ]);

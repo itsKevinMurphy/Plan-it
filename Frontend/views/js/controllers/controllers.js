@@ -43,7 +43,6 @@ angular.module('controller', [])
     ServiceForUser.loginUser($scope.user).success(function(data){
       console.log(data);
       ServiceForUser.setToken(data.token);
-      ServiceForUser.setUser(data.userID);
       $scope.$parent.isLogged = true;
       $location.path('/event');
     });
@@ -203,17 +202,14 @@ angular.module('controller', [])
 .controller('UserProfileController', function ($scope, $stateParams, ServiceForUser){
   $scope.id = $stateParams.userID;
   $scope.token = ServiceForUser.getToken();
-  $scope.currentUserID = ServiceForUser.getUser();
   console.log($scope.id);
   $scope.friend = {};
-  $scope.friend.userID;
+  $scope.friend.userID = 1;
   // $scope.user;
 
   ServiceForUser.findUserByID($scope.id, $scope.token).success(function (data)
   {
       $scope.user = data;
-      $scope.friend.userID = data.UserID;
-      console.log($scope.friend);
       console.log(data);
   }
   );
@@ -221,9 +217,8 @@ angular.module('controller', [])
   $scope.addNewFriend = function () {
     $scope.token = ServiceForUser.getToken();
 
-    console.log($scope.friend);
     console.log("attempting to add " + $scope.friend.userID);
-    ServiceForUser.addNewFriend($scope.currentUserID, $scope.friend, $scope.token).success(function (data) {
+    ServiceForUser.addNewFriend(4, $scope.friend, $scope.token).success(function (data) {
       console.log("successfully added " + $scope.friend.userID);
     });
     // $window.location.reload();
@@ -247,6 +242,21 @@ angular.module('controller', [])
     );
   }
 
+})
+
+
+//view friends
+.controller('ViewFriendsController', function ($scope, $stateParams, ServiceForUser){
+  $scope.token = ServiceForUser.getToken();
+  $scope.id = $stateParams.myID;
+  console.log($scope.id);
+
+    ServiceForUser.getAllFriends($scope.id, $scope.token).success(function (data)
+  {
+      $scope.friendList = data;
+      console.log(data);
+  }
+  );
 })
 
 
