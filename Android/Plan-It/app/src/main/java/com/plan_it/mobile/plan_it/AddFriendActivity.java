@@ -20,15 +20,17 @@ import cz.msebera.android.httpclient.Header;
 
 public class AddFriendActivity extends AppCompatActivity {
     int friendId;
+    int userID;
     TextView searchResult;
     EditText friendName;
-    String friendNameString;
+    String friendNameString = "";
     Button addFriend;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friend);
         searchResult = (TextView)findViewById(R.id.txt_search_for_friend_result);
+        userID = LoginActivity.userID;
     }
 
     public void SearchForFriend(View v)
@@ -73,16 +75,17 @@ public class AddFriendActivity extends AppCompatActivity {
         }
         else if(friendNameString == null || friendNameString =="")
         {
+            Toast.makeText(getApplicationContext(), "Enter a valid User Name or Email: " + friendNameString, Toast.LENGTH_LONG).show();
             searchResult.setText("Please Enter a Valid Email or User Name");
         }
         searchResult.setVisibility(View.VISIBLE);
     }
 
-    public  void AddFriend()
+    public void AddFriend(View v)
     {
         RequestParams jdata = new RequestParams();
         jdata.put("userID", friendId);
-        jdata.put("id", "to be done");
+        jdata.put("id", userID);
 
         RestClient.post("/user/" + friendId + "/friend",  jdata, LoginActivity.token, new JsonHttpResponseHandler()
         {
