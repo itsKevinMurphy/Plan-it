@@ -413,6 +413,7 @@ public class ViewEventActvity extends Activity{
         etToDate.setFocusable(false);
 
         btnLoadImg.setVisibility(View.INVISIBLE);
+
     }
     public void isInvited(){
 
@@ -435,6 +436,8 @@ public class ViewEventActvity extends Activity{
         btnGoing.setVisibility(View.VISIBLE);
         btnNotGoing.setVisibility(View.VISIBLE);
 
+
+
     }
 
     public void isOwner() {
@@ -455,6 +458,8 @@ public class ViewEventActvity extends Activity{
 
         etToDate.setInputType(InputType.TYPE_NULL);
         etToDate.setOnTouchListener(listener);
+
+
 
         deleteEvent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -567,10 +572,11 @@ public class ViewEventActvity extends Activity{
             }
         });
     }
-
     public void navItemList(View v)
     {
         Intent intent = new Intent(this, ItemListActivity.class);
+        intent.putExtra("token", LoginActivity.token);
+        intent.putExtra("eventID", eventID);
         startActivity(intent);
     }
 
