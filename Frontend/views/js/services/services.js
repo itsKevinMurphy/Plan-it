@@ -1,12 +1,11 @@
 //Angular service to enable HTTP requests for Events API
 angular.module('services', ['ngCookies'])
-.service("ServiceForEvents" , ['$http', function ($http) {
+.service("ServiceForEvents" , ['$http', '$cookies', function ($http, $cookies) {
     this.addEvent = function(data, token)
     {
       return $http({url:'http://planit.lukefarnell.CA:3000/events', method: "POST", data: data, headers: {'x-access-token': token}});
     }
     this.getAllEvents = function(token)
-    // change to get event by user
     {
       return $http({url:'http://planit.lukefarnell.CA:3000/events/user', method: "GET", headers: {'x-access-token': token}});
     }
@@ -20,9 +19,33 @@ angular.module('services', ['ngCookies'])
     this.updateEvent = function (id, data, token){
       return $http({ url: 'http://planit.lukefarnell.CA:3000/events/' + id , method: "PUT", data: data, headers: {'x-access-token': token}});
     }
-
+    this.setEvent = function(value)
+    {
+      $cookies.eventID = value;
+    }
+    this.getEvent = function()
+    {
+      return $cookies.eventID;
+    }
 }
 ])
+
+.service("ServiceForItems" , ['$http', function ($http) {
+    this.getListItems = function(id, token){
+      return $http({url:'http://planit.lukefarnell.CA:3000/events/' + id + '/list', method: "GET", headers: {'x-access-token': token}});
+    }
+    this.createListItem = function(id, data, token){
+      return $http({url:'http://planit.lukefarnell.CA:3000/events/' + id + '/list', method: "POST", data: data, headers: {'x-access-token': token}});
+    }
+    this.updateItem = function(id, itemId, data, token){
+      return $http({url:'http://planit.lukefarnell.CA:3000/events/' + id + '/list/' + itemId, method: "PUT", data: data, headers: {'x-access-token': token}});
+    }
+    this.deleteItem = function(id, itemId, token){
+      return $http({url:'http://planit.lukefarnell.CA:3000/events/' + id + '/list/' + itemId, method: "DELETE", headers: {'x-access-token': token}});
+    }
+}
+])
+
 .service("ServiceForUser", ['$http', '$cookies', '$location', function ($http, $cookies, $location) {
     var token = "";
 
@@ -51,7 +74,6 @@ angular.module('services', ['ngCookies'])
     {
       return $http({url:'http://planit.lukefarnell.CA:3000/user/' + id + '/friend/' + friendId, method: "DELETE", headers: {'x-access-token': token}});
     }
-
 
     this.registerUser = function(data)
     {
@@ -88,7 +110,6 @@ angular.module('services', ['ngCookies'])
     this.getUser = function()
     {
       return $cookies.userID;
-     }
-
+    }
 }
 ]);

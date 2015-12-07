@@ -200,6 +200,7 @@ angular.module('controller', [])
 .controller('EventDetailsController', function ($window, $scope, $stateParams, ServiceForEvents, ServiceForUser){
   $scope.id = $stateParams.eventID;
   $scope.token = ServiceForUser.getToken();
+  ServiceForEvents.setEvent($scope.id);
 
   console.log($scope.id);
   ServiceForEvents.getEventById($scope.id, $scope.token).success(function (data)
@@ -222,6 +223,8 @@ angular.module('controller', [])
   };
 
 })
+
+.controller('InviteFriendController')
 
 
 //search users
@@ -270,7 +273,6 @@ angular.module('controller', [])
     // $window.location.reload();
   };
 
-
   $scope.removeFriend = function () {
     $scope.token = ServiceForUser.getToken();
 
@@ -298,6 +300,52 @@ angular.module('controller', [])
       console.log(data);
   }
   );
+
+})
+
+
+.controller('ItemListController', function ($scope, $window, ServiceForItems, ServiceForEvents, ServiceForUser){
+  $scope.token = ServiceForUser.getToken();
+  // $scope.id = $stateParams.eventID;
+  $scope.currentEventID = ServiceForEvents.getEvent();
+  console.log("event id: " + $scope.currentEventID);
+
+    ServiceForItems.getListItems($scope.currentEventID, $scope.token).success(function (data)
+  {
+      $scope.itemList = data;
+      console.log("retrieved list " + data);
+  }
+  );
+
+  $scope.addItem = function () {
+    $scope.token = ServiceForUser.getToken();
+
+    console.log("adding item " + $scope.newItem.item + " to event " + $scope.currentEventID);
+    ServiceForItems.createListItem($scope.currentEventID, $scope.newItem, $scope.token).success(function (data) {
+      console.log("successfully added " + $scope.newItem.item);
+      $window.location.reload();
+    });
+  };
+
+  $scope.updateItem = function (toUpdate) {
+    $scope.token = ServiceForUser.getToken();
+
+    console.log("updating item " + toUpdate.ListID + " from event " + $scope.currentEventID);
+    ServiceForItems.updateItem($scope.currentEventID, toUpdate.ListID, toUpdate, $scope.token).success(function (data) {
+      console.log("successfully added " + toUpdate.ListID);
+      // $window.location.reload();
+    });
+  };
+
+  $scope.deleteItem = function (toUpdate) {
+    $scope.token = ServiceForUser.getToken();
+
+    console.log("deleting item " + toUpdate.ListID + " from event " + $scope.currentEventID);
+    ServiceForItems.deleteItem($scope.currentEventID, toUpdate.ListID, $scope.token).success(function (data) {
+      console.log("successfully deleted " + toUpdate.ListID);
+      $window.location.reload();
+    });
+  };
 
 })
 
