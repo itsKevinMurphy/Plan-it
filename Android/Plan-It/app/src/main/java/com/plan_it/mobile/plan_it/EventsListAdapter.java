@@ -21,6 +21,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -53,7 +55,6 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
         String toTime;
         String fromTime;
         IsAttending isAttending;
-        Bitmap bmp;
         byte[] byteArray;
         Bitmap eventPhoto;
 
@@ -151,16 +152,46 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
         final Event event = mEvents.get(i);
         eventsViewHolder.bind(event);
 
-        eventsViewHolder.button1.setOnClickListener(new View.OnClickListener(){
-            @Override public void onClick(View v) {
+        eventsViewHolder.button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mEvents.get(j).isAttending == IsAttending.INVITED || mEvents.get(j).isAttending == IsAttending.DECLINED)
+                {
+                    try {
+                        UpdateDatabase.UpdateInvitation(mEvents.get(j).isAttending, 1, mEvents.get(j).eventID);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else if (mEvents.get(j).isAttending == IsAttending.ATTENDING || mEvents.get(j).isAttending == IsAttending.LEFT || mEvents.get(j).isAttending == IsAttending.OWNER)
+                {
+
+                }
+
                 Toast.makeText(context, mEvents.get(j).name,
                         Toast.LENGTH_LONG).show();
             }
         });
-        eventsViewHolder.button2.setOnClickListener(new View.OnClickListener(){
-            @Override public void onClick(View v) {
-                Toast.makeText(context,mEvents.get(j).description,
-                        Toast.LENGTH_LONG).show();
+        eventsViewHolder.button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mEvents.get(j).isAttending == IsAttending.INVITED ||mEvents.get(j).isAttending == IsAttending.ATTENDING)
+                {
+                    try {
+                        UpdateDatabase.UpdateInvitation(mEvents.get(j).isAttending, 2, mEvents.get(j).eventID);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    Toast.makeText(context, "Declining: " + mEvents.get(j).name,
+                            Toast.LENGTH_LONG).show();
+                }
+                else if ( mEvents.get(j).isAttending == IsAttending.DECLINED || mEvents.get(j).isAttending == IsAttending.LEFT || mEvents.get(j).isAttending == IsAttending.OWNER)
+                {
+                    UpdateDatabase.DeleteEvent(mEvents.get(j).isAttending.toString(), mEvents.get(j).eventID);
+                    Toast.makeText(context, "Deleting: " + mEvents.get(j).name + " Refresh List from menu",
+                            Toast.LENGTH_LONG).show();
+                }
+
             }
         });
 
@@ -171,11 +202,11 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
         }
         else if(mEvents.get(i).isAttending == IsAttending.ATTENDING)
         {
-            eventsViewHolder.button1.setImageResource(R.drawable.ic_thumb_down_red_24dp);
-            eventsViewHolder.button2.setImageResource(R.drawable.ic_photo_library_blue_24dp);
+            eventsViewHolder.button1.setImageResource(R.drawable.ic_photo_library_blue_24dp);
+            eventsViewHolder.button2.setImageResource(R.drawable.ic_thumb_down_red_24dp);
             eventsViewHolder.cv.setCardBackgroundColor(Color.argb(125, 155, 255, 118));
         }
-        else if(mEvents.get(i).isAttending == IsAttending.LEFT)
+        else if(mEvents.get(i).isAttending == IsAttending.LEFT || mEvents.get(i).isAttending == IsAttending.OWNER)
         {
             eventsViewHolder.button1.setImageResource(R.drawable.ic_photo_library_blue_24dp);
             eventsViewHolder.button2.setImageResource(R.drawable.ic_delete_grey_24dp);
@@ -187,9 +218,8 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
             eventsViewHolder.button2.setImageResource(R.drawable.ic_delete_grey_24dp);
             eventsViewHolder.cv.setCardBackgroundColor(Color.argb(125, 255, 165, 171));
         }
-        else {
-            eventsViewHolder.button1.setImageResource(R.drawable.ic_delete_grey_24dp);
-            eventsViewHolder.button2.setImageResource(R.drawable.ic_edit_blue_24dp);
+        else
+        {
             eventsViewHolder.cv.setCardBackgroundColor(Color.argb(125, 255, 254, 199));
         }
 

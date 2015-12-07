@@ -43,7 +43,7 @@ app.config(['$stateProvider','$urlRouterProvider',
             url: '/eventinfo/:eventID',
             views: {
                 'rightView': {
-                    templateUrl: 'event.details.html', controller:'EventDetailsController'
+                    templateUrl: 'event.details.html', controller: 'EventDetailsController'
                 }
             }
         })
@@ -56,10 +56,10 @@ app.config(['$stateProvider','$urlRouterProvider',
             }
         })
         .state('event.items', {
-            url: '',
+            url: '/eventitems/:eventID',
             views: {
                 'rightView': {
-                    templateUrl: 'event.items.html'
+                    templateUrl: 'event.items.html', controller: 'ItemListController'
                 }
             }
         })
@@ -91,15 +91,15 @@ app.config(['$stateProvider','$urlRouterProvider',
             url: '/friends',
             views: {
                 'generalView': {
-                    templateUrl: 'friends.html'
+                    templateUrl: 'friends.html', controller: 'ViewFriendsController'
                 }
             }
         })
         .state('friends.profile', {
-            url: '',
+            url: '/profile/:userID',
             views: {
                 'rightView': {
-                    templateUrl: 'friends.profile.html'
+                    templateUrl: 'friends.profile.html', controller: 'UserProfileController'
                 }
             }
         })
@@ -112,10 +112,10 @@ app.config(['$stateProvider','$urlRouterProvider',
             }
         })
         .state('users.profile', {
-            url: '',
+            url: '/profile/:userID',
             views: {
                 'rightView': {
-                    templateUrl: 'users.profile.html', controller:'UserProfileController'
+                    templateUrl: 'users.profile.html', controller: 'UserProfileController'
                 }
             }
         })
@@ -123,7 +123,7 @@ app.config(['$stateProvider','$urlRouterProvider',
             url: '/account',
             views: {
                 'generalView': {
-                    templateUrl: 'account.html', controller:'AccountController'
+                    templateUrl: 'account.html', controller: 'AccountController'
                 }
             }
         })

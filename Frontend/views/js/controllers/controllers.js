@@ -43,6 +43,7 @@ angular.module('controller', [])
     ServiceForUser.loginUser($scope.user).success(function(data){
       console.log(data);
       ServiceForUser.setToken(data.token);
+      ServiceForUser.setUser(data.userID);
       $scope.$parent.isLogged = true;
       $location.path('/event');
     });
@@ -175,6 +176,7 @@ angular.module('controller', [])
 .controller('EventDetailsController', function ($window, $scope, $stateParams, ServiceForEvents, ServiceForUser){
   $scope.id = $stateParams.eventID;
   $scope.token = ServiceForUser.getToken();
+  ServiceForEvents.setEvent($scope.id);
 
   console.log($scope.id);
   ServiceForEvents.getEventById($scope.id, $scope.token).success(function (data)
@@ -184,7 +186,6 @@ angular.module('controller', [])
     $scope.event.thumbnail = 'data:image/jpeg;base64,' + $scope.event.picture;
   }
   );
-
 
   //$scope.event.picture = "data:image/jpeg;base64," + $scope.event.picture;
 
@@ -198,6 +199,9 @@ angular.module('controller', [])
   };
 
 })
+
+.controller('InviteFriendController')
+
 
 //search users
 .controller('SearchUserController', function ($scope, ServiceForUser){
@@ -220,16 +224,108 @@ angular.module('controller', [])
 .controller('UserProfileController', function ($scope, $stateParams, ServiceForUser){
   $scope.id = $stateParams.userID;
   $scope.token = ServiceForUser.getToken();
+  $scope.currentUserID = ServiceForUser.getUser();
   console.log($scope.id);
+  $scope.friend = {};
+  $scope.friend.userID;
 
   ServiceForUser.findUserByID($scope.id, $scope.token).success(function (data)
   {
       $scope.user = data;
+      $scope.friend.userID = data.UserID;
+      console.log($scope.friend);
+      console.log(data);
+  }
+  );
+
+  $scope.addNewFriend = function () {
+    $scope.token = ServiceForUser.getToken();
+
+    console.log("my id: " + $scope.currentUserID + " | friend id: " + $scope.friend);
+    console.log("attempting to add " + $scope.friend.userID);
+    ServiceForUser.addNewFriend($scope.currentUserID, $scope.friend, $scope.token).success(function (data) {
+      console.log("successfully added " + $scope.friend.userID);
+    });
+    // $window.location.reload();
+  };
+
+  $scope.removeFriend = function () {
+    $scope.token = ServiceForUser.getToken();
+
+    console.log("my id: " + $scope.currentUserID + " | friend id: " + $scope.friend);
+    console.log("attempting to remove " + $scope.friend.userID);
+    if (confirm("Are you sure you want to remove friend?") == true)
+        ServiceForUser.removeFriend($scope.currentUserID, $scope.friend.userID, $scope.token).success(function (data) {
+          console.log("successfully removed " + $scope.friend.userID);
+        });
+  };
+
+
+})
+
+//view friends
+.controller('ViewFriendsController', function ($scope, ServiceForUser){
+  $scope.token = ServiceForUser.getToken();
+  // $scope.id = $stateParams.myID;
+  $scope.currentUserID = ServiceForUser.getUser();
+  console.log("my id: " + $scope.currentUserID);
+
+    ServiceForUser.getAllFriends($scope.currentUserID, $scope.token).success(function (data)
+  {
+      $scope.friendList = data;
       console.log(data);
   }
   );
 
 })
+
+
+.controller('ItemListController', function ($scope, $window, ServiceForItems, ServiceForEvents, ServiceForUser){
+  $scope.token = ServiceForUser.getToken();
+  // $scope.id = $stateParams.eventID;
+  $scope.currentEventID = ServiceForEvents.getEvent();
+  console.log("event id: " + $scope.currentEventID);
+
+    ServiceForItems.getListItems($scope.currentEventID, $scope.token).success(function (data)
+  {
+      $scope.itemList = data;
+      console.log("retrieved list " + data);
+  }
+  );
+
+  $scope.addItem = function () {
+    $scope.token = ServiceForUser.getToken();
+
+    console.log("adding item " + $scope.newItem.item + " to event " + $scope.currentEventID);
+    ServiceForItems.createListItem($scope.currentEventID, $scope.newItem, $scope.token).success(function (data) {
+      console.log("successfully added " + $scope.newItem.item);
+      $window.location.reload();
+    });
+  };
+
+  $scope.updateItem = function (toUpdate) {
+    $scope.token = ServiceForUser.getToken();
+
+    console.log("updating item " + toUpdate.ListID + " from event " + $scope.currentEventID);
+    ServiceForItems.updateItem($scope.currentEventID, toUpdate.ListID, toUpdate, $scope.token).success(function (data) {
+      console.log("successfully added " + toUpdate.ListID);
+      // $window.location.reload();
+    });
+  };
+
+  $scope.deleteItem = function (toUpdate) {
+    $scope.token = ServiceForUser.getToken();
+
+    console.log("deleting item " + toUpdate.ListID + " from event " + $scope.currentEventID);
+    ServiceForItems.deleteItem($scope.currentEventID, toUpdate.ListID, $scope.token).success(function (data) {
+      console.log("successfully deleted " + toUpdate.ListID);
+      $window.location.reload();
+    });
+  };
+
+})
+
+
 .controller('AccountController', function ($scope, $location)
 {
 

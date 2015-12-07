@@ -51,7 +51,7 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
         //token = LoginActivity.token;
         //userid = LoginActivity.userID;
 
-        //token = intent.getStringExtra("toke");
+        //token = intent.getStringExtra("token");
         try {
             getEventsList();
 
