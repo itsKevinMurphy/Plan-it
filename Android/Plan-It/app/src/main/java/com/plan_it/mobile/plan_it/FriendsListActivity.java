@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,6 +48,12 @@ public class FriendsListActivity extends AppCompatActivity {
     private int GetImageResource(ImageView imageView)
     {
         return (Integer)imageView.getTag();
+    }
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.setHeaderTitle("Delete Friend");
+        menu.add(0, v.getId(), 0, "Are you sure?");
     }
 
     public void fillFriendsList()throws JSONException {
