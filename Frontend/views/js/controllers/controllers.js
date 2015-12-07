@@ -159,6 +159,30 @@ angular.module('controller', [])
   }
 
 })
+.controller('EventInviteFriendController', function ($window, $scope, $stateParams, ServiceForEvents, ServiceForUser){
+
+  $scope.token = ServiceForUser.getToken();
+  $scope.id = $stateParams.eventID;
+  $scope.currentUserID = ServiceForUser.getUser();
+  $scope.friendList;
+  console.log("my id: " + $scope.currentUserID);
+
+    ServiceForUser.getAllFriends($scope.currentUserID, $scope.token).success(function (data)
+  {
+      $scope.friendList = data;
+      console.log(data);
+  }
+  );
+
+  $scope.inviteFriend = function(friendID)
+  {
+    ServiceForUser.inviteEventMember($scope.id, friendID, $scope.token).success(function(data)
+    {
+      console.log("Friend Invited.")
+    }
+    );
+  }
+})
 
 .controller('EventListController', function ($scope, ServiceForEvents, ServiceForUser){
   $scope.token = ServiceForUser.getToken();
@@ -331,9 +355,6 @@ angular.module('controller', [])
 
 }
 )
-
-
-
 // angular.module('userController', [])
 .controller('RegisterUserController', function ($scope, $location, ServiceForUser) {
 
