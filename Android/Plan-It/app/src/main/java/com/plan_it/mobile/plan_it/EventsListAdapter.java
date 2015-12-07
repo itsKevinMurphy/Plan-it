@@ -188,9 +188,8 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
                 else if ( mEvents.get(j).isAttending == IsAttending.DECLINED || mEvents.get(j).isAttending == IsAttending.LEFT || mEvents.get(j).isAttending == IsAttending.OWNER)
                 {
                     UpdateDatabase.DeleteEvent(mEvents.get(j).isAttending.toString(), mEvents.get(j).eventID);
-                    Toast.makeText(context, "Deleting: " + mEvents.get(j).name,
+                    Toast.makeText(context, "Deleting: " + mEvents.get(j).name + " Refresh List from menu",
                             Toast.LENGTH_LONG).show();
-
                 }
 
             }
