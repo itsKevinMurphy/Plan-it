@@ -19,7 +19,7 @@ event.createEvent = function(req, res, next) {
       console.log(err);
     else{
       //set the user as the event owner
-      event.members.push({UserId: parseInt(token.UserID), isAttending: "Owner"});
+      event.members.push({UserId: parseInt(token.UserID), friendlyName : token.friendlyName, isAttending: "Owner"});
 
 
       //save the event
@@ -83,6 +83,16 @@ event.getUsersEvents = function(req, res, next) {
       });
     }
   });
+}
+
+event.getMembersByEventId = function(req, res, next){
+  database.eventModel.findOne({"EventID" : req.params.id}, function(err, event){
+    if(err)
+      console.log(err);
+    else{
+      res.status(200).json(event.members);
+    }
+  })
 }
 
 event.updateEvent = function(req, res, next) {
@@ -249,7 +259,7 @@ event.inviteFriend = function(req, res, next){
                 res.status(409).send("member is already invited to the event");
               }
               else{
-                event.members.push({UserId: user.UserID, isAttending: "Invited"});
+                event.members.push({UserId: user.UserID, friendlyName : user.friendlyName, isAttending: "Invited"});
                 event.save(function(err){
                   if(err)
                     console.log(err);
