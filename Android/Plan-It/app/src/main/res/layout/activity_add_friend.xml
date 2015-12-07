@@ -49,7 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/btn_add_friend"
-        android:text="@string/action_search"
+        android:text="@string/add_friend"
         android:onClick="AddFriend"
         android:layout_below="@id/txt_search_for_friend_result"/>
 
