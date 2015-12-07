@@ -87,6 +87,14 @@ app.config(['$stateProvider','$urlRouterProvider',
                 }
             }
         })
+        .state('event.addfriend', {
+            url: '/addfriend/:eventID',
+            views: {
+                'rightView': {
+                    templateUrl: 'event.addfriend.html', controller: 'EventInviteFriendController'
+                }
+            }
+        })
         .state('friends', {
             url: '/friends',
             views: {

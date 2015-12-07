@@ -49,6 +49,11 @@ angular.module('services', ['ngCookies'])
 .service("ServiceForUser", ['$http', '$cookies', '$location', function ($http, $cookies, $location) {
     var token = "";
 
+    this.inviteEventMember = function(id, friendID, token)
+    {
+      return $http({url:'http://planit.lukefarnell.CA:3000/events/' + id + '/invite/' + friendID, method: "POST", headers: {'x-access-token': token}});
+    }
+
     this.searchUser = function(data, token)
     {
       return $http({url:'http://planit.lukefarnell.CA:3000/search/' + data + '/friend', method: "GET", data: data, headers: {'x-access-token': token}});
