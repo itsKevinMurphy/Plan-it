@@ -73,12 +73,21 @@ event.getUsersEvents = function(req, res, next) {
     if(err)
       console.log("error"  + err);
     else{
-      console.log(token);
-      database.eventModel.find({"members.UserId": token.UserID}, function(err, events) {
-        if (err)
+      database.eventModel.find({"members.UserId": token.UserID}).lean().exec(function(err, events){
+        if(err)
           console.log(err);
-        else {
-          res.status(200).send(events);
+        else{
+          database.eventModel.find().where("members.UserId").in(token.UserID).
+          select("-_id EventID what why where when endDate picture fromTime toTime itemList members").lean().exec(function(err, result){
+            for(var i = 0; i < result.length;i++){
+              console.log(result[i].members.length);
+              for(var j = 0; j < result[i].members.length;j++){
+                if(result[i].members[j].UserId == token.UserID)
+                  result[i].isAttending = result[i].members[j].isAttending;
+              }
+            }
+            res.status(200).json(result);
+          });
         }
       });
     }
@@ -246,6 +255,7 @@ event.inviteFriend = function(req, res, next){
     if(err)
       console.log(err);
     else{
+      console.log(event);
       database.userModel.findOne({"UserID" : req.params.friendId}, function(err, user){
         if(err)
           console.log(err);
@@ -259,7 +269,7 @@ event.inviteFriend = function(req, res, next){
                 res.status(409).send("member is already invited to the event");
               }
               else{
-                event.members.push({UserId: user.UserID, friendlyName : user.friendlyName, isAttending: "Invited"});
+                event.members.push({UserId: user.UserID, friendlyName: user.friendlyName, isAttending: "Invited"});
                 event.save(function(err){
                   if(err)
                     console.log(err);
