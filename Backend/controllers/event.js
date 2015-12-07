@@ -236,18 +236,31 @@ event.inviteFriend = function(req, res, next){
     if(err)
       console.log(err);
     else{
-      database.userModel.findOne({"UserID" : req.params.friendId}, function(err, result){
+      database.userModel.findOne({"UserID" : req.params.friendId}, function(err, user){
         if(err)
           console.log(err);
         else{
-          event.members.push({UserId: result.UserID, isAttending: "Invited"});
-          event.save(function(err){
+          database.eventModel.findOne({$and:[{"EventID": req.params.id},{"members.UserId": user.UserID}]}, function(err, member){
             if(err)
               console.log(err);
+            else{
+
+              if(member){
+                res.status(409).send("member is already invited to the event");
+              }
+              else{
+                event.members.push({UserId: user.UserID, isAttending: "Invited"});
+                event.save(function(err){
+                  if(err)
+                    console.log(err);
+                  else
+                    res.sendStatus(200);
+                });
+              }
+            }
           });
         }
       });
-      res.sendStatus(200);
     }
   });
 }
