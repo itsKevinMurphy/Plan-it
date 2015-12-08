@@ -78,9 +78,8 @@ event.getUsersEvents = function(req, res, next) {
           console.log(err);
         else{
           database.eventModel.find().where("members.UserId").in(token.UserID).
-          select("-_id EventID what why where when endDate picture fromTime toTime itemList members").lean().exec(function(err, result){
+          select("-_id EventID what why where when endDate picture fromTime toTime itemList totalEstCost totalActCost members").lean().exec(function(err, result){
             for(var i = 0; i < result.length;i++){
-              console.log(result[i].members.length);
               for(var j = 0; j < result[i].members.length;j++){
                 if(result[i].members[j].UserId == token.UserID)
                   result[i].isAttending = result[i].members[j].isAttending;
@@ -153,18 +152,15 @@ event.createListItem = function(req, res, next) {
         "actCost": req.body.actCost
       });
       event.itemList.push(list);
-
-      database.eventModel.calculateEst(req.params.id, function(result) {
-        event.totalEstCost = result.estCost;
-        event.totalActCost = result.actCost;
-        event.save(function(err) {
+        event.save(function(err, data) {
           if (err)
             console.log(err);
           else{
+            console.log(data);
             res.sendStatus(201);
           }
         });
-      });
+
     }
   });
 }
@@ -189,7 +185,7 @@ event.claimItem = function(req, res, next){
     else{
       console.log(result);
       database.eventModel.update({"itemList.ListID" : req.params.item, "EventID" : req.params.id},
-      {$set : { "itemList.$.whoseBringing": result.UserID}},
+      {$set : { "itemList.$.whoseBringing": result.friendlyName}},
       function(err, item){
         if(err)
           console.log(err);
