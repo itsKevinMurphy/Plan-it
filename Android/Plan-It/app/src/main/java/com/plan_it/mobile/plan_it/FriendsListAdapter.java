@@ -103,6 +103,7 @@ public class FriendsListAdapter extends ArrayAdapter<FriendListModel> {
             public void onFailure(int statusCode, Header[] header, Throwable throwable, JSONObject response) {
                 Toast.makeText(context, "Failure, Unable to add: " + response, Toast.LENGTH_LONG).show();
             }
+
         });
     }
     private int GetImageResource(ImageView imageView)

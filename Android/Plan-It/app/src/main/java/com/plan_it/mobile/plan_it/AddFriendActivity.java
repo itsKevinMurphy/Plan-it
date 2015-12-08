@@ -77,7 +77,7 @@ public class AddFriendActivity extends AppCompatActivity {
                 }
             });
         }
-        else if(friendNameString == null || friendNameString =="")
+        else if(friendNameString == null || friendNameString == "")
         {
             Toast.makeText(getApplicationContext(), "Enter a valid User Name or Email: " + friendNameString, Toast.LENGTH_LONG).show();
             searchResult.setText("Please Enter a Valid Email or User Name");
