@@ -84,34 +84,6 @@ public class ViewEventActvity extends Activity{
     public ArrayList<Members> mList = new ArrayList<>();
     ListView attendeeList;
     Context context = this;
-    /*String[] attendeeName = {
-            "Kristian",
-            "Joanne",
-            "Kevin",
-            "Mo",
-            "Amina",
-            "Luke",
-            "Kamran"
-    };
-    Integer[] imgid = {
-            R.drawable.mickey_mouse_icon,
-            R.drawable.riot_fest_325,
-            R.drawable.victoria_snowboard_mount_washington_small,
-            R.drawable.cottage_26_waterside_248,
-            R.drawable.no_image,
-            R.drawable.victoria_snowboard_mount_washington_small,
-            R.drawable.cottage_26_waterside_248,
-    };
-
-    Integer[] imgStatus = {
-            R.drawable.ic_thumb_up_green_24dp,
-            R.drawable.ic_thumb_up_green_24dp,
-            R.drawable.ic_thumb_up_green_24dp,
-            R.drawable.ic_thumb_up_green_24dp,
-            R.drawable.ic_thumb_up_green_24dp,
-            R.drawable.ic_thumb_up_green_24dp,
-            R.drawable.ic_thumb_up_green_24dp
-    };*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,9 +112,6 @@ public class ViewEventActvity extends Activity{
         attendeeList = (ListView)findViewById(R.id.attendee_list);
         attendeeList.setAdapter(new AttendeeListAdapter(this, R.layout.attendee_list, mList));
 
-       /* AttendeeListAdapter adapter = new AttendeeListAdapter(this, attendeeName, imgid, imgStatus);
-        attendeeList = (ListView)findViewById(android.R.id.list);
-        attendeeList.setAdapter(adapter);*/
 
         btnLoadImg = (Button)findViewById(R.id.btnChngPic);
         eventImage = (ImageView)findViewById(R.id.ivViewEventImage);
