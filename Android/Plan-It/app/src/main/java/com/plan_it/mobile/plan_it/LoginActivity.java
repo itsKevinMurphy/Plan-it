@@ -46,7 +46,10 @@ public class LoginActivity extends AppCompatActivity {
 
         etUser=(EditText)findViewById(R.id.editText);
         etPass=(EditText)findViewById(R.id.editTextPassword);
-
+        etUser.setText("");
+        etPass.setText("");
+        /*etUser.setText("nedstark");
+        etPass.setText("password");*/
 
 
         // Instantiate Progress Dialog object
@@ -55,8 +58,6 @@ public class LoginActivity extends AppCompatActivity {
         prgDialog.setMessage("Please wait...");
         // Set Cancelable as False
         prgDialog.setCancelable(false);
-
-
     }
 
     @Override
