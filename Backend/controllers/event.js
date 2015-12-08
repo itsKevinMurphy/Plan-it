@@ -220,27 +220,28 @@ event.deleteItem = function(req, res, next){
 }
 
 event.updateItem = function(req, res, next){
+  console.log(req.params.item);
   database.eventModel.findOne({"itemList.ListID" : req.params.item, "EventID" : req.params.id}, function(err, result){
     if(err)
       console.log(err);
     else{
-      result.itemList[0].ListID = result.itemList[0].ListID;
-      result.itemList[0].item = req.body.item || result.itemList[0].item;
-      result.itemList[0].actCost = req.body.actCost || result.itemList[0].actCost;
-      result.itemList[0].estCost = req.body.estCost || result.itemList[0].estCost;
+      for(var i = 0; i < result.itemList.length;i++){
+        if(result.itemList[i].ListID == req.params.item){
+          result.itemList[i].ListID = result.itemList[i].ListID;
+          result.itemList[i].item = req.body.item || result.itemList[i].item;
+          result.itemList[i].actCost = req.body.actCost || result.itemList[i].actCost;
+          result.itemList[i].estCost = req.body.estCost || result.itemList[i].estCost;
 
-      database.eventModel.calculateEst(parseInt(req.params.id), function(item) {
-        result.totalEstCost = item[0].estCost;
-        result.totalActCost = item[0].actCost;
+            result.save(function(err, saved){
+              if(err)
+                console.log(err);
+              else{
+                res.json(saved);
+              }
+            });
 
-        result.save(function(err, saved){
-          if(err)
-            console.log(err);
-          else{
-            res.json(saved);
-          }
-        });
-      });
+        }
+      }
     }
   });
 }
