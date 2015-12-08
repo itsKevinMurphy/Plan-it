@@ -211,6 +211,39 @@ angular.module('controller', [])
   }
   );
 
+  ServiceForEvents.getMembersByEventId($scope.id, $scope.token).success(function (data)
+  {
+    console.log(data);
+    $scope.memberList = data;
+  }
+  );
+
+  $scope.checkOwner = function (toCheck) {
+    if (toCheck.isAttending == "Owner") { 
+      return true;
+    }
+  }
+  $scope.checkInvited = function (toCheck) {
+    if (toCheck.isAttending == "Invited") { 
+      return true;
+    }
+  }
+  $scope.checkAttending = function (toCheck) {
+    if (toCheck.isAttending == "Attending") { 
+      return true;
+    }
+  }
+  $scope.checkDeclined = function (toCheck) {
+    if (toCheck.isAttending == "Declined") { 
+      return true;
+    }
+  }
+  $scope.checkLeft = function (toCheck) {
+    if (toCheck.isAttending == "Left") { 
+      return true;
+    }
+  }
+
   //$scope.event.picture = "data:image/jpeg;base64," + $scope.event.picture;
 
   $scope.deleteEvent = function () {
@@ -224,7 +257,7 @@ angular.module('controller', [])
 
 })
 
-.controller('InviteFriendController')
+// .controller('InviteFriendController')
 
 
 //search users
@@ -312,10 +345,31 @@ angular.module('controller', [])
 
     ServiceForItems.getListItems($scope.currentEventID, $scope.token).success(function (data)
   {
-      $scope.itemList = data;
-      console.log("retrieved list " + data);
+    $scope.itemList = data;
+    console.log("retrieved list " + data);
+
+
   }
   );
+
+  $scope.checkClaimed = function (toClaim) {
+
+    if (toClaim.hasOwnProperty('whoseBringing')) { 
+      // $scope.claimed = true;
+      return true;
+      console.log ("claimed"); 
+    }
+  }
+
+  $scope.claimItem = function (toClaim) {
+    $scope.token = ServiceForUser.getToken();
+
+    console.log("claiming item " + toClaim.ListID + " from event " + $scope.currentEventID);
+    ServiceForItems.claimItem($scope.currentEventID, toClaim.ListID, $scope.token).success(function (data) {
+      console.log("successfully claimed " + toClaim.ListID + " claimed by " + toClaim.whoseBringing);
+      $window.location.reload();
+    });
+  };
 
   $scope.addItem = function () {
     $scope.token = ServiceForUser.getToken();
@@ -333,16 +387,16 @@ angular.module('controller', [])
     console.log("updating item " + toUpdate.ListID + " from event " + $scope.currentEventID);
     ServiceForItems.updateItem($scope.currentEventID, toUpdate.ListID, toUpdate, $scope.token).success(function (data) {
       console.log("successfully added " + toUpdate.ListID);
-      // $window.location.reload();
+      $window.location.reload();
     });
   };
 
-  $scope.deleteItem = function (toUpdate) {
+  $scope.deleteItem = function (toDelete) {
     $scope.token = ServiceForUser.getToken();
 
-    console.log("deleting item " + toUpdate.ListID + " from event " + $scope.currentEventID);
-    ServiceForItems.deleteItem($scope.currentEventID, toUpdate.ListID, $scope.token).success(function (data) {
-      console.log("successfully deleted " + toUpdate.ListID);
+    console.log("deleting item " + toDelete.ListID + " from event " + $scope.currentEventID);
+    ServiceForItems.deleteItem($scope.currentEventID, toDelete.ListID, $scope.token).success(function (data) {
+      console.log("successfully deleted " + toDelete.ListID);
       $window.location.reload();
     });
   };

@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -33,6 +34,7 @@ import android.widget.Toast;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -43,12 +45,14 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import cz.msebera.android.httpclient.Header;
+
 public class ViewEventActvity extends Activity{
     String base64ImageUpdate;
     Bitmap bmp;
 
     int eventID;
-
+    boolean isFromEditEvent;
     String eTitle;
     String eDesc;
     String eLocation;
@@ -61,7 +65,6 @@ public class ViewEventActvity extends Activity{
     byte[] byteArray;
     Bitmap eImage;
 
-    EditText addInvitee;
     Button addMore;
     EditText etTitle;
     EditText etDesc;
@@ -81,37 +84,9 @@ public class ViewEventActvity extends Activity{
 
     Calendar myCalendar = Calendar.getInstance();
 
-    public ArrayList<Members> mList = new ArrayList<>();
+    public ArrayList<Members> mList;
     ListView attendeeList;
     Context context = this;
-    /*String[] attendeeName = {
-            "Kristian",
-            "Joanne",
-            "Kevin",
-            "Mo",
-            "Amina",
-            "Luke",
-            "Kamran"
-    };
-    Integer[] imgid = {
-            R.drawable.mickey_mouse_icon,
-            R.drawable.riot_fest_325,
-            R.drawable.victoria_snowboard_mount_washington_small,
-            R.drawable.cottage_26_waterside_248,
-            R.drawable.no_image,
-            R.drawable.victoria_snowboard_mount_washington_small,
-            R.drawable.cottage_26_waterside_248,
-    };
-
-    Integer[] imgStatus = {
-            R.drawable.ic_thumb_up_green_24dp,
-            R.drawable.ic_thumb_up_green_24dp,
-            R.drawable.ic_thumb_up_green_24dp,
-            R.drawable.ic_thumb_up_green_24dp,
-            R.drawable.ic_thumb_up_green_24dp,
-            R.drawable.ic_thumb_up_green_24dp,
-            R.drawable.ic_thumb_up_green_24dp
-    };*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,8 +94,7 @@ public class ViewEventActvity extends Activity{
 
         getBundleValues();
 
-        addInvitee = (EditText)findViewById(R.id.edit_addInvitee);
-        addMore = (Button)findViewById(R.id.btnInviteMore);
+        addMore = (Button)findViewById(R.id.btn_invite_more);
         tvWhoIsComing = (TextView)findViewById(R.id.tvWhoIsComing);
         etTitle = (EditText)findViewById(R.id.etViewEventTitle);
         etDesc = (EditText)findViewById(R.id.etViewEventDescription);
@@ -135,14 +109,9 @@ public class ViewEventActvity extends Activity{
         btnNotGoing = (Button)findViewById(R.id.btnDecline);
         deleteEvent = (Button)findViewById(R.id.btnViewDeleteEvent);
 
-        populateAttendee();
-
         attendeeList = (ListView)findViewById(R.id.attendee_list);
-        attendeeList.setAdapter(new AttendeeListAdapter(this, R.layout.attendee_list, mList));
 
-       /* AttendeeListAdapter adapter = new AttendeeListAdapter(this, attendeeName, imgid, imgStatus);
-        attendeeList = (ListView)findViewById(android.R.id.list);
-        attendeeList.setAdapter(adapter);*/
+        populateAttendee();
 
         btnLoadImg = (Button)findViewById(R.id.btnChngPic);
         eventImage = (ImageView)findViewById(R.id.ivViewEventImage);
@@ -159,18 +128,19 @@ public class ViewEventActvity extends Activity{
         initializeData();
 
         if(status == IsAttending.ATTENDING){isAttending();}
-        else if(status == IsAttending.INVITED || status == IsAttending.DECLINED || status == IsAttending.LEFT){isInvited();}
+        else if(status == IsAttending.INVITED){isInvited();}
         else if(status == IsAttending.OWNER){isOwner();}
+        else if(status == IsAttending.DECLINED){isDeclined();}
     }
 
     public void populateAttendee(){
-        mList.add(new Members(1,"KristianCastaneda",MemberStatus.OWNER,true, true));
-        mList.add(new Members(2,"JoanneTanson",MemberStatus.ATTENDING,true, true));
-        mList.add(new Members(3,"KevinMurphy",MemberStatus.ATTENDING,true, true));
-        mList.add(new Members(4,"LukeFarnell",MemberStatus.INVITED,false, false));
-        mList.add(new Members(5,"KamranSyed",MemberStatus.INVITED,false, false));
-        mList.add(new Members(6,"MoSumon",MemberStatus.DECLINED,false, false));
-        mList.add(new Members(7,"AminaAbbasi",MemberStatus.LEFT,false, false));
+        try{
+            getMembers();
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public void getBundleValues(){
@@ -204,23 +174,23 @@ public class ViewEventActvity extends Activity{
 
     public void onEdit(){
        etTitle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
+           @Override
+           public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+               if (actionId == EditorInfo.IME_ACTION_DONE) {
 
-                    try {
-                        eTitle = etTitle.getText().toString();
-                        updateEvent(eTitle);
-                        Toast.makeText(getApplicationContext(), "Successfully Updated", Toast.LENGTH_LONG).show();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                   try {
+                       eTitle = etTitle.getText().toString();
+                       updateEvent(eTitle);
+                       Toast.makeText(getApplicationContext(), "Successfully Updated", Toast.LENGTH_LONG).show();
+                   } catch (JSONException e) {
+                       e.printStackTrace();
+                   }
 
-                    return true;
-                }
-                return false;
-            }
-        });
+                   return true;
+               }
+               return false;
+           }
+       });
 
         etDesc.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -429,10 +399,40 @@ public class ViewEventActvity extends Activity{
         etFromDate.setFocusable(false);
         etToDate.setEnabled(false);
         etToDate.setFocusable(false);
+        etFromTime.setEnabled(false);
+        etFromTime.setFocusable(false);
+        etToTime.setEnabled(false);
+        etToTime.setFocusable(false);
 
         btnLoadImg.setVisibility(View.INVISIBLE);
-
+        deleteEvent.setVisibility(View.GONE);
     }
+
+    public void isDeclined(){
+        etTitle.setEnabled(false);
+        etTitle.setFocusable(false);
+        etDesc.setEnabled(false);
+        etDesc.setFocusable(false);
+        etLocation.setEnabled(false);
+        etLocation.setFocusable(false);
+        etFromDate.setEnabled(false);
+        etFromDate.setFocusable(false);
+        etToDate.setEnabled(false);
+        etToDate.setFocusable(false);
+        etFromTime.setEnabled(false);
+        etFromTime.setFocusable(false);
+        etToTime.setEnabled(false);
+        etToTime.setFocusable(false);
+
+
+        deleteEvent.setVisibility(View.GONE);
+        itemList.setVisibility(View.GONE);
+        messageBoard.setVisibility(View.GONE);
+        btnLoadImg.setVisibility(View.GONE);
+
+        btnGoing.setVisibility(View.VISIBLE);
+    }
+
     public void isInvited(){
 
         etTitle.setEnabled(false);
@@ -445,8 +445,13 @@ public class ViewEventActvity extends Activity{
         etFromDate.setFocusable(false);
         etToDate.setEnabled(false);
         etToDate.setFocusable(false);
+        etFromTime.setEnabled(false);
+        etFromTime.setFocusable(false);
+        etToTime.setEnabled(false);
+        etToTime.setFocusable(false);
 
 
+        deleteEvent.setVisibility(View.GONE);
         itemList.setVisibility(View.GONE);
         messageBoard.setVisibility(View.GONE);
         btnLoadImg.setVisibility(View.GONE);
@@ -456,9 +461,9 @@ public class ViewEventActvity extends Activity{
     }
 
     public void isOwner() {
-        tvWhoIsComing.setText("Invite or Uninvite People");
+        tvWhoIsComing.setText("Invite People");
 
-        addInvitee.setVisibility(View.VISIBLE);
+        //addInvitee.setVisibility(View.VISIBLE);
         addMore.setVisibility(View.VISIBLE);
         deleteEvent.setVisibility(View.VISIBLE);
 
@@ -473,6 +478,18 @@ public class ViewEventActvity extends Activity{
 
         etToDate.setInputType(InputType.TYPE_NULL);
         etToDate.setOnTouchListener(listener);
+
+        addMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    Intent i = new Intent(ViewEventActvity.this, FriendsListActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("isFromEditEvent", isFromEditEvent);
+                    bundle.putInt("eventID", eventID);
+                    i.putExtras(bundle);
+                    startActivity(i);
+            }
+        });
 
         deleteEvent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -531,6 +548,7 @@ public class ViewEventActvity extends Activity{
         }
     }
 
+
     public void updateEvent(String change) throws JSONException {
         RequestParams jdata = new RequestParams();
         if(change == eTitle) {
@@ -557,7 +575,7 @@ public class ViewEventActvity extends Activity{
         else if(change == base64ImageUpdate){
             jdata.put("picture", base64ImageUpdate);
         }
-        RestClient.put("events/" + eventID, jdata,LoginActivity.token, new JsonHttpResponseHandler() {
+        RestClient.put("events/" + eventID, jdata, LoginActivity.token, new JsonHttpResponseHandler() {
             public void onSuccess(String response) {
                 JSONObject res;
                 try {
@@ -570,9 +588,69 @@ public class ViewEventActvity extends Activity{
             }
         });
     }
+
+    public void getMembers()throws JSONException{
+        RestClient.get("events/" + eventID + "/members", null, LoginActivity.token, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray memberArray) {
+                Log.d("onSuccess: ", memberArray.toString());
+                JSONObject member = null;
+                try {
+                    mList = new ArrayList<>();
+                    for (int i = 0; i < memberArray.length(); i++) {
+                        member = memberArray.getJSONObject(i);
+                        int userId = member.getInt("UserId");
+                        String friendlyName = member.getString("friendlyName");
+                        String status = member.getString("isAttending");
+                        MemberStatus memberStatus = MemberStatus.valueOf(status.trim().toUpperCase());
+                        mList.add(new Members(userId, friendlyName, memberStatus, true, true));
+                        Log.d("Member: ", member.toString());
+                    }
+
+                    attendeeList.setAdapter(new AttendeeListAdapter(context, R.layout.attendee_list, mList));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] header, Throwable throwable, JSONObject response) {
+                Toast.makeText(getApplicationContext(), "FAILURE", Toast.LENGTH_LONG).show();
+            }
+
+        });
+    }
+
+    /*public void getEvent() throws JSONException {
+        RestClient.get("events/" + eventID, null, LoginActivity.token, new JsonHttpResponseHandler() {
+            public void onSuccess(String response) {
+                JSONObject res;
+                try {
+                    res = new JSONObject(response);
+                    eTitle = res.getString("what");
+                    eDesc = res.getString("why");
+                    eLocation = res.getString("where");
+                    eFromDate = res.getString("when");
+                    eToDate = res.getString("endDate");
+                    eFromTime = res.getString("fromTime");
+                    eToTime = res.getString("toTime");
+                    eOwner =
+                    status =
+                    byteArray
+
+                    Log.d("debug", res.getString("some_key")); // this is how you get a value out
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }*/
 
     public void deleteEvent() throws JSONException {
-        RestClient.delete("events/" + eventID,null, LoginActivity.token, new JsonHttpResponseHandler() {
+        RestClient.delete("events/" + eventID, null, LoginActivity.token, new JsonHttpResponseHandler() {
             public void onSuccess(String response) {
                 JSONObject res;
                 try {
@@ -586,6 +664,8 @@ public class ViewEventActvity extends Activity{
         });
 
     }
+
+
     public void navItemList(View v)
     {
         Intent intent = new Intent(this, ItemListActivity.class);
