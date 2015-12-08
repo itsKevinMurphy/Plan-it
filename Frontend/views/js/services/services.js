@@ -27,6 +27,11 @@ angular.module('services', ['ngCookies'])
     {
       return $cookies.eventID;
     }
+    this.getMembersByEventId = function(id, token)
+    {
+      return $http({url:'http://planit.lukefarnell.CA:3000/events/' + id + '/members', method: "GET", headers: {'x-access-token': token}});
+    }
+
 }
 ])
 
@@ -42,6 +47,10 @@ angular.module('services', ['ngCookies'])
     }
     this.deleteItem = function(id, itemId, token){
       return $http({url:'http://planit.lukefarnell.CA:3000/events/' + id + '/list/' + itemId, method: "DELETE", headers: {'x-access-token': token}});
+    }
+    this.claimItem = function(id, itemId, token){
+      console.log("claim service called");
+      return $http({url:'http://planit.lukefarnell.CA:3000/events/' + id + '/claim/' + itemId, method: "POST", headers: {'x-access-token': token}});
     }
 }
 ])
