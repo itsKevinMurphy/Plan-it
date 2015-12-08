@@ -115,6 +115,13 @@ public class ItemListActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
+        if (id == R.id.action_logout)
+        {
+            LoginActivity.token = null;
+            LoginActivity.userID = 0;
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
         return super.onOptionsItemSelected(item);
     }
 
