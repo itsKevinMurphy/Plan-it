@@ -120,8 +120,24 @@ public class AddFriendActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_friends_list)
+        {
+            NavToFriendList();
+        }
+        if (id == R.id.action_create_new_event)
+        {
+            Intent intent = new Intent(this, CreateEventActivity.class);
+            startActivity(intent);
+        }
+        if (id == R.id.action_event_list)
+        {
+            Intent intent = new Intent(this, EventsListActivity.class);
+            startActivity(intent);
+        }
+        if(id == R.id.action_refresh)
+        {
+            Intent intent = getIntent();
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

@@ -32,7 +32,7 @@ public class FriendsListActivity extends AppCompatActivity {
     int friendID;
     String friendName;
     private ArrayList<FriendListModel> mFriends;
-    Context context = this;
+    public Context context = this;
     int userID = LoginActivity.userID;
     String token = LoginActivity.token;
     @Override
@@ -144,10 +144,27 @@ public class FriendsListActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
+        if (id == R.id.action_event_list)
+        {
+            Intent intent = new Intent(this, EventsListActivity.class);
+            startActivity(intent);
+        }
+        if (id == R.id.action_add_friends)
+        {
+            Intent intent = new Intent(this, AddFriendActivity.class);
+            startActivity(intent);
+        }
+        if (id == R.id.action_create_new_event)
+        {
+            Intent intent = new Intent(this, CreateEventActivity.class);
+            startActivity(intent);
+        }
+        if(id == R.id.action_refresh)
+        {
+            Intent intent = getIntent();
+            startActivity(intent);
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -156,7 +173,7 @@ public class FriendsListActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AddFriendActivity.class);
         startActivity(intent);
     }
-    public void NavToFriendList()
+    public void NavToFriendList(View v)
     {
         Intent intent = new Intent(this, FriendsListActivity.class);
         startActivity(intent);
