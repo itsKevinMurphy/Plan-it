@@ -248,27 +248,27 @@ angular.module('controller', [])
   );
 
   $scope.checkOwner = function (toCheck) {
-    if (toCheck.isAttending == "Owner") { 
+    if (toCheck == "Owner") { 
       return true;
     }
   }
   $scope.checkInvited = function (toCheck) {
-    if (toCheck.isAttending == "Invited") { 
+    if (toCheck == "Invited") { 
       return true;
     }
   }
   $scope.checkAttending = function (toCheck) {
-    if (toCheck.isAttending == "Attending") { 
+    if (toCheck == "Attending") { 
       return true;
     }
   }
   $scope.checkDeclined = function (toCheck) {
-    if (toCheck.isAttending == "Declined") { 
+    if (toCheck == "Declined") { 
       return true;
     }
   }
   $scope.checkLeft = function (toCheck) {
-    if (toCheck.isAttending == "Left") { 
+    if (toCheck == "Left") { 
       return true;
     }
   }
