@@ -509,7 +509,7 @@ public class ViewEventActvity extends Activity{
             public void onClick(View view) {
                     Intent i = new Intent(ViewEventActvity.this, FriendsListActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putBoolean("isFromEditEvent", isFromEditEvent);
+                    bundle.putBoolean("isFromEditEvent", true);
                     bundle.putInt("eventID", eventID);
                     i.putExtras(bundle);
                     startActivity(i);

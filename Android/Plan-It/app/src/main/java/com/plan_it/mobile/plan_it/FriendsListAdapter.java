@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,8 @@ public class FriendsListAdapter extends ArrayAdapter<FriendListModel> {
     int resource;
     FriendHolder friend;
     FriendsListActivity fla;
+    boolean isFromEditEvent;
+    int eventID;
     View view;
     public FriendsListAdapter(Context context, int resource, ArrayList<FriendListModel> friendsList) {
         super(context, resource, friendsList);
@@ -43,7 +46,9 @@ public class FriendsListAdapter extends ArrayAdapter<FriendListModel> {
     public View getView(final int position, View view, ViewGroup parent) {
         this.view = view;
         View rowView = view;
-         final int i = position;
+        isFromEditEvent = fla.isFromEditEvent;
+        eventID = fla.eventID;
+        final int i = position;
         if(rowView == null)
         {
             LayoutInflater inflater = ((Activity)context).getLayoutInflater();
@@ -62,32 +67,46 @@ public class FriendsListAdapter extends ArrayAdapter<FriendListModel> {
         friend.txtFriendID.setTag(position);
         friend.txtFriendID.setText(friendsList.get(position).FriendID);
         friend.imgProfilePic.setImageResource(friendsList.get(position).ProfilePic);
-        friend.removeFriend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        if(isFromEditEvent == false) {
+
+            friend.removeFriend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
 
-                AlertDialog.Builder alert = new AlertDialog.Builder(
-                        context);
-                alert.setTitle("Alert!!");
-                alert.setMessage("Are you sure to delete record");
-                alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        RemoveFriend(LoginActivity.userID, friendsList.get(position).UserID);
-                        dialog.dismiss();
-                    }
-                });
-                alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                alert.show();
-                notifyDataSetChanged();
-            }
-        });
+                    AlertDialog.Builder alert = new AlertDialog.Builder(
+                            context);
+                    alert.setTitle("Alert!!");
+                    alert.setMessage("Are you sure to delete record");
+                    alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            RemoveFriend(LoginActivity.userID, friendsList.get(position).UserID);
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.show();
+                    notifyDataSetChanged();
+                }
+            });
+        }
+        else{
+            friend.removeFriend.setImageResource(R.drawable.ic_add_circle_blue_24dp);
+            friend.removeFriend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    inviteFriend(eventID, friendsList.get(position).UserID);
+                    Intent intent = new Intent(fla, EventsListActivity.class);
+                    context.startActivity(intent);
+                }
+            });
+        }
         rowView.setTag(friend);
 
         return rowView;
@@ -116,4 +135,21 @@ public class FriendsListAdapter extends ArrayAdapter<FriendListModel> {
             }
         });
     }
+
+    public void inviteFriend(int eventid, int friendid){
+        RestClient.post("/events/"+ eventid + "/invite/" + friendid, null, LoginActivity.token, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                //Toast.makeText(context, "Success, Friend: " + friendName + " Was added\n" + response, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+               // Toast.makeText(context, "FAILURE, Friend: " + friendName + " Could not be added\n" + responseString , Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
 }
