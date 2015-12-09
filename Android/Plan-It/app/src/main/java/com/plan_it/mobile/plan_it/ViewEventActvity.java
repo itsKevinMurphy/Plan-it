@@ -743,6 +743,14 @@ public class ViewEventActvity extends Activity{
         startActivity(intent);
     }
 
+    public void NavMessages(View v)
+    {
+        Intent intent = new Intent(this, Messages.class);
+        intent.putExtra("token", LoginActivity.token);
+        intent.putExtra("eventID", eventID);
+        startActivity(intent);
+    }
+
     public void answerInvite(String answer)throws JSONException{
         RestClient.post("events/" + eventID + "/invite/" + answer, null, LoginActivity.token, new JsonHttpResponseHandler() {
             public void onSuccess(String response) {
