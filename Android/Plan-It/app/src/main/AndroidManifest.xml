@@ -55,6 +55,10 @@
             android:name=".AddFriendActivity"
             android:label="@string/title_activity_add_friend" >
         </activity>
+        <activity
+            android:name=".Messages"
+            android:label="@string/title_activity_messages" >
+        </activity>
     </application>
 
 </manifest>
