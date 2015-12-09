@@ -18,7 +18,7 @@
         <button class="btn btn-sm btn-default btn-block" ng-show="!checkOwner(event.isAttending)" ng-click="attendEvent()">
             <span class="glyphicon glyphicon-ok"> ATTEND</span>
         </button>
-        <button class="btn btn-sm btn-danger btn-block" ng-show="!checkOwner(event.isAttending)">
+        <button class="btn btn-sm btn-danger btn-block" ng-show="!checkOwner(event.isAttending)" ng-click="declineEvent()">
             <span class="glyphicon glyphicon-remove"> DECLINE</span>
         </button>
         <button class="btn btn-sm btn-primary btn-block" ng-show="!checkOwner(event.isAttending)" ng-click="leaveEvent()">
