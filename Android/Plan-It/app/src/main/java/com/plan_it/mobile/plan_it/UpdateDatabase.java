@@ -34,7 +34,7 @@ public class UpdateDatabase {
         {
             answer = "Declined";
         }
-        
+
         RestClient.put("events/" + eventID + "/invite/" + answer, null, LoginActivity.token, new JsonHttpResponseHandler() {
             public void onSuccess(String response) {
                 JSONObject res;
