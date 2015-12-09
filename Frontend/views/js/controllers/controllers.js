@@ -226,7 +226,7 @@ angular.module('controller', [])
 
 })
 
-.controller('EventDetailsController', function ($window, $scope, $stateParams, ServiceForEvents, ServiceForUser){
+.controller('EventDetailsController', function ($window, $location, $scope, $stateParams, ServiceForEvents, ServiceForUser){
   $scope.id = $stateParams.eventID;
   ServiceForEvents.setEvent($scope.id);
   $scope.token = ServiceForUser.getToken();
@@ -282,6 +282,16 @@ angular.module('controller', [])
     if (confirm("Are you sure you want to delete the event?") == true)
         ServiceForEvents.deleteEvent($scope.id, $scope.token).success(function (data) {});
     $window.location.reload();
+    $location.path('event');
+  };
+  $scope.leaveEvent = function () {
+    $scope.token = ServiceForUser.getToken();
+
+    console.log("about to leave event")
+    if (confirm("Are you sure you want to leave the event?") == true)
+        ServiceForEvents.leaveEvent($scope.id, $scope.token).success(function (data) {});
+    $window.location.reload();
+    $location.path('event');
   };
 
 })
