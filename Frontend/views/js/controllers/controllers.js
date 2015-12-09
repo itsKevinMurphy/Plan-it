@@ -180,14 +180,17 @@ angular.module('controller', [])
     {
       console.log("Friend Invited.")
     }
-    );
+    ).error (function(error) {
+      $scope.errorMsg = "Conflict error: " + error;
+      console.log(error);
+    });
   }
 })
 
 .controller('EventListController', function ($scope, ServiceForEvents, ServiceForUser){
   $scope.token = ServiceForUser.getToken();
   console.log($scope.token);
-
+  // $scope.event;
   ServiceForEvents.getAllEvents($scope.token).success(function (data)
   {
       $scope.eventList = data;
@@ -195,12 +198,38 @@ angular.module('controller', [])
   }
   );
 
+  $scope.checkOwner = function (toCheck) {
+    if (toCheck.isAttending == "Owner") { 
+      return true;
+    }
+  }
+  $scope.checkInvited = function (toCheck) {
+    if (toCheck.isAttending == "Invited") { 
+      return true;
+    }
+  }
+  $scope.checkAttending = function (toCheck) {
+    if (toCheck.isAttending == "Attending") { 
+      return true;
+    }
+  }
+  $scope.checkDeclined = function (toCheck) {
+    if (toCheck.isAttending == "Declined") { 
+      return true;
+    }
+  }
+  $scope.checkLeft = function (toCheck) {
+    if (toCheck.isAttending == "Left") { 
+      return true;
+    }
+  }
+
 })
 
 .controller('EventDetailsController', function ($window, $scope, $stateParams, ServiceForEvents, ServiceForUser){
   $scope.id = $stateParams.eventID;
-  $scope.token = ServiceForUser.getToken();
   ServiceForEvents.setEvent($scope.id);
+  $scope.token = ServiceForUser.getToken();
 
   console.log($scope.id);
   ServiceForEvents.getEventById($scope.id, $scope.token).success(function (data)
@@ -342,12 +371,32 @@ angular.module('controller', [])
   // $scope.id = $stateParams.eventID;
   $scope.currentEventID = ServiceForEvents.getEvent();
   console.log("event id: " + $scope.currentEventID);
+  var actualCost = 0;
+  var estimatedCost = 0;
 
     ServiceForItems.getListItems($scope.currentEventID, $scope.token).success(function (data)
   {
-    $scope.itemList = data;
     console.log("retrieved list " + data);
+    $scope.itemList = data;
 
+    //calculate total
+    for(var i=0; i<data.length; i++){
+      var items = data[i];
+      console.log("this item actual cost: " + items.actCost + " this item estimated cost: " + items.estCost);
+      var actCost = items.actCost;
+      var estCost = items.estCost;
+      actualCost = actualCost + actCost;
+      estimatedCost = estimatedCost + estCost;
+      console.log("total actual: " + actualCost + " total estimated: " + estimatedCost);
+      $scope.actualTotal = parseFloat(actualCost);
+      $scope.estimatedTotal = parseFloat(estimatedCost);
+    }
+    
+    $scope.divideTotal = function (num) {
+      $scope.actualSplit = parseFloat(actualCost/num).toFixed(2);
+      $scope.estimatedSplit = parseFloat(estimatedCost/num).toFixed(2);
+    }
+    
 
   }
   );
