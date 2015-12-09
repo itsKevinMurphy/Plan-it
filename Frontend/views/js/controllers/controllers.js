@@ -302,6 +302,14 @@ angular.module('controller', [])
     $window.location.reload();
     $location.path('event');
   };
+  $scope.declineEvent = function () {
+    $scope.token = ServiceForUser.getToken();
+
+    console.log("about to decline event invitation")
+    ServiceForEvents.answerInvitation($scope.id, "Declined", $scope.token).success(function (data) {});
+    $window.location.reload();
+    $location.path('event');
+  };
 
 
 })
