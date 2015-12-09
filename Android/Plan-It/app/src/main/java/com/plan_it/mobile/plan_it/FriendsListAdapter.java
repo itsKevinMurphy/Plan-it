@@ -36,8 +36,10 @@ public class FriendsListAdapter extends ArrayAdapter<FriendListModel> {
     boolean isFromEditEvent;
     int eventID;
     View view;
-    public FriendsListAdapter(Context context, int resource, ArrayList<FriendListModel> friendsList) {
+    public FriendsListAdapter(Context context, int resource, ArrayList<FriendListModel> friendsList, int eventID, boolean isFromEditEvent) {
         super(context, resource, friendsList);
+        this.eventID = eventID;
+        this.isFromEditEvent = isFromEditEvent;
         this.context = context;
         this.resource = resource;
         this.friendsList = friendsList;
@@ -46,8 +48,6 @@ public class FriendsListAdapter extends ArrayAdapter<FriendListModel> {
     public View getView(final int position, View view, ViewGroup parent) {
         this.view = view;
         View rowView = view;
-        isFromEditEvent = fla.isFromEditEvent;
-        eventID = fla.eventID;
         final int i = position;
         if(rowView == null)
         {
@@ -67,7 +67,7 @@ public class FriendsListAdapter extends ArrayAdapter<FriendListModel> {
         friend.txtFriendID.setTag(position);
         friend.txtFriendID.setText(friendsList.get(position).FriendID);
         friend.imgProfilePic.setImageResource(friendsList.get(position).ProfilePic);
-        if(isFromEditEvent == false) {
+        if(!isFromEditEvent) {
 
             friend.removeFriend.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -102,8 +102,6 @@ public class FriendsListAdapter extends ArrayAdapter<FriendListModel> {
                 @Override
                 public void onClick(View v) {
                     inviteFriend(eventID, friendsList.get(position).UserID);
-                    Intent intent = new Intent(fla, EventsListActivity.class);
-                    context.startActivity(intent);
                 }
             });
         }
@@ -123,31 +121,30 @@ public class FriendsListAdapter extends ArrayAdapter<FriendListModel> {
         jdata.put("userID", friendId);
         jdata.put("id", id);
         Log.d("Removing User: ", Integer.toString(id));
-        Toast.makeText(context, "ID: " + Integer.toString(id), Toast.LENGTH_LONG).show();
         RestClient.delete("/user/" + id + "/friend/" + friendId, jdata, LoginActivity.token, new JsonHttpResponseHandler() {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                Toast.makeText(context, "Success, " + response + " has been Added to your list", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Success, " + response + " has been removed from your list", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] header, Throwable throwable, JSONObject response) {
-                Toast.makeText(context, "Failure, Unable to add: " + response, Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Failure, Unable to remove: " + response, Toast.LENGTH_LONG).show();
             }
         });
     }
 
     public void inviteFriend(int eventid, int friendid){
-        RestClient.post("/events/"+ eventid + "/invite/" + friendid, null, LoginActivity.token, new JsonHttpResponseHandler() {
+        RestClient.post("/events/" + eventid + "/invite/" + friendid, null, LoginActivity.token, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
-                //Toast.makeText(context, "Success, Friend: " + friendName + " Was added\n" + response, Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Success, Friend: " + response + " Was added\n", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 super.onFailure(statusCode, headers, responseString, throwable);
-               // Toast.makeText(context, "FAILURE, Friend: " + friendName + " Could not be added\n" + responseString , Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "FAILURE: " + responseString, Toast.LENGTH_LONG).show();
             }
         });
     }
