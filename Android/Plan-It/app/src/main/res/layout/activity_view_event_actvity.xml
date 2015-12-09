@@ -117,7 +117,7 @@
                     android:textSize="8dp"
                     android:id="@+id/btnChngPic"
                     android:layout_below="@+id/ivViewEventImage"
-                    android:layout_centerHorizontal="true" />
+                    android:layout_centerHorizontal="true"/>
 
                 <ImageView
                     android:id="@+id/ivViewEventImage"
