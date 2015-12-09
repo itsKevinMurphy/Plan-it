@@ -294,6 +294,16 @@ angular.module('controller', [])
     $location.path('event');
   };
 
+  $scope.attendEvent = function () {
+    $scope.token = ServiceForUser.getToken();
+
+    console.log("about to attend event invitation")
+    ServiceForEvents.answerInvitation($scope.id, "Attending", $scope.token).success(function (data) {});
+    $window.location.reload();
+    $location.path('event');
+  };
+
+
 })
 
 // .controller('InviteFriendController')
