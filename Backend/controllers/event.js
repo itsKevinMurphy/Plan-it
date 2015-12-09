@@ -312,7 +312,7 @@ event.invitation = function(req, res, next){
     if(err)
       console.log(err);
     else{
-      database.eventModel.update({"members.$.UserID" : user.UserId , "EventID" : req.params.id},
+      database.eventModel.update({$and:[{"EventID": req.params.id},{"members.UserId": user.UserID}]},
        {$set: {"members.$.isAttending" : req.params.answer}},
        function(err, event){
         if(err)
