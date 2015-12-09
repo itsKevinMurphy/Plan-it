@@ -94,6 +94,11 @@ public class Messages extends AppCompatActivity {
         eventID = b.getInt("eventID");
     }
 
+    public void GetMessages()
+    {
+
+    }
+
     public void SendMessage(View v)
     {
         message = txt_message.getText().toString();
