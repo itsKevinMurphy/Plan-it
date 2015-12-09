@@ -19,6 +19,9 @@ angular.module('services', ['ngCookies'])
     this.updateEvent = function (id, data, token){
       return $http({ url: 'http://planit.lukefarnell.CA:3000/events/' + id , method: "PUT", data: data, headers: {'x-access-token': token}});
     }
+    this.leaveEvent = function (id, token){
+      return $http({ url: 'http://planit.lukefarnell.CA:3000/events/' + id + '/leave', method: "POST", headers: {'x-access-token': token}});
+    }
     this.setEvent = function(value)
     {
       $cookies.eventID = value;
