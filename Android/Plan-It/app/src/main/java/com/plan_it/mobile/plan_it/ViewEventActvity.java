@@ -60,7 +60,6 @@ public class ViewEventActvity extends Activity{
     String eToDate;
     String eFromTime;
     String eToTime;
-    String eOwner;
     IsAttending status;
     byte[] byteArray;
     Bitmap eImage;
@@ -93,7 +92,6 @@ public class ViewEventActvity extends Activity{
         setContentView(R.layout.activity_view_event_actvity);
 
         getBundleValues();
-
         addMore = (Button)findViewById(R.id.btn_invite_more);
         tvWhoIsComing = (TextView)findViewById(R.id.tvWhoIsComing);
         etTitle = (EditText)findViewById(R.id.etViewEventTitle);
@@ -147,6 +145,7 @@ public class ViewEventActvity extends Activity{
         Intent intent = getIntent();
         Bundle eventBundle = intent.getExtras();
         eventID = eventBundle.getInt("eventID");
+
         eTitle = eventBundle.getString("eventName");
         eDesc = eventBundle.getString("eventDescription");
         eLocation = eventBundle.getString("eventLocation");
@@ -154,7 +153,6 @@ public class ViewEventActvity extends Activity{
         eToDate = eventBundle.getString("eventToDate");
         eFromTime = eventBundle.getString("eventFromTime");
         eToTime = eventBundle.getString("eventToTime");
-        eOwner = eventBundle.getString("eventOwner");
         status = (IsAttending) eventBundle.get("isAttending");
         byteArray = eventBundle.getByteArray("eventPhoto");
         boolean itemListAccess = eventBundle.getBoolean("itemList");
@@ -177,7 +175,6 @@ public class ViewEventActvity extends Activity{
            @Override
            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                if (actionId == EditorInfo.IME_ACTION_DONE) {
-
                    try {
                        eTitle = etTitle.getText().toString();
                        updateEvent(eTitle);
@@ -405,7 +402,21 @@ public class ViewEventActvity extends Activity{
         etToTime.setFocusable(false);
 
         btnLoadImg.setVisibility(View.INVISIBLE);
-        deleteEvent.setVisibility(View.GONE);
+        deleteEvent.setVisibility(View.VISIBLE);
+        deleteEvent.setText("Leave Event");
+        deleteEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    leaveEvent();
+                    Intent i = new Intent(ViewEventActvity.this, EventsListActivity.class);
+                    startActivity(i);
+                }
+                catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public void isDeclined(){
@@ -431,6 +442,32 @@ public class ViewEventActvity extends Activity{
         btnLoadImg.setVisibility(View.GONE);
 
         btnGoing.setVisibility(View.VISIBLE);
+        deleteEvent.setVisibility(View.VISIBLE);
+        deleteEvent.setText("Leave Event");
+        deleteEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    leaveEvent();
+                    Intent i = new Intent(ViewEventActvity.this, EventsListActivity.class);
+                    startActivity(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        btnGoing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    answerInvite("Attending");
+                    Intent intent = new Intent(ViewEventActvity.this, EventsListActivity.class);
+                    startActivity(intent);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public void isInvited(){
@@ -488,7 +525,6 @@ public class ViewEventActvity extends Activity{
     public void isOwner() {
         tvWhoIsComing.setText("Invite People");
 
-        //addInvitee.setVisibility(View.VISIBLE);
         addMore.setVisibility(View.VISIBLE);
         deleteEvent.setVisibility(View.VISIBLE);
 
@@ -647,10 +683,11 @@ public class ViewEventActvity extends Activity{
         });
     }
 
-    /*public void getEvent() throws JSONException {
+   /* public void getEvent() throws JSONException {
         RestClient.get("events/" + eventID, null, LoginActivity.token, new JsonHttpResponseHandler() {
             public void onSuccess(String response) {
                 JSONObject res;
+                String statusString;
                 try {
                     res = new JSONObject(response);
                     eTitle = res.getString("what");
@@ -660,9 +697,11 @@ public class ViewEventActvity extends Activity{
                     eToDate = res.getString("endDate");
                     eFromTime = res.getString("fromTime");
                     eToTime = res.getString("toTime");
-                    eOwner =
-                    status =
-                    byteArray
+                    statusString = res.getString("isAttending");
+                    status = IsAttending.valueOf(statusString.trim().toUpperCase());
+                    String base64String = res.getString("picture");
+                    Bitmap eventImg = base64ToBitmap(base64String);
+                    bmp = Bitmap.createScaledBitmap(eventImg, 140, 150, true);
 
                     Log.d("debug", res.getString("some_key")); // this is how you get a value out
                 } catch (JSONException e) {
@@ -673,6 +712,11 @@ public class ViewEventActvity extends Activity{
         });
 
     }*/
+
+    private Bitmap base64ToBitmap(String b64){
+        byte[] imageAsBytes = Base64.decode(b64.getBytes(),Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
+    }
 
     public void deleteEvent() throws JSONException {
         RestClient.delete("events/" + eventID, null, LoginActivity.token, new JsonHttpResponseHandler() {
@@ -701,6 +745,21 @@ public class ViewEventActvity extends Activity{
 
     public void answerInvite(String answer)throws JSONException{
         RestClient.post("events/" + eventID + "/invite/" + answer, null, LoginActivity.token, new JsonHttpResponseHandler() {
+            public void onSuccess(String response) {
+                JSONObject res;
+                try {
+                    res = new JSONObject(response);
+                    Log.d("debug", res.getString("some_key")); // this is how you get a value out
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public void leaveEvent() throws JSONException{
+        RestClient.post("events/" + eventID + "/leave", null, LoginActivity.token, new JsonHttpResponseHandler() {
             public void onSuccess(String response) {
                 JSONObject res;
                 try {
