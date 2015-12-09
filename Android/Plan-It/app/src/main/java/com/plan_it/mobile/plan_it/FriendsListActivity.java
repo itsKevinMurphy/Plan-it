@@ -85,8 +85,7 @@ public class FriendsListActivity extends AppCompatActivity {
                     }*/
 
                     list = (ListView)findViewById(R.id.friends_list_view);
-                    list.setAdapter(new FriendsListAdapter(context, R.layout.friends_list_item, friendsList));
-
+                    list.setAdapter(new FriendsListAdapter(context, R.layout.friends_list_item, friendsList, eventID, isFromEditEvent));
 
                 } catch (JSONException e) {
                     e.printStackTrace();
