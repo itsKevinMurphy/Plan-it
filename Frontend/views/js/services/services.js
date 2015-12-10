@@ -117,6 +117,7 @@ angular.module('services', ['ngCookies'])
     {
       $cookies.token = "";
       $cookies.userID = "";
+      $cookies.eventID = "";
     }
     this.setUser = function(value)
     {
