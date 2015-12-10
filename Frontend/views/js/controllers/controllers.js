@@ -508,8 +508,32 @@ angular.module('controller', [])
 .controller('AccountController', function ($scope, $location)
 {
 
-}
-)
+})
+.controller('EventChatController', function($scope, $window, $location, ServiceForMessages, ServiceForUser, ServiceForEvents){
+  $scope.token = ServiceForUser.getToken();
+  $scope.currentEvent = ServiceForEvents.getEvent();
+  $scope.chat = {};
+
+  ServiceForMessages.getMessages($scope.currentEvent, 1, $scope.token).success(function(data)
+  {
+    if(data[0])
+    {
+    $scope.messageList = data[0].messages;
+    console.log(data);
+    console.log(data[0].messages)
+    }
+  })
+
+  $scope.sendMessage = function(chat){
+    ServiceForMessages.sendMessage($scope.chat, $scope.currentEvent, $scope.token).success(function(data)
+  {
+    console.log("Message sent.");
+    $scope.chat.message = "";
+    $window.location.reload();
+  })
+  }
+})
+
 // angular.module('userController', [])
 .controller('RegisterUserController', function ($scope, $location, ServiceForUser) {
 
