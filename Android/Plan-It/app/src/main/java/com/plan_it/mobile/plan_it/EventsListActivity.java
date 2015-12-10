@@ -71,8 +71,6 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        /*Intent intent = getIntent();
-        startActivity(intent);*/
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
