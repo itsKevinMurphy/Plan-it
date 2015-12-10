@@ -62,7 +62,6 @@ public class FriendsListActivity extends AppCompatActivity {
     }
 
     public void fillFriendsList()throws JSONException {
-        removeFriend = (ImageView)findViewById(R.id.friends_list_remove);
         RestClient.get("/user/" + userID + "/friend", null, LoginActivity.token, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray friendsArray) {
@@ -79,11 +78,6 @@ public class FriendsListActivity extends AppCompatActivity {
                         friendName = friend.getString("friendlyName");
                         Log.d("Friend: ", friend.toString());
                     }
-
-                   /* if(isFromEditEvent)
-                    {
-                        removeFriend.setImageResource(R.drawable.ic_add_circle_blue_24dp);
-                    }*/
 
                     list = (ListView)findViewById(R.id.friends_list_view);
                     list.setAdapter(new FriendsListAdapter(context, R.layout.friends_list_item, friendsList, eventID, isFromEditEvent));
