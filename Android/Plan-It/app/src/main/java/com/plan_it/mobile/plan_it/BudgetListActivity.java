@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,10 +39,14 @@ public class BudgetListActivity extends AppCompatActivity implements SwipeRefres
         Bundle eventBundle = intent.getExtras();
         eventID = eventBundle.getInt("eventID");
 
-        budgetList = (ListView) findViewById(R.id.budget_list_view);
+
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout_budget_list);
         swipeRefreshLayout.setOnRefreshListener(this);
-
+        try {
+            getMembers();
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -69,16 +74,21 @@ public class BudgetListActivity extends AppCompatActivity implements SwipeRefres
                         int userId = member.getInt("UserId");
                         String friendlyName = member.getString("friendlyName");
                         String status = member.getString("isAttending");
-                        boolean isPaying = member.getBoolean("isPaying");
-                        if(!member.has("isPaying")){
-                            isPaying = false;
+                        boolean isPaying;
+                        if (!member.has("isPaying")) {
+                            isPaying = true;
+                        }
+                        else{
+                            isPaying = member.getBoolean("isPaying");
                         }
                         MemberStatus memberStatus = MemberStatus.valueOf(status.trim().toUpperCase());
-                        bList.add(new Members(userId, friendlyName, memberStatus, isPaying, true, true));
-                        Log.d("Member: ", member.toString());
+                        if(memberStatus == MemberStatus.ATTENDING || memberStatus == MemberStatus.OWNER){
+                            bList.add(new Members(userId, friendlyName, memberStatus, isPaying, true, true));
+                            Log.d("Member: ", member.toString());
+                        }
                     }
-
-                    budgetList.setAdapter(new AttendeeListAdapter(context, R.layout.list_budget, bList));
+                    budgetList = (ListView) findViewById(R.id.budget_list_view);
+                    budgetList.setAdapter(new BudgetListAdapter(context, R.layout.list_budget, bList));
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -91,6 +101,28 @@ public class BudgetListActivity extends AppCompatActivity implements SwipeRefres
             }
 
         });
+    }
+
+    public void setPaying(int memberId, boolean isPaying) throws JSONException{
+        RequestParams jdata = new RequestParams();
+        if(isPaying == true){
+            jdata.put("isPaying","true");
+        }
+        else{
+            jdata.put("isPaying","false");
+        }
+        RestClient.post("/events/" + eventID + "/paying/" + memberId, jdata, LoginActivity.token, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+        });
+
     }
 
     @Override

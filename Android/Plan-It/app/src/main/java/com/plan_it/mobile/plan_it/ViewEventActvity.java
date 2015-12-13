@@ -86,6 +86,7 @@ public class ViewEventActvity extends Activity implements SwipeRefreshLayout.OnR
     Button btnLoadImg;
     ImageView eventImage;
     Button deleteEvent;
+    Button budgetButton;
 
     Calendar myCalendar = Calendar.getInstance();
 
@@ -113,6 +114,7 @@ public class ViewEventActvity extends Activity implements SwipeRefreshLayout.OnR
         btnGoing = (Button)findViewById(R.id.btnAccept);
         btnNotGoing = (Button)findViewById(R.id.btnDecline);
         deleteEvent = (Button)findViewById(R.id.btnViewDeleteEvent);
+        budgetButton = (Button) findViewById(R.id.btnBudget);
 
         Intent intent = getIntent();
         Bundle eventBundle = intent.getExtras();
@@ -470,6 +472,7 @@ public class ViewEventActvity extends Activity implements SwipeRefreshLayout.OnR
         messageBoard.setVisibility(View.GONE);
         btnLoadImg.setVisibility(View.GONE);
 
+        budgetButton.setVisibility(View.GONE);
         btnGoing.setVisibility(View.VISIBLE);
         deleteEvent.setVisibility(View.VISIBLE);
         deleteEvent.setText("Leave Event");
@@ -522,6 +525,7 @@ public class ViewEventActvity extends Activity implements SwipeRefreshLayout.OnR
         messageBoard.setVisibility(View.GONE);
         btnLoadImg.setVisibility(View.GONE);
 
+        budgetButton.setVisibility(View.GONE);
         btnGoing.setVisibility(View.VISIBLE);
         btnNotGoing.setVisibility(View.VISIBLE);
 
@@ -693,9 +697,12 @@ public class ViewEventActvity extends Activity implements SwipeRefreshLayout.OnR
                         String friendlyName = member.getString("friendlyName");
                         String status = member.getString("isAttending");
                         MemberStatus memberStatus = MemberStatus.valueOf(status.trim().toUpperCase());
-                        boolean isPaying = member.getBoolean("isPaying");
-                        if(!member.has("isPaying")){
-                            isPaying = false;
+                        boolean isPaying;
+                        if (!member.has("isPaying")) {
+                            isPaying = true;
+                        }
+                        else{
+                            isPaying = member.getBoolean("isPaying");
                         }
                         mList.add(new Members(userId, friendlyName, memberStatus, isPaying, true, true));
                         Log.d("Member: ", member.toString());
@@ -828,6 +835,11 @@ public class ViewEventActvity extends Activity implements SwipeRefreshLayout.OnR
         });
     }
 
+    public void navBudgetList(View v){
+        Intent intent = new Intent(ViewEventActvity.this, BudgetListActivity.class);
+        intent.putExtra("eventID", eventID);
+        startActivity(intent);
+    }
 
 
 }
