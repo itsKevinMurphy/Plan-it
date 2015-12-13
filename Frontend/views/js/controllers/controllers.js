@@ -1,4 +1,4 @@
-angular.module('controller', [])
+angular.module('controller', ['angularMoment'])
 .controller('MainController', function($scope, ServiceForUser, $cookies, $location)
 {
   console.log('Hello from Main controller');
