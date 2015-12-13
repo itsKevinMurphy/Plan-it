@@ -19,7 +19,7 @@ event.createEvent = function(req, res, next) {
       console.log(err);
     else{
       //set the user as the event owner
-      event.members.push({UserId: parseInt(token.UserID), isAttending: "Owner"});
+      event.members.push({UserId: parseInt(token.UserID), friendlyName : token.friendlyName, isAttending: "Owner"});
 
 
       //save the event
@@ -46,13 +46,38 @@ event.createEvent = function(req, res, next) {
 }
 
 event.getEventById = function(req, res, next) {
-  database.eventModel.findOne({
-    "EventID": req.params.id
-  }, function(err, event) {
-    if (err)
-      console.log(err);
+  // database.eventModel.findOne({
+  //   "EventID": req.params.id
+  // }, function(err, event) {
+  //   if (err)
+  //     console.log(err);
+  //   else{
+  //     res.status(200).send(event);
+  //   }
+  // });
+  console.log('hit');
+  database.userModel.findOne({token : req.headers["x-access-token"]}, function(err, token){
+    if(err)
+      console.log("error"  + err);
     else{
-      res.status(200).send(event);
+      database.eventModel.findOne({"EventID" : req.params.id}).lean().exec(function(err, events){
+        if(err)
+          console.log(err);
+        else{
+          database.eventModel.findOne({"EventID" : req.params.id}).where("members.UserId").in(token.UserID).
+          select("-_id EventID what why where when endDate picture fromTime toTime itemList totalEstCost totalActCost members").lean().exec(function(err, result){
+            console.log(result.members.length);
+            //for(var i = 0; i < result.members.length;i++){
+              for(var j = 0; j < result.members.length;j++){
+                if(result.members[j].UserId == token.UserID)
+                  result.isAttending = result.members[j].isAttending;
+                  //console.log(result[i]);
+              }
+            //}
+            res.status(200).json(result);
+          });
+        }
+      });
     }
   });
 }
@@ -73,16 +98,34 @@ event.getUsersEvents = function(req, res, next) {
     if(err)
       console.log("error"  + err);
     else{
-      console.log(token);
-      database.eventModel.find({"members.UserId": token.UserID}, function(err, events) {
-        if (err)
+      database.eventModel.find({"members.UserId": token.UserID}).lean().exec(function(err, events){
+        if(err)
           console.log(err);
-        else {
-          res.status(200).send(events);
+        else{
+          database.eventModel.find().where("members.UserId").in(token.UserID).
+          select("-_id EventID what why where when endDate picture fromTime toTime itemList totalEstCost totalActCost members").lean().exec(function(err, result){
+            for(var i = 0; i < result.length;i++){
+              for(var j = 0; j < result[i].members.length;j++){
+                if(result[i].members[j].UserId == token.UserID)
+                  result[i].isAttending = result[i].members[j].isAttending;
+              }
+            }
+            res.status(200).json(result);
+          });
         }
       });
     }
   });
+}
+
+event.getMembersByEventId = function(req, res, next){
+  database.eventModel.findOne({"EventID" : req.params.id}, function(err, event){
+    if(err)
+      console.log(err);
+    else{
+      res.status(200).json(event.members);
+    }
+  })
 }
 
 event.updateEvent = function(req, res, next) {
@@ -111,13 +154,33 @@ event.updateEvent = function(req, res, next) {
 }
 
 event.deleteEvent = function(req, res, next) {
-  database.eventModel.remove({
-    "EventID": req.params.id
-  }, function (err, event) {
-    if (err)
+  database.userModel.findOne({token: req.headers["x-access-token"]}, function(err, user){
+    if(err)
       console.log(err);
-    else
-      res.sendStatus(200);
+    else{
+      database.eventModel.findOne({"EventID" : req.params.id}, function(err, event){
+        if(err)
+          console.log(err);
+        else{
+          for(var i = 0; i < event.members.length;i++){
+            if(event.members[i].UserId == user.UserID && event.members[i].isAttending !== 'Owner'){
+              res.status(409).send("Only the owener can delete the event");
+            }
+            else if(event.members[i].UserId == user.UserID && event.members[i].isAttending == 'Owner'){
+              database.eventModel.remove({
+                "EventID": req.params.id
+              }, function (err, event) {
+                if (err)
+                  console.log(err);
+                else{
+                  res.sendStatus(200);
+                }
+              });
+            }
+          }
+        }
+      });
+    }
   });
 }
 
@@ -134,18 +197,15 @@ event.createListItem = function(req, res, next) {
         "actCost": req.body.actCost
       });
       event.itemList.push(list);
-
-      database.eventModel.calculateEst(req.params.id, function(result) {
-        event.totalEstCost = result.estCost;
-        event.totalActCost = result.actCost;
-        event.save(function(err) {
+        event.save(function(err, data) {
           if (err)
             console.log(err);
           else{
+            console.log(data);
             res.sendStatus(201);
           }
         });
-      });
+
     }
   });
 }
@@ -170,7 +230,7 @@ event.claimItem = function(req, res, next){
     else{
       console.log(result);
       database.eventModel.update({"itemList.ListID" : req.params.item, "EventID" : req.params.id},
-      {$set : { "itemList.$.whoseBringing": result.UserID}},
+      {$set : { "itemList.$.whoseBringing": result.friendlyName}},
       function(err, item){
         if(err)
           console.log(err);
@@ -205,27 +265,28 @@ event.deleteItem = function(req, res, next){
 }
 
 event.updateItem = function(req, res, next){
+  console.log(req.params.item);
   database.eventModel.findOne({"itemList.ListID" : req.params.item, "EventID" : req.params.id}, function(err, result){
     if(err)
       console.log(err);
     else{
-      result.itemList[0].ListID = result.itemList[0].ListID;
-      result.itemList[0].item = req.body.item || result.itemList[0].item;
-      result.itemList[0].actCost = req.body.actCost || result.itemList[0].actCost;
-      result.itemList[0].estCost = req.body.estCost || result.itemList[0].estCost;
+      for(var i = 0; i < result.itemList.length;i++){
+        if(result.itemList[i].ListID == req.params.item){
+          result.itemList[i].ListID = result.itemList[i].ListID;
+          result.itemList[i].item = req.body.item || result.itemList[i].item;
+          result.itemList[i].actCost = req.body.actCost || result.itemList[i].actCost;
+          result.itemList[i].estCost = req.body.estCost || result.itemList[i].estCost;
 
-      database.eventModel.calculateEst(parseInt(req.params.id), function(item) {
-        result.totalEstCost = item[0].estCost;
-        result.totalActCost = item[0].actCost;
+            result.save(function(err, saved){
+              if(err)
+                console.log(err);
+              else{
+                res.json(saved);
+              }
+            });
 
-        result.save(function(err, saved){
-          if(err)
-            console.log(err);
-          else{
-            res.json(saved);
-          }
-        });
-      });
+        }
+      }
     }
   });
 }
@@ -236,6 +297,7 @@ event.inviteFriend = function(req, res, next){
     if(err)
       console.log(err);
     else{
+      console.log(event);
       database.userModel.findOne({"UserID" : req.params.friendId}, function(err, user){
         if(err)
           console.log(err);
@@ -249,7 +311,12 @@ event.inviteFriend = function(req, res, next){
                 res.status(409).send("member is already invited to the event");
               }
               else{
-                event.members.push({UserId: user.UserID, isAttending: "Invited"});
+                event.members.push({UserId: user.UserID, friendlyName: user.friendlyName, isAttending: "Invited"});
+                user.events.push({eventID:req.params.id});
+                user.save(function(err){
+                  if(err)
+                    console.log(err);
+                });
                 event.save(function(err){
                   if(err)
                     console.log(err);
@@ -270,12 +337,41 @@ event.invitation = function(req, res, next){
     if(err)
       console.log(err);
     else{
-      database.eventModel.update({"members.$.UserID" : user.UserId , "EventID" : req.params.id},
+      database.eventModel.update({$and:[{"EventID": req.params.id},{"members.UserId": user.UserID}]},
        {$set: {"members.$.isAttending" : req.params.answer}},
        function(err, event){
         if(err)
           console.log(err);
         else{
+          res.sendStatus(200);
+        }
+      });
+    }
+  });
+}
+
+event.leave = function(req, res, next){
+  database.userModel.findOne({token: req.headers["x-access-token"]}, function(err, user){
+    if(err)
+      console.log(err);
+    else{
+      database.eventModel.findOne({"EventID" : parseInt(req.params.id)}, function(err, event){
+        if(err)
+          console.log(err);
+        else{
+          for(var i = 0; i < event.members.length;i++){
+            if(event.members[i].UserId == user.UserID && event.members[i].isAttending == 'Owner')
+              res.status(409).send("The Owner cannot be removed from the event");
+          }
+          //console.log(user.events.eventID);
+          //console.log(event.members);
+          user.events.pull({_id: null, eventID : req.params.id});
+          user.save(function(err){
+            if(err)
+              console.log(err);
+          });
+          event.members.pull({UserId : user.UserID});
+          event.save();
           res.sendStatus(200);
         }
       });

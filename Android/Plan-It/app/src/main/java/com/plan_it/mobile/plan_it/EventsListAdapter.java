@@ -206,7 +206,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
             eventsViewHolder.button2.setImageResource(R.drawable.ic_thumb_down_red_24dp);
             eventsViewHolder.cv.setCardBackgroundColor(Color.argb(125, 155, 255, 118));
         }
-        else if(mEvents.get(i).isAttending == IsAttending.LEFT || mEvents.get(i).isAttending == IsAttending.OWNER)
+        else if(mEvents.get(i).isAttending == IsAttending.LEFT)
         {
             eventsViewHolder.button1.setImageResource(R.drawable.ic_photo_library_blue_24dp);
             eventsViewHolder.button2.setImageResource(R.drawable.ic_delete_grey_24dp);
@@ -220,6 +220,8 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
         }
         else
         {
+            eventsViewHolder.button1.setImageResource(R.drawable.ic_photo_library_blue_24dp);
+            eventsViewHolder.button2.setImageResource(R.drawable.ic_delete_grey_24dp);
             eventsViewHolder.cv.setCardBackgroundColor(Color.argb(125, 255, 254, 199));
         }
 

@@ -46,6 +46,8 @@ public class LoginActivity extends AppCompatActivity {
 
         etUser=(EditText)findViewById(R.id.editText);
         etPass=(EditText)findViewById(R.id.editTextPassword);
+        etUser.setText("");
+        etPass.setText("");
 
 
         // Instantiate Progress Dialog object
@@ -54,8 +56,6 @@ public class LoginActivity extends AppCompatActivity {
         prgDialog.setMessage("Please wait...");
         // Set Cancelable as False
         prgDialog.setCancelable(false);
-
-
     }
 
     @Override
@@ -117,38 +117,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
-   /* public void getLogin(){
-            RequestParams params = new RequestParams();
-
-            // When Email Edit View and Password Edit View have values other than Null
-            if ((password != null) && (user != null)) {
-                params.put("username", user);
-                // Put Http parameter password with value of Password Edit Value control
-                params.put("password", password);
-            }
-            RestClient.post("login", params, null, new JsonHttpResponseHandler(){
-                @Override
-                public void onSuccess(int statusCode, Header[] header,JSONObject response) {
-                try {
-                    token = response.getString("token"); // this is how you get a value out
-                    userID = response.getInt("userID");
-                    tokenClass.setToken(token);
-                    //Toast.makeText(getApplicationContext(),token, Toast.LENGTH_LONG).show();
-                }
-                    catch (JSONException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                super.onFailure(statusCode, headers, responseString, throwable);
-                Log.d("Failed: ", "" + statusCode);
-                Log.d("Error : ", "" + throwable);
-            }
-        });
-    }*/
 
     public void register(View v)
     {

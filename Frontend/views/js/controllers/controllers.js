@@ -165,6 +165,7 @@ angular.module('controller', [])
   $scope.id = $stateParams.eventID;
   $scope.currentUserID = ServiceForUser.getUser();
   $scope.friendList;
+  $scope.eventNumber;
   console.log("my id: " + $scope.currentUserID);
 
     ServiceForUser.getAllFriends($scope.currentUserID, $scope.token).success(function (data)
@@ -180,14 +181,17 @@ angular.module('controller', [])
     {
       console.log("Friend Invited.")
     }
-    );
+    ).error (function(error) {
+      $scope.errorMsg = "Conflict error: " + error;
+      console.log(error);
+    });
   }
 })
 
-.controller('EventListController', function ($scope, ServiceForEvents, ServiceForUser){
+.controller('EventListController', function ($scope, ServiceForEvents, ServiceForUser, $location){
   $scope.token = ServiceForUser.getToken();
   console.log($scope.token);
-
+  // $scope.event;
   ServiceForEvents.getAllEvents($scope.token).success(function (data)
   {
       $scope.eventList = data;
@@ -195,12 +199,61 @@ angular.module('controller', [])
   }
   );
 
+  $scope.setEventID = function(eventID)
+  {
+    ServiceForEvents.setEvent(eventID);
+    console.log("Set Event ID: " + eventID)
+  }
+
+  $scope.getEventDetails = function()
+  {
+    $scope.eventNumber = ServiceForEvents.getEvent();
+    console.log("Event ID is:" + $scope.eventNumber);
+  }
+
+  $scope.checkOwner = function (toCheck) {
+    if (toCheck.isAttending == "Owner") {
+      return true;
+    }
+  }
+  $scope.checkInvited = function (toCheck) {
+    if (toCheck.isAttending == "Invited") {
+      return true;
+    }
+  }
+  $scope.checkAttending = function (toCheck) {
+    if (toCheck.isAttending == "Attending") {
+      return true;
+    }
+  }
+  $scope.checkDeclined = function (toCheck) {
+    if (toCheck.isAttending == "Declined") {
+      return true;
+    }
+  }
+  $scope.checkLeft = function (toCheck) {
+    if (toCheck.isAttending == "Left") {
+      return true;
+    }
+  }
+
+  $scope.checkEventID = function()
+  {
+    if(ServiceForEvents.getEvent() != "")
+    {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
 })
 
-.controller('EventDetailsController', function ($window, $scope, $stateParams, ServiceForEvents, ServiceForUser){
+.controller('EventDetailsController', function ($window, $location, $scope, $stateParams, ServiceForEvents, ServiceForUser){
   $scope.id = $stateParams.eventID;
-  $scope.token = ServiceForUser.getToken();
   ServiceForEvents.setEvent($scope.id);
+  $scope.token = ServiceForUser.getToken();
 
   console.log($scope.id);
   ServiceForEvents.getEventById($scope.id, $scope.token).success(function (data)
@@ -211,6 +264,39 @@ angular.module('controller', [])
   }
   );
 
+  ServiceForEvents.getMembersByEventId($scope.id, $scope.token).success(function (data)
+  {
+    console.log(data);
+    $scope.memberList = data;
+  }
+  );
+
+  $scope.checkOwner = function (toCheck) {
+    if (toCheck == "Owner") {
+      return true;
+    }
+  }
+  $scope.checkInvited = function (toCheck) {
+    if (toCheck == "Invited") {
+      return true;
+    }
+  }
+  $scope.checkAttending = function (toCheck) {
+    if (toCheck == "Attending") {
+      return true;
+    }
+  }
+  $scope.checkDeclined = function (toCheck) {
+    if (toCheck == "Declined") {
+      return true;
+    }
+  }
+  $scope.checkLeft = function (toCheck) {
+    if (toCheck == "Left") {
+      return true;
+    }
+  }
+
   //$scope.event.picture = "data:image/jpeg;base64," + $scope.event.picture;
 
   $scope.deleteEvent = function () {
@@ -220,11 +306,39 @@ angular.module('controller', [])
     if (confirm("Are you sure you want to delete the event?") == true)
         ServiceForEvents.deleteEvent($scope.id, $scope.token).success(function (data) {});
     $window.location.reload();
+    $location.path('event');
   };
+  $scope.leaveEvent = function () {
+    $scope.token = ServiceForUser.getToken();
+
+    console.log("about to leave event")
+    if (confirm("Are you sure you want to leave the event?") == true)
+        ServiceForEvents.leaveEvent($scope.id, $scope.token).success(function (data) {});
+    $window.location.reload();
+    $location.path('event');
+  };
+
+  $scope.attendEvent = function () {
+    $scope.token = ServiceForUser.getToken();
+
+    console.log("about to attend event invitation")
+    ServiceForEvents.answerInvitation($scope.id, "Attending", $scope.token).success(function (data) {});
+    $window.location.reload();
+    $location.path('event');
+  };
+  $scope.declineEvent = function () {
+    $scope.token = ServiceForUser.getToken();
+
+    console.log("about to decline event invitation")
+    ServiceForEvents.answerInvitation($scope.id, "Declined", $scope.token).success(function (data) {});
+    $window.location.reload();
+    $location.path('event');
+  };
+
 
 })
 
-.controller('InviteFriendController')
+// .controller('InviteFriendController')
 
 
 //search users
@@ -309,13 +423,54 @@ angular.module('controller', [])
   // $scope.id = $stateParams.eventID;
   $scope.currentEventID = ServiceForEvents.getEvent();
   console.log("event id: " + $scope.currentEventID);
+  var actualCost = 0;
+  var estimatedCost = 0;
 
     ServiceForItems.getListItems($scope.currentEventID, $scope.token).success(function (data)
   {
-      $scope.itemList = data;
-      console.log("retrieved list " + data);
+    console.log("retrieved list " + data);
+    $scope.itemList = data;
+
+    //calculate total
+    for(var i=0; i<data.length; i++){
+      var items = data[i];
+      console.log("this item actual cost: " + items.actCost + " this item estimated cost: " + items.estCost);
+      var actCost = items.actCost;
+      var estCost = items.estCost;
+      actualCost = actualCost + actCost;
+      estimatedCost = estimatedCost + estCost;
+      console.log("total actual: " + actualCost + " total estimated: " + estimatedCost);
+      $scope.actualTotal = parseFloat(actualCost);
+      $scope.estimatedTotal = parseFloat(estimatedCost);
+    }
+
+    $scope.divideTotal = function (num) {
+      $scope.actualSplit = parseFloat(actualCost/num).toFixed(2);
+      $scope.estimatedSplit = parseFloat(estimatedCost/num).toFixed(2);
+    }
+
+
   }
   );
+
+  $scope.checkClaimed = function (toClaim) {
+
+    if (toClaim.hasOwnProperty('whoseBringing')) {
+      // $scope.claimed = true;
+      return true;
+      console.log ("claimed");
+    }
+  }
+
+  $scope.claimItem = function (toClaim) {
+    $scope.token = ServiceForUser.getToken();
+
+    console.log("claiming item " + toClaim.ListID + " from event " + $scope.currentEventID);
+    ServiceForItems.claimItem($scope.currentEventID, toClaim.ListID, $scope.token).success(function (data) {
+      console.log("successfully claimed " + toClaim.ListID + " claimed by " + toClaim.whoseBringing);
+      $window.location.reload();
+    });
+  };
 
   $scope.addItem = function () {
     $scope.token = ServiceForUser.getToken();
@@ -333,16 +488,16 @@ angular.module('controller', [])
     console.log("updating item " + toUpdate.ListID + " from event " + $scope.currentEventID);
     ServiceForItems.updateItem($scope.currentEventID, toUpdate.ListID, toUpdate, $scope.token).success(function (data) {
       console.log("successfully added " + toUpdate.ListID);
-      // $window.location.reload();
+      $window.location.reload();
     });
   };
 
-  $scope.deleteItem = function (toUpdate) {
+  $scope.deleteItem = function (toDelete) {
     $scope.token = ServiceForUser.getToken();
 
-    console.log("deleting item " + toUpdate.ListID + " from event " + $scope.currentEventID);
-    ServiceForItems.deleteItem($scope.currentEventID, toUpdate.ListID, $scope.token).success(function (data) {
-      console.log("successfully deleted " + toUpdate.ListID);
+    console.log("deleting item " + toDelete.ListID + " from event " + $scope.currentEventID);
+    ServiceForItems.deleteItem($scope.currentEventID, toDelete.ListID, $scope.token).success(function (data) {
+      console.log("successfully deleted " + toDelete.ListID);
       $window.location.reload();
     });
   };
@@ -353,8 +508,32 @@ angular.module('controller', [])
 .controller('AccountController', function ($scope, $location)
 {
 
-}
-)
+})
+.controller('EventChatController', function($scope, $window, $location, ServiceForMessages, ServiceForUser, ServiceForEvents){
+  $scope.token = ServiceForUser.getToken();
+  $scope.currentEvent = ServiceForEvents.getEvent();
+  $scope.chat = {};
+
+  ServiceForMessages.getMessages($scope.currentEvent, 1, $scope.token).success(function(data)
+  {
+    if(data[0])
+    {
+    $scope.messageList = data[0].messages;
+    console.log(data);
+    console.log(data[0].messages)
+    }
+  })
+
+  $scope.sendMessage = function(chat){
+    ServiceForMessages.sendMessage($scope.chat, $scope.currentEvent, $scope.token).success(function(data)
+  {
+    console.log("Message sent.");
+    $scope.chat.message = "";
+    $window.location.reload();
+  })
+  }
+})
+
 // angular.module('userController', [])
 .controller('RegisterUserController', function ($scope, $location, ServiceForUser) {
 

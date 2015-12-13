@@ -132,30 +132,37 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+
         if (id == R.id.action_filter)
         {
             FilterEvents();
         }
-        if (id == R.id.action_friendsList)
+        if (id == R.id.action_friends_list)
         {
             Intent intent = new Intent(this, FriendsListActivity.class);
+            startActivity(intent);
+        }
+        if (id == R.id.action_add_friends)
+        {
+            Intent intent = new Intent(this, AddFriendActivity.class);
             startActivity(intent);
         }
         if (id == R.id.action_create_new_event)
         {
             navCreateNewEvent(view);
         }
-        if(id == R.id.action_item_list)
-        {
-            Intent intent = new Intent(this, ItemListActivity.class);
-            startActivity(intent);
-        }
+
         if(id == R.id.action_refresh)
         {
             Intent intent = getIntent();
+            startActivity(intent);
+        }
+
+        if (id == R.id.action_logout)
+        {
+            LoginActivity.token = null;
+            LoginActivity.userID = 0;
+            Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
@@ -245,11 +252,14 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
                     for(int i = 0; i < eventsList.length(); i++){
                         firstEvent = eventsList.getJSONObject(i);
                         String eventImge = firstEvent.getString("picture");
+                        String userStats = firstEvent.getString("isAttending");
+                        IsAttending status = IsAttending.valueOf(userStats.trim().toUpperCase());
+
                         Bitmap eventimg = base64ToBitmap(eventImge);
 
                         Bitmap scaledImage = Bitmap.createScaledBitmap(eventimg, 140, 150, true);
 
-                        mEvents.add(new Event(firstEvent.getInt("EventID"), firstEvent.getString("what"), "Kevin Murphy", firstEvent.getString("why"), firstEvent.getString("where"), scaledImage, firstEvent.getString("when"), firstEvent.getString("endDate"),firstEvent.getString("fromTime"), firstEvent.getString("toTime"), IsAttending.OWNER/*randomStatus()*/, true, true));
+                        mEvents.add(new Event(firstEvent.getInt("EventID"), firstEvent.getString("what"), "Kevin Murphy", firstEvent.getString("why"), firstEvent.getString("where"), scaledImage, firstEvent.getString("when"), firstEvent.getString("endDate"),firstEvent.getString("fromTime"), firstEvent.getString("toTime"), status, true, true));
                                 Log.d("RestD", firstEvent.toString());
                     }
 
@@ -271,14 +281,15 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
 
         });
     }
-
-    public IsAttending randomStatus(){
-        return IsAttending.values()[new Random().nextInt(IsAttending.values().length)];
-    }
-
     public void navCreateNewEvent(View v)
     {
         Intent intent = new Intent(this, CreateEventActivity.class);
         startActivity(intent);
+    }
+    public void DeleteEvent(String isAttending, int eventID, String eventName)
+    {
+        UpdateDatabase.DeleteEvent(isAttending, eventID);
+        Toast.makeText(this, "Deleting: " + eventName + " Refresh List from menu",
+                Toast.LENGTH_LONG).show();
     }
 }

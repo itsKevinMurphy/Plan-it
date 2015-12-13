@@ -19,6 +19,9 @@ angular.module('services', ['ngCookies'])
     this.updateEvent = function (id, data, token){
       return $http({ url: 'http://planit.lukefarnell.CA:3000/events/' + id , method: "PUT", data: data, headers: {'x-access-token': token}});
     }
+    this.leaveEvent = function (id, token){
+      return $http({ url: 'http://planit.lukefarnell.CA:3000/events/' + id + '/leave', method: "POST", headers: {'x-access-token': token}});
+    }
     this.setEvent = function(value)
     {
       $cookies.eventID = value;
@@ -27,6 +30,14 @@ angular.module('services', ['ngCookies'])
     {
       return $cookies.eventID;
     }
+    this.getMembersByEventId = function(id, token)
+    {
+      return $http({url:'http://planit.lukefarnell.CA:3000/events/' + id + '/members', method: "GET", headers: {'x-access-token': token}});
+    }
+    this.answerInvitation = function (id, answer, token){
+      return $http({ url: 'http://planit.lukefarnell.CA:3000/events/' + id + '/invite/' + answer, method: "POST", headers: {'x-access-token': token}});
+    }
+
 }
 ])
 
@@ -43,9 +54,22 @@ angular.module('services', ['ngCookies'])
     this.deleteItem = function(id, itemId, token){
       return $http({url:'http://planit.lukefarnell.CA:3000/events/' + id + '/list/' + itemId, method: "DELETE", headers: {'x-access-token': token}});
     }
+    this.claimItem = function(id, itemId, token){
+      console.log("claim service called");
+      return $http({url:'http://planit.lukefarnell.CA:3000/events/' + id + '/claim/' + itemId, method: "POST", headers: {'x-access-token': token}});
+    }
 }
 ])
-
+.service("ServiceForMessages" , ['$http', function ($http) {
+    this.getMessages = function(eventid, msgid, token)
+    {
+      return $http({url:'http://planit.lukefarnell.CA:3000/message/' + eventid + '/id/' + msgid, method: "GET", headers: {'x-access-token': token}});
+    }
+    this.sendMessage = function(message, eventid, token)
+    {
+      return $http({url:'http://planit.lukefarnell.CA:3000/message/' + eventid, data: message, method: "POST", headers: {'x-access-token': token}});
+    }
+}])
 .service("ServiceForUser", ['$http', '$cookies', '$location', function ($http, $cookies, $location) {
     var token = "";
 
@@ -102,6 +126,7 @@ angular.module('services', ['ngCookies'])
     {
       $cookies.token = "";
       $cookies.userID = "";
+      $cookies.eventID = "";
     }
     this.setUser = function(value)
     {
