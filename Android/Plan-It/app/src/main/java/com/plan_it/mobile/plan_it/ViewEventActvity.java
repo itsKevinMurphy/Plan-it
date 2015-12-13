@@ -693,7 +693,11 @@ public class ViewEventActvity extends Activity implements SwipeRefreshLayout.OnR
                         String friendlyName = member.getString("friendlyName");
                         String status = member.getString("isAttending");
                         MemberStatus memberStatus = MemberStatus.valueOf(status.trim().toUpperCase());
-                        mList.add(new Members(userId, friendlyName, memberStatus, true, true));
+                        boolean isPaying = member.getBoolean("isPaying");
+                        if(!member.has("isPaying")){
+                            isPaying = false;
+                        }
+                        mList.add(new Members(userId, friendlyName, memberStatus, isPaying, true, true));
                         Log.d("Member: ", member.toString());
                     }
 

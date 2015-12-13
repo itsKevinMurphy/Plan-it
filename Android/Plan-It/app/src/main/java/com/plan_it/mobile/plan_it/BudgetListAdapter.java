@@ -52,6 +52,13 @@ public class BudgetListAdapter extends ArrayAdapter<Members> {
         member.txtAttendeeName.setText(budgetList.get(position).memberName);
         member.imgProfilePic.setImageResource(R.drawable.ic_account_circle_blue_24dp);
 
+        if(budgetList.get(position).isPaying == true){
+            member.isPaying.setChecked(true);
+        }
+        else{
+            member.isPaying.setChecked(false);
+        }
+
         return rowView;
     }
 
