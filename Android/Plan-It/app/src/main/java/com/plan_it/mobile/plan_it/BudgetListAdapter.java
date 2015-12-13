@@ -59,32 +59,21 @@ public class BudgetListAdapter extends ArrayAdapter<Members> {
         } else {
             member.isPaying.setChecked(false);
         }
-        if(budgetList.get(i).status == MemberStatus.OWNER){
-            member.isPaying.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    try {
-                        if (member.isPaying.isChecked()) {
-                            ((BudgetListActivity) context).setPaying(budgetList.get(i).memberId, true);
-                        }
-                        else{
-                            ((BudgetListActivity) context).setPaying(budgetList.get(i).memberId, false);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+        member.isPaying.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                try {
+                    if (member.isPaying.isChecked() == true) {
+                        ((BudgetListActivity) context).setPaying(budgetList.get(i).memberId, true);
+
+                    } else if(member.isPaying.isChecked() == false){
+                        ((BudgetListActivity) context).setPaying(budgetList.get(i).memberId, false);
                     }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            });
-
-        }
-        else if(budgetList.get(i).status == MemberStatus.ATTENDING){
-            member.isPaying.setClickable(false);
-        }
-
-
-
-
-
+            }
+        });
         return rowView;
     }
 

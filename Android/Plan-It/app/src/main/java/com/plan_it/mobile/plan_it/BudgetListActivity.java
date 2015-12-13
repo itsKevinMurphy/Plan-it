@@ -106,20 +106,22 @@ public class BudgetListActivity extends AppCompatActivity implements SwipeRefres
     public void setPaying(int memberId, boolean isPaying) throws JSONException{
         RequestParams jdata = new RequestParams();
         if(isPaying == true){
-            jdata.put("isPaying","true");
+            jdata.put("answer",true);
         }
-        else{
-            jdata.put("isPaying","false");
+        else if (isPaying == false){
+            jdata.put("answer",false);
         }
         RestClient.post("/events/" + eventID + "/paying/" + memberId, jdata, LoginActivity.token, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
+                Toast.makeText(getApplicationContext(),"Changed isPaying",Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 super.onFailure(statusCode, headers, responseString, throwable);
+                Toast.makeText(getApplicationContext(),"Did not change isPaying",Toast.LENGTH_SHORT).show();
             }
         });
 
