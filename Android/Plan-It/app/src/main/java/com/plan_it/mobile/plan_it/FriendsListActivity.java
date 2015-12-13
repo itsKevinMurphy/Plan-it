@@ -2,13 +2,13 @@ package com.plan_it.mobile.plan_it;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -24,10 +24,9 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
-public class FriendsListActivity extends AppCompatActivity {
+public class FriendsListActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
     public ArrayList<FriendListModel> friendsList = new ArrayList<>();
     ListView list;
-    ImageView removeFriend;
     boolean isFromEditEvent = false;
     int eventID;
     int friendID;
@@ -37,11 +36,14 @@ public class FriendsListActivity extends AppCompatActivity {
     int userID = LoginActivity.userID;
     String token = LoginActivity.token;
 
+    private SwipeRefreshLayout swipeRefreshLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
+        setContentView(R.layout.activity_friends_list);
         if(intent.getExtras() != null) {
             isFromEditEvent = bundle.getBoolean("isFromEditEvent");
             eventID = bundle.getInt("eventID");
@@ -55,22 +57,32 @@ public class FriendsListActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout_friend_list);
+        swipeRefreshLayout.setOnRefreshListener(this);
     }
+
+    @Override
+    public void onRefresh() {
+        swipeRefreshLayout.setRefreshing(true);
+        friendsList = null;
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+    }
+
     private int GetImageResource(ImageView imageView)
     {
         return (Integer)imageView.getTag();
     }
 
     public void fillFriendsList()throws JSONException {
-        removeFriend = (ImageView)findViewById(R.id.friends_list_remove);
+
         RestClient.get("/user/" + userID + "/friend", null, LoginActivity.token, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray friendsArray) {
                 Log.d("onSuccess: ", friendsArray.toString());
                 JSONObject friend = null;
                 try {
-                    setContentView(R.layout.activity_friends_list);
-
                     for (int i = 0; i < friendsArray.length(); i++)
                     {
                         friend = friendsArray.getJSONObject(i);
@@ -79,11 +91,6 @@ public class FriendsListActivity extends AppCompatActivity {
                         friendName = friend.getString("friendlyName");
                         Log.d("Friend: ", friend.toString());
                     }
-
-                   /* if(isFromEditEvent)
-                    {
-                        removeFriend.setImageResource(R.drawable.ic_add_circle_blue_24dp);
-                    }*/
 
                     list = (ListView)findViewById(R.id.friends_list_view);
                     list.setAdapter(new FriendsListAdapter(context, R.layout.friends_list_item, friendsList, eventID, isFromEditEvent));
@@ -168,6 +175,7 @@ public class FriendsListActivity extends AppCompatActivity {
     }
     public void RemoveFriend(int id, int friendId)
     {
+        swipeRefreshLayout.setRefreshing(true);
         RequestParams jdata = new RequestParams();
         jdata.put("userID", friendId);
         jdata.put("id", id);
@@ -175,6 +183,7 @@ public class FriendsListActivity extends AppCompatActivity {
         RestClient.delete("/user/" + id + "/friend/" + friendId, jdata, LoginActivity.token, new JsonHttpResponseHandler() {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Toast.makeText(context, "Success, " + response + " has been removed from your list", Toast.LENGTH_LONG).show();
+                swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
