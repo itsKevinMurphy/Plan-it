@@ -112,6 +112,7 @@ database.messagesModel.messageList = function(msgid, eventid, callback){
             'MessageID' :'$messages.MessageID',
             'Message' :'$messages.message',
             'userID' : '$messages.userID',
+            'friendlyName' : '$messages.friendlyName',
             'time' : '$messages.time'
             }
         }

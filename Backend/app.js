@@ -22,9 +22,9 @@ app.post('/events', eventCtrl.createEvent);
 
 app.put('/events/:id', eventCtrl.updateEvent);
 app.get('/events/user', eventCtrl.getUsersEvents);
+app.post('/events/:id/paying/:friendId([0-9]*$)', eventCtrl.paying);
 app.post('/events/:id/invite/:friendId([0-9]*$)', eventCtrl.inviteFriend);
 app.post('/events/:id/invite/:answer(Attending|Declined)', eventCtrl.invitation);
-app.post('/events/:id/paying/:friendId([0-9]*$)', eventCtrl.notPaying);
 app.post('/events/:id/leave', eventCtrl.leave);
 app.delete('/events/:id', eventCtrl.deleteEvent);
 app.get('/events/:id/list', eventCtrl.getListItems);

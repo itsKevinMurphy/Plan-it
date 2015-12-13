@@ -359,13 +359,13 @@ event.leave = function(req, res, next){
   });
 }
 
-event.notPaying = function(req, res, next){
+event.paying = function(req, res, next){
   database.userModel.findOne({UserID: req.params.friendId}, function(err, user){
     if(err)
       console.log(err);
     else{
       database.eventModel.update({$and:[{"EventID": req.params.id},{"members.UserId": user.UserID}]},
-       {$set: {"members.$.isPaying" : false}},
+       {$set: {"members.$.isPaying" : req.body.answer}},
        function(err, event){
         if(err)
           console.log(err);
