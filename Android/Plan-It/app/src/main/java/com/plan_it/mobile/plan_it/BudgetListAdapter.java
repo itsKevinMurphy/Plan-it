@@ -54,33 +54,35 @@ public class BudgetListAdapter extends ArrayAdapter<Members> {
         member.txtBudgetMember.setTag(position);
         member.txtBudgetMember.setText(budgetList.get(position).memberName);
         member.imgBudgetProfilePic.setImageResource(R.drawable.ic_account_circle_blue_24dp);
-        if(budgetList.get(i).status == MemberStatus.OWNER){
-
-        }
-        else if(budgetList.get(i).status == MemberStatus.ATTENDING){
-
-        }
-
         if(budgetList.get(i).isPaying == true){
             member.isPaying.setChecked(true);
         } else {
             member.isPaying.setChecked(false);
         }
-        member.isPaying.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                try {
-                    if (member.isPaying.isChecked()) {
-                        ((BudgetListActivity) context).setPaying(budgetList.get(i).memberId, true);
+        if(budgetList.get(i).status == MemberStatus.OWNER){
+            member.isPaying.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    try {
+                        if (member.isPaying.isChecked()) {
+                            ((BudgetListActivity) context).setPaying(budgetList.get(i).memberId, true);
+                        }
+                        else{
+                            ((BudgetListActivity) context).setPaying(budgetList.get(i).memberId, false);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                    else{
-                        ((BudgetListActivity) context).setPaying(budgetList.get(i).memberId, false);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
-            }
-        });
+            });
+
+        }
+        else if(budgetList.get(i).status == MemberStatus.ATTENDING){
+            member.isPaying.setClickable(false);
+        }
+
+
+
 
 
         return rowView;
