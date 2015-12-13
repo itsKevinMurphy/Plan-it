@@ -19,7 +19,7 @@ event.createEvent = function(req, res, next) {
       console.log(err);
     else{
       //set the user as the event owner
-      event.members.push({UserId: parseInt(token.UserID), friendlyName : token.friendlyName, isAttending: "Owner"});
+      event.members.push({UserId: parseInt(token.UserID), friendlyName : token.friendlyName, isAttending: "Owner", isPaying: true});
       //save the event
       event.save(function(err, result) {
         if (err)
