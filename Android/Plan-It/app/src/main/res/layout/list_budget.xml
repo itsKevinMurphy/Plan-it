@@ -11,11 +11,6 @@
         android:src="@drawable/ic_account_circle_blue_24dp"
         android:id="@+id/budget_list_profile_image"/>
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:id="@+id/budget_list_friendID"/>
-    <TextView
         android:paddingTop="10dp"
         android:id="@+id/budget_list_friend_id"
         android:layout_gravity="center_vertical"

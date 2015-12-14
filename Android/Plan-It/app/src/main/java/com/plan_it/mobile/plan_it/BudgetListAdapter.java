@@ -23,7 +23,6 @@ public class BudgetListAdapter extends ArrayAdapter<Members> {
     Context context;
     int resource;
     BudgetHolder member;
-
     public BudgetListAdapter(Context context, int resource, ArrayList<Members> budgetList){
         super(context, resource, budgetList);
         this.context = context;
@@ -31,9 +30,9 @@ public class BudgetListAdapter extends ArrayAdapter<Members> {
         this.budgetList = budgetList;
     }
 
-    public View getView(int position, View view, ViewGroup parent) {
+    public View getView (final int i, View view, ViewGroup parent) {
         View rowView = view;
-        final int i = position;
+       // final int i = position;
         if(rowView == null)
         {
             LayoutInflater inflater = ((Activity)context).getLayoutInflater();
@@ -44,36 +43,26 @@ public class BudgetListAdapter extends ArrayAdapter<Members> {
             member.txtBudgetMember = (TextView) rowView.findViewById(R.id.budget_list_friend_id);
             member.imgBudgetProfilePic = (ImageView) rowView.findViewById(R.id.budget_list_profile_image);
             member.isPaying = (CheckBox) rowView.findViewById(R.id.budget_list_isPaying);
-
-            rowView.setTag(member);
         }
         else
         {
             member = (BudgetHolder)rowView.getTag();
         }
-        member.txtBudgetMember.setTag(position);
-        member.txtBudgetMember.setText(budgetList.get(position).memberName);
+        member.txtBudgetMember.setTag(i);
+        member.txtBudgetMember.setText(budgetList.get(i).memberName);
         member.imgBudgetProfilePic.setImageResource(R.drawable.ic_account_circle_blue_24dp);
-        if(budgetList.get(i).isPaying == true){
-            member.isPaying.setChecked(true);
-        } else {
-            member.isPaying.setChecked(false);
-        }
-        member.isPaying.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                try {
-                    if (member.isPaying.isChecked() == true) {
-                        ((BudgetListActivity) context).setPaying(budgetList.get(i).memberId, true);
-
-                    } else if(member.isPaying.isChecked() == false){
-                        ((BudgetListActivity) context).setPaying(budgetList.get(i).memberId, false);
+        member.isPaying.setChecked(budgetList.get(i).isPaying);
+            member.isPaying.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    try {
+                        ((BudgetListActivity) context).setPaying(budgetList.get(i).memberId, budgetList.get(i).isPaying);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
-            }
-        });
+            });
+        rowView.setTag(member);
         return rowView;
     }
 
