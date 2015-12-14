@@ -22,6 +22,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -46,12 +48,29 @@ public class Messages extends AppCompatActivity implements SwipeRefreshLayout.On
         txt_message = (EditText)findViewById(R.id.txt_message);
         txt_message.setText("");
         ImageButton send = (ImageButton)findViewById(R.id.btn_send_message);
-        GetMessages(messageId);
+        try {
+            GetMessages(messageId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout_messages);
+        swipeRefreshLayout.setOnRefreshListener(this);
+
+
 
     }
 
+    @Override
+    public void onRefresh() {
+        swipeRefreshLayout.setRefreshing(true);
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+        swipeRefreshLayout.setRefreshing(false);
+    }
 
-    public void GetMessages(int id)
+    public void GetMessages(int id) throws JSONException
     {
         RestClient.get("/message/" + eventID + "/id/" + id, null, LoginActivity.token, new JsonHttpResponseHandler() {
             @Override
@@ -68,6 +87,7 @@ public class Messages extends AppCompatActivity implements SwipeRefreshLayout.On
 
                     Log.d("Message: ", list_message.toString());
                     }
+//                    messageId = list_message.getInt("MessageID");
                     listView = (ListView)findViewById(R.id.messages_list_view);
                     listView.setAdapter(new MessageAdapter(context, R.layout.message, messages));
 
@@ -157,14 +177,5 @@ public class Messages extends AppCompatActivity implements SwipeRefreshLayout.On
             Toast.makeText(this, "Please Type a message \nbefore hitting send", Toast.LENGTH_LONG);
         }
         txt_message.setText("");
-    }
-
-    @Override
-    public void onRefresh() {
-        swipeRefreshLayout.setRefreshing(true);
-        //messages = null;
-        Intent intent = getIntent();
-        finish();
-        startActivity(intent);
     }
 }
