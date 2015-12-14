@@ -503,8 +503,11 @@ angular.module('controller', ['angularMoment'])
   };
 
 })
+.controller('EventBudgetController', function ($scope, $location){
 
 
+
+})
 .controller('AccountController', function ($scope, $location)
 {
 
