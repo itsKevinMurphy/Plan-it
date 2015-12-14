@@ -69,10 +69,10 @@ app.config(['$stateProvider','$urlRouterProvider',
             }
         })
         .state('event.budget', {
-            url: '',
+            url: '/budget',
             views: {
                 'rightView': {
-                    templateUrl: 'event.budget.html'
+                    templateUrl: 'event.budget.html', controller: 'EventBudgetController'
                 }
             }
         })
