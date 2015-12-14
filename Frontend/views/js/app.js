@@ -1,5 +1,10 @@
 // var app = angular.module('planItApp', ['ngRoute']);
-var app = angular.module('planItApp', ['ui.router', 'services', 'controller']);
+var app = angular.module('planItApp', ['ui.router', 'services', 'controller', 'angularMoment']);
+
+app.constant('angularMomentConfig', {
+  preprocess: 'utc',
+  timezone: 'Europe/Berlin'
+});
 
 //to route views on single page
 app.config(['$stateProvider','$urlRouterProvider',
