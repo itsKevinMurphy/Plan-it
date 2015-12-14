@@ -17,7 +17,7 @@
         <h4>When <small>does the event start</small></h4>
         <!-- <input class="form-control" type="datetime-local" ng-model="event.when" required> -->
         <!-- datetime-local does not work for IE or FF -->
-        <input class="form-control" type="text" data-provide="datepicker" ng-model="event.when" name="when" id="when" placeholder="MM/DD/YYYY" required>
+        <input class="form-control" type="text" class="datepicker" data-provide="datepicker" ng-model="event.when" name="when" id="when" placeholder="MM/DD/YYYY" required>
         <input class="form-control" type="text" class="bootstrap-timepicker timepicker" data-default-time="false" ng-model="event.fromTime" name="fromTime" id="fromTime" placeholder="HH:MM AM/PM" required>
     </span>
     <span class="end">
@@ -63,16 +63,5 @@ $('#when').datepicker({
 })
 $('#endDate').datepicker({
     format: 'dd/mm/yyyy',
-    icons: {
-              time: 'glyphicon glyphicon-time',
-              date: 'glyphicon glyphicon-calendar',
-              up: 'glyphicon glyphicon-chevron-up',
-              down: 'glyphicon glyphicon-chevron-down',
-              previous: 'glyphicon glyphicon-chevron-left',
-              next: 'glyphicon glyphicon-chevron-right',
-              today: 'glyphicon glyphicon-screenshot',
-              clear: 'glyphicon glyphicon-trash',
-              close: 'glyphicon glyphicon-remove'
-          }
 })
 </script>
