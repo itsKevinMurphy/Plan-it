@@ -20,17 +20,17 @@
             android:label="@string/title_activity_events_list" >
         </activity>
         <activity
+            android:name=".ViewEventActvity"
+            android:label="@string/title_activity_view_event_actvity" >
+        </activity>
+
+        <activity
             android:name=".FriendsListActivity"
             android:label="@string/title_activity_friends_list" >
         </activity>
         <activity
             android:name=".CreateEventActivity"
             android:label="@string/title_activity_create_event" >
-        </activity>
-        <activity
-            android:name=".ViewEventActvity"
-            android:label="@string/title_activity_view_event_actvity"
-            android:windowSoftInputMode="stateHidden|adjustPan" >
         </activity>
         <activity
             android:name=".MainActivity"
