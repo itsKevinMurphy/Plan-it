@@ -6,23 +6,13 @@ package com.plan_it.mobile.plan_it;
 public class Budget {
 
     String userName;
-    double totalActualCost;
+    double totalPaid;
     boolean isPaying;
-    Budget(){}
+    String toPay;
 
-    Budget(String userName, double totalActualCost, boolean isPaying){
+    Budget(String userName, double totalPaid, boolean isPaying){
         this.userName = userName;
-        this.totalActualCost = totalActualCost;
+        this.totalPaid = totalPaid;
         this.isPaying = isPaying;
-    }
-
-    public void setUserName(String userName){
-        this.userName = userName;
-    }
-    public String getUserName(String userName){
-        return userName;
-    }
-    public void setTotalActualCost(double cost){
-        this.totalActualCost += cost;
     }
 }
