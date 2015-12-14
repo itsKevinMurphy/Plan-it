@@ -50,7 +50,7 @@ import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
 
-public class ViewEventActvity extends Activity implements SwipeRefreshLayout.OnRefreshListener{
+public class ViewEventActvity extends Activity {
 
     private static final int CAMERA_REQUEST = 1888;
 
@@ -94,7 +94,6 @@ public class ViewEventActvity extends Activity implements SwipeRefreshLayout.OnR
     ListView attendeeList;
     Context context = this;
 
-    private SwipeRefreshLayout swipeRefreshLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,24 +141,9 @@ public class ViewEventActvity extends Activity implements SwipeRefreshLayout.OnR
         });
         onEdit();
 
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout_view_event);
-        swipeRefreshLayout.setOnRefreshListener(this);
-
-
-
     }
 
-    @Override
-    public void onRefresh() {
-        swipeRefreshLayout.setRefreshing(true);
-        try {
-            getEvent(eventID);
-            swipeRefreshLayout.setRefreshing(false);
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
     public void imageOption(){
         final CharSequence[] items = {"Take Photo", "Choose from Library", "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(ViewEventActvity.this);
