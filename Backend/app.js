@@ -26,6 +26,7 @@ app.post('/events/:id/paying/:friendId([0-9]*$)', eventCtrl.paying);
 app.post('/events/:id/invite/:friendId([0-9]*$)', eventCtrl.inviteFriend);
 app.post('/events/:id/invite/:answer(Attending|Declined)', eventCtrl.invitation);
 app.post('/events/:id/leave', eventCtrl.leave);
+app.get('/events/:id/budget', eventCtrl.budget);
 app.delete('/events/:id', eventCtrl.deleteEvent);
 app.get('/events/:id/list', eventCtrl.getListItems);
 app.post('/events/:id/claim/:item', eventCtrl.claimItem);
@@ -43,6 +44,7 @@ app.post("/login", userCtrl.loginUser);
 app.get('/events/:id([0-9]*$)', eventCtrl.getEventById);
 app.post('/message/:event', msgCtrl.createMessage);
 app.get('/message/:event/id/:msgid', msgCtrl.getAllMessagesSinceID);
+
 
 
 app.listen(3000, function() {

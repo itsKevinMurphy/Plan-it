@@ -39,8 +39,10 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
     private RecyclerView events_recycler_view;
     public String token;
     public int userid;
-
     private SwipeRefreshLayout swipeRefreshLayout;
+    String userName = "UserName";
+    Bitmap scaledImage;
+    Bitmap eventimg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +58,6 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
-
-
-
     }
 
     @Override
@@ -261,16 +260,35 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
                     mEvents = new ArrayList<>();
                     for(int i = 0; i < eventsList.length(); i++){
                         firstEvent = eventsList.getJSONObject(i);
-
+                        //String userName = getUserName(firstEvent.getInt("UserId"));
+                        Log.d("UserName:  ", userName);
                         String userStats = firstEvent.getString("isAttending");
                         IsAttending status = IsAttending.valueOf(userStats.trim().toUpperCase());
-                        Bitmap scaledImage;
 
                         if(firstEvent.has("picture"))
                         {
                             String eventImge = firstEvent.getString("picture");
-                            Bitmap eventimg = base64ToBitmap(eventImge);
-                            scaledImage = Bitmap.createScaledBitmap(eventimg, 140, 150, true);
+                            if (eventImge != null && eventImge != "") {
+                                try {
+
+                                    eventimg = base64ToBitmap(eventImge);
+                                    scaledImage = Bitmap.createScaledBitmap(eventimg, 140, 150, true);
+                                }
+                                catch (Exception e)
+                                {
+                                    scaledImage = null;
+                                    Log.e("Plan-it", e.toString());
+                                    Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.no_image);
+                                    scaledImage = Bitmap.createScaledBitmap(icon, 140, 150, true);
+                                    Log.d("Scaled Image", scaledImage.toString());
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.no_image);
+                                scaledImage = Bitmap.createScaledBitmap(icon, 140, 150, true);
+                            }
                         }
                         else
                         {
@@ -278,7 +296,7 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
                             scaledImage = Bitmap.createScaledBitmap(icon, 140, 150, true);
                         }
 
-                        mEvents.add(new Event(firstEvent.getInt("EventID"), firstEvent.getString("what"), "Kevin Murphy", firstEvent.getString("why"), firstEvent.getString("where"), scaledImage, firstEvent.getString("when"), firstEvent.getString("endDate"),firstEvent.getString("fromTime"), firstEvent.getString("toTime"), status, true, true));
+                        mEvents.add(new Event(firstEvent.getInt("EventID"), firstEvent.getString("what"), "Kevin", firstEvent.getString("why"), firstEvent.getString("where"), scaledImage, firstEvent.getString("when"), firstEvent.getString("endDate"),firstEvent.getString("fromTime"), firstEvent.getString("toTime"), status, true, true));
                                 Log.d("RestD", firstEvent.toString());
                     }
                      adapter = new EventsListAdapter( getApplicationContext(), mEvents);
@@ -299,6 +317,7 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
 
         });
     }
+
     public void navCreateNewEvent(View v)
     {
         Intent intent = new Intent(this, CreateEventActivity.class);
@@ -306,8 +325,34 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
     }
     public void DeleteEvent(String isAttending, int eventID, String eventName)
     {
-        UpdateDatabase.DeleteEvent(isAttending, eventID);
         Toast.makeText(this, "Deleting: " + eventName + " Refresh List from menu",
                 Toast.LENGTH_LONG).show();
+        UpdateDatabase.DeleteEvent(isAttending, eventID);
     }
+    public String getUserName(int userIDtoSearch) {
+        RestClient.get("/search/" + userIDtoSearch + "/user", null, LoginActivity.token, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                // If the response is JSONObject instead of expected JSONArray
+                JSONObject res;
+                try {
+                    res = response;
+                    userName = res.getString("friendlyName");
+
+
+                } catch (JSONException ex) {
+                    ex.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] header, Throwable throwable, JSONObject response) {
+                Toast.makeText(view.getContext(), "GET USERNAME FAIL", Toast.LENGTH_LONG).show();
+            }
+
+        });
+        return userName;
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.plan_it.mobile.plan_it;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -175,9 +176,24 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
                 }
                 else if ( mEvents.get(j).isAttending == IsAttending.DECLINED || mEvents.get(j).isAttending == IsAttending.LEFT || mEvents.get(j).isAttending == IsAttending.OWNER)
                 {
-                    UpdateDatabase.DeleteEvent(mEvents.get(j).isAttending.toString(), mEvents.get(j).eventID);
-                    Toast.makeText(context, "Deleting: " + mEvents.get(j).name + " Refresh List from menu",
-                            Toast.LENGTH_LONG).show();
+                    AlertDialog.Builder alert = new AlertDialog.Builder(
+                            context);
+                    alert.setTitle("Alert!!");
+                    alert.setMessage("Are you sure to delete record");
+                    alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ((EventsListActivity)context).DeleteEvent(mEvents.get(j).isAttending.toString(), mEvents.get(j).eventID, mEvents.get(j).name);
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.show();
                 }
 
             }
