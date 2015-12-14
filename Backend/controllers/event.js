@@ -187,6 +187,7 @@ event.createListItem = function(req, res, next) {
           database.eventModel.calculateMoney(parseInt(req.params.id),function(result){
             event.totalEstCost = result[0].estCost;
             event.totalActCost = result[0].actCost;
+            event.save();
           });
           res.sendStatus(201);
         }
