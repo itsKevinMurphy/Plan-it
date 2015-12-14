@@ -44,6 +44,14 @@
                         android:id="@+id/etViewEventTitle"
                         android:layout_centerHorizontal="true"
                         android:textStyle="bold"/>
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btnBudget"
+                        android:layout_alignParentRight="true"
+                        android:text="Budget"
+                        android:visibility="visible"
+                        android:onClick="navBudgetList"/>
                 </RelativeLayout>
             </LinearLayout>
 
@@ -301,7 +309,6 @@
                         android:layout_below="@id/attendee_list"
                         android:layout_alignParentBottom="true"
                         android:onClick="navItemList"/>
-
                     <Button
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
