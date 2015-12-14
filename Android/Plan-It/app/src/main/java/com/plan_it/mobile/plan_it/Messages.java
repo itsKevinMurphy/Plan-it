@@ -41,26 +41,47 @@ public class Messages extends AppCompatActivity implements SwipeRefreshLayout.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getExtras();
-        GetMessages();
         setContentView(R.layout.activity_messages);
 
         txt_message = (EditText)findViewById(R.id.txt_message);
         txt_message.setText("");
         ImageButton send = (ImageButton)findViewById(R.id.btn_send_message);
-        listView = (ListView)findViewById(R.id.messages_list_view);
-        listView.setAdapter(new MessageAdapter(context, R.layout.message, messages));
+        GetMessages(messageId);
+
     }
 
-    public void GetMessages()
+
+    public void GetMessages(int id)
     {
-        messages.add(new MessageModel(userId, "Kevin Murphy", "This is a message", "4:50pm"));
-        messages.add(new MessageModel(1, "Steven Murphy", "This is also message", "4:54pm"));
-        messages.add(new MessageModel(2, "Kevin Bacon", "This is a degree, get a little closer to me", "5:00pm"));
-        messages.add(new MessageModel(3, "Kristian", "I is do's the workings", "5:10pm"));
-        messages.add(new MessageModel(4, "Computer", "EXTERMINATE, KILL ALL HUMANS...... \nDaisy, Daisy, \nGive me your answer true.\nI'm half crazy, all for the love of you", "5:50pm"));
-        messages.add(new MessageModel(5, "Server", "Yo Human, that computer is acting strange dawg", "6:50pm"));
-        messages.add(new MessageModel(6, "Johnny Pneumonic", "I'm in the system, the computer will be defragged", "6:56pm"));
-        messages.add(new MessageModel(userId, "Kevin Murphy", "Um.......... This is weird", "7:50pm"));
+        RestClient.get("/message/" + eventID + "/id/" + id, null, LoginActivity.token, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray messageArray) {
+               // Log.d("onSuccess: ", messageArray.toString());
+                JSONObject list_message = null;
+                try {
+                    list_message = messageArray.getJSONObject(0);
+                    JSONArray messageList = list_message.getJSONArray("messages");
+                    JSONObject messageObject = null;
+                    for (int i = 0; i < messageList.length(); i++) {
+                        messageObject = messageList.getJSONObject(i);
+                        messages.add(new MessageModel(messageObject.getInt("userID"), messageObject.getString("friendlyName"), messageObject.getString("Message"), messageObject.getString("time")));
+
+                    Log.d("Message: ", list_message.toString());
+                    }
+                    listView = (ListView)findViewById(R.id.messages_list_view);
+                    listView.setAdapter(new MessageAdapter(context, R.layout.message, messages));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] header, Throwable throwable, JSONObject response) {
+                Toast.makeText(getApplicationContext(), "FAILURE", Toast.LENGTH_LONG).show();
+            }
+
+        });
     }
 
     @Override
