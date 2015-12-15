@@ -391,9 +391,8 @@ event.paying = function(req, res, next){
 
 event.budget = function(req, res, next){
   var results = [];
-  var copy = [];
   var claimedTotal = 0;
-  var isPayingTotal = 0;
+  var dividedTotal = 0;
   var isPayingCount = 0;
   var claimers = [];
 
@@ -401,45 +400,40 @@ event.budget = function(req, res, next){
     if(err)
       console.log(err);
     else{
-
         //compare with each attending member
         for(var i=0; i<event.members.length; i++){
           var claimedValue = 0;
-
+      
           for(var j=0; j<event.itemList.length; j++){
             if(event.members[i].friendlyName == event.itemList[j].whoseBringing){
               claimedValue += event.itemList[j].actCost;
               claimedTotal += event.itemList[j].actCost;
               console.log("claimedTotal: " + claimedTotal);
-            }
+            } 
           }
-
-          var obj = {
-            friendlyName: event.members[i].friendlyName,
-            claimedValue: claimedValue,
+          var obj = { 
+            friendlyName: event.members[i].friendlyName, 
+            claimedValue: claimedValue, 
             isPaying: event.members[i].isPaying };
           results.push(obj);
         }
       }
 
       for(var i=0; i<results.length; i++){
-
-        if (results[i].isPaying == true){
-          isPayingCount++;
-          isPayingTotal += results[i].claimedValue;
-          console.log("isPayingTotal: " + isPayingTotal);
-        }
+        if (results[i].isPaying == true)
+          isPayingCount++; 
       }
 
       for(var i=0; i<results.length; i++){
         if (results[i].isPaying == true){
+          results[i].dividedTotal = (claimedTotal/isPayingCount);
           results[i].toPay = (claimedTotal/isPayingCount) - results[i].claimedValue;
           console.log(results[i].friendlyName +" = "+ results[i].claimedValue);
         }
         else {
+          results[i].dividedTotal = 0;
           results[i].toPay = 0;
         }
-
       }
 
       res.status(200).send(results);
