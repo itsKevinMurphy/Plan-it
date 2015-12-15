@@ -18,12 +18,12 @@ import java.util.ArrayList;
 /**
  * Created by Kristian on 13/12/2015.
  */
-public class BudgetListAdapter extends ArrayAdapter<Members> {
-    ArrayList<Members> budgetList;
+public class BudgetListAdapter extends ArrayAdapter<Budget> {
+    ArrayList<Budget> budgetList;
     Context context;
     int resource;
     BudgetHolder member;
-    public BudgetListAdapter(Context context, int resource, ArrayList<Members> budgetList){
+    public BudgetListAdapter(Context context, int resource, ArrayList<Budget> budgetList){
         super(context, resource, budgetList);
         this.context = context;
         this.resource = resource;
@@ -41,17 +41,25 @@ public class BudgetListAdapter extends ArrayAdapter<Members> {
             member = new BudgetHolder();
 
             member.txtBudgetMember = (TextView) rowView.findViewById(R.id.budget_list_friend_id);
-            member.imgBudgetProfilePic = (ImageView) rowView.findViewById(R.id.budget_list_profile_image);
-            member.isPaying = (CheckBox) rowView.findViewById(R.id.budget_list_isPaying);
+            member.txtBudgetContribution = (TextView) rowView.findViewById(R.id.budget_list_contribution);
+            member.txtBudgetAmountToPay = (TextView) rowView.findViewById(R.id.budget_list_amount_to_pay);
+            member.isPaying = (CheckBox) rowView.findViewById(R.id.budget_list_is_paying);
         }
         else
         {
             member = (BudgetHolder)rowView.getTag();
         }
         member.txtBudgetMember.setTag(i);
-        member.txtBudgetMember.setText(budgetList.get(i).memberName);
-        member.imgBudgetProfilePic.setImageResource(R.drawable.ic_account_circle_blue_24dp);
-        member.isPaying.setChecked(budgetList.get(i).isPaying);
+        member.txtBudgetMember.setText(budgetList.get(i).userName);
+        member.txtBudgetContribution.setText(String.valueOf(budgetList.get(i).sumActCost));
+        member.txtBudgetAmountToPay.setText(String.valueOf(budgetList.get(i).toPay));
+        if(budgetList.get(i).isPaying == true){
+            member.isPaying.setChecked(true);
+        }
+        else{
+            member.isPaying.setChecked(false);
+        }
+        /*member.isPaying.setChecked(budgetList.get(i).isPaying);
             member.isPaying.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -61,7 +69,7 @@ public class BudgetListAdapter extends ArrayAdapter<Members> {
                         e.printStackTrace();
                     }
                 }
-            });
+            });*/
         rowView.setTag(member);
         return rowView;
     }
@@ -70,7 +78,8 @@ public class BudgetListAdapter extends ArrayAdapter<Members> {
     static class BudgetHolder
     {
         TextView txtBudgetMember;
-        ImageView imgBudgetProfilePic;
+        TextView txtBudgetContribution;
+        TextView txtBudgetAmountToPay;
         CheckBox isPaying;
     }
 

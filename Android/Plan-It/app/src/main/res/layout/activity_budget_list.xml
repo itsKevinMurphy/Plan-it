@@ -14,21 +14,42 @@
             android:gravity="center"
             android:textStyle="bold"
             android:layout_width="0dp"
-            android:layout_weight=".60"
+            android:layout_weight="0.30"
             android:layout_height="match_parent"
             android:text="Member Name"
-            android:id="@+id/item_list_label_item"
-            android:textSize="25sp"/>
+            android:id="@+id/activity_budget_list_label_item"
+            android:textSize="15sp"/>
+
         <TextView
             android:background="@drawable/back"
             android:gravity="center"
             android:textStyle="bold"
             android:layout_width="0dp"
-            android:layout_weight=".40"
+            android:layout_weight=".25"
             android:layout_height="match_parent"
-            android:text="Is Paying"
-            android:id="@+id/item_list_label_estimated_actual_cost"
-            android:textSize="25sp"/>
+            android:text="Contribution"
+            android:id="@+id/activity_budget_list_label_contribution"
+            android:textSize="15sp"/>
+        <TextView
+            android:background="@drawable/back"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_width="0dp"
+            android:layout_weight=".25"
+            android:layout_height="match_parent"
+            android:text="Amount to Pay"
+            android:id="@+id/activity_budget_list_label_amount_to_pay"
+            android:textSize="15sp"/>
+        <TextView
+            android:background="@drawable/back"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_width="0dp"
+            android:layout_weight=".15"
+            android:layout_height="match_parent"
+            android:text="Paying"
+            android:id="@+id/activity_budget_list_label_is_paying"
+            android:textSize="15sp"/>
     </LinearLayout>
     <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swipe_refresh_layout_budget_list"
@@ -55,8 +76,8 @@
             android:layout_width="0dp"
             android:layout_weight=".60"
             android:layout_height="match_parent"
-            android:text="Amount to pay"
-            android:id="@+id/budget_list_paying_label"
+            android:text="Subtotal"
+            android:id="@+id/activity_budget_list_sub_total_label"
             android:textSize="30sp"/>
         <TextView
             android:background="@drawable/back"
@@ -66,7 +87,7 @@
             android:layout_weight=".40"
             android:layout_height="match_parent"
             android:text="$0"
-            android:id="@+id/budget_list_paying_amount"
+            android:id="@+id/activity_budget_list_sub_total"
             android:textSize="30sp"/>
     </LinearLayout>
 

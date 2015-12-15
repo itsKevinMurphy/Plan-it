@@ -28,7 +28,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class BudgetListActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
 
-    public ArrayList<Members> bList;
+    public ArrayList<Budget> bList;
     private SwipeRefreshLayout swipeRefreshLayout;
     ListView budgetList;
     Context context = this;
@@ -47,7 +47,7 @@ public class BudgetListActivity extends AppCompatActivity implements SwipeRefres
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout_budget_list);
         swipeRefreshLayout.setOnRefreshListener(this);
         try {
-            getMembers();
+            populateBudget();
         }catch (JSONException e) {
             e.printStackTrace();
         }
@@ -57,7 +57,7 @@ public class BudgetListActivity extends AppCompatActivity implements SwipeRefres
     public void onRefresh() {
         swipeRefreshLayout.setRefreshing(true);
         try {
-            getMembers();
+            populateBudget();
             swipeRefreshLayout.setRefreshing(false);
 
         } catch (JSONException e) {
@@ -65,31 +65,35 @@ public class BudgetListActivity extends AppCompatActivity implements SwipeRefres
         }
     }
 
-    public void getMembers()throws JSONException{
-        RestClient.get("events/" + eventID + "/members", null, LoginActivity.token, new JsonHttpResponseHandler() {
+    public void populateBudget()throws JSONException{
+        RestClient.get("events/" + eventID + "/budget", null, LoginActivity.token, new JsonHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray memberArray) {
-                Log.d("onSuccess: ", memberArray.toString());
-                JSONObject member = null;
+            public void onSuccess(int statusCode, Header[] headers, JSONArray budgetArray) {
+                Log.d("onSuccess: ", budgetArray.toString());
+                JSONObject budget = null;
                 try {
                     bList = new ArrayList<>();
-                    for (int i = 0; i < memberArray.length(); i++) {
-                        member = memberArray.getJSONObject(i);
-                        int userId = member.getInt("UserId");
-                        String friendlyName = member.getString("friendlyName");
-                        String status = member.getString("isAttending");
+                    for (int i = 0; i < budgetArray.length(); i++) {
+                        budget = budgetArray.getJSONObject(i);
+                        String friendlyName = budget.getString("friendlyName");
+                        double sumActCost = budget.getDouble("claimedValue");
+                        double toPay = budget.getDouble("toPay");
+                        double dividedTotal;
+                        if(budget.has("dividedTotal")){
+                            dividedTotal = budget.getDouble("dividtedTotal");
+                        }
+                        else{
+                            dividedTotal = 0.0;
+                        }
                         boolean isPaying;
-                        if (!member.has("isPaying")) {
+                        if (!budget.has("isPaying")) {
                             isPaying = true;
                         }
                         else{
-                            isPaying = member.getBoolean("isPaying");
+                            isPaying = budget.getBoolean("isPaying");
                         }
-                        MemberStatus memberStatus = MemberStatus.valueOf(status.trim().toUpperCase());
-                        if(memberStatus == MemberStatus.ATTENDING || memberStatus == MemberStatus.OWNER){
-                            bList.add(new Members(userId, friendlyName, memberStatus, isPaying, true, true));
-                            Log.d("Member: ", member.toString());
-                        }
+                        bList.add(new Budget(friendlyName,sumActCost,dividedTotal, toPay, isPaying));
+                        Log.d("Member: ", budget.toString());
                     }
                     budgetList = (ListView) findViewById(R.id.budget_list_view);
                     budgetList.setAdapter(new BudgetListAdapter(context, R.layout.list_budget, bList));
