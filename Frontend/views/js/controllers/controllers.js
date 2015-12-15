@@ -503,8 +503,18 @@ angular.module('controller', ['angularMoment'])
   };
 
 })
-.controller('EventBudgetController', function ($scope, $location){
-
+.controller('EventBudgetController', function ($scope, ServiceForEvents, ServiceForUser){
+  $scope.token = ServiceForUser.getToken();
+  $scope.currentEvent = ServiceForEvents.getEvent();
+  //to get actual total  
+  // ServiceForEvents.getEventById($scope.currentEvent, $scope.token).success(function (data) {
+  //     $scope.event = data;
+  // });
+  ServiceForEvents.getBudget($scope.currentEvent, $scope.token).success(function (data)
+  {
+    console.log("budget section of" + $scope.currentEvent);
+    $scope.results = data;
+  });
 
 
 })

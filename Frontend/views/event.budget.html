@@ -9,47 +9,18 @@
 
     <table class="items">
     <tr>
+        <th style="width:20%;">Paying</th>
         <th>Attendee</th>
         <th>Divided Amount</th>
         <th>Contribution</th>
-        <th>To Pay</th>
-    </tr><tr>
-        <td><span class="glyphicon glyphicon-star"></span> Joanne Tanson</td>
-        <td><input type="text" value="$49.95"></td>
-        <td><input type="text" value="$49.95"></td>
-        <td><input type="text" value="$0.00"></td>
-    </tr><tr>
-        <td><span class="glyphicon glyphicon-thumbs-down"></span> Amina Abbasi</td>
-        <td><input type="text" value="$0.00"></td>
-        <td><input type="text" value="$0.00"></td>
-        <td><input type="text" value="$0.00"></td>
-    </tr><tr>
-        <td><span class="glyphicon glyphicon-thumbs-up"></span> Kamran Syed</td>
-        <td><input type="text" value="$49.95"></td>
-        <td><input type="text" value="$20.00"></td>
-        <td><input type="text" value="$29.95"></td>
-    </tr><tr>
-        <td><span class="glyphicon glyphicon-thumbs-up"></span> Kevin Murphy</td>
-        <td><input type="text" value="$49.95"></td>
-        <td><input type="text" value="$60.00"></td>
-        <td><input type="text" value="-$10.05"></td>
-    </tr><tr>
-        <td><span class="glyphicon glyphicon-thumbs-up"></span> Kristian Castaneda</td>
-        <td><input type="text" value="$49.95"></td>
-        <td><input type="text" value="$84.95"></td>
-        <td><input type="text" value="-$35.00"></td>
-    </tr><tr>
-        <td><span class="glyphicon glyphicon-thumbs-up"></span> Luke Farnell</td>
-        <td><input type="text" value="$49.95"></td>
-        <td><input type="text" value="$12.50"></td>
-        <td><input type="text" value="$37.45"></td>
-    </tr><tr>
-        <td><span class="glyphicon glyphicon-thumbs-down"></span> Mohammed Sumon</td>
-        <td><input type="text" value="$0.00"></td>
-        <td><input type="text" value="$0.00"></td>
-        <td><input type="text" value="$0.00"></td>
+        <th>Amount to Pay</th>
+    </tr><tr ng-repeat="result in results">
+        <td><input type="checkbox" ng-model="result.isPaying"></td>
+        <td>{{result.friendlyName}}</td>
+        <td>{{result.dividedTotal}}</td>
+        <td>{{result.claimedValue}}</td>
+        <td>{{result.toPay}}</td>
     </tr>
-
     </table>
 
 
