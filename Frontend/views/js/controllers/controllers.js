@@ -503,10 +503,27 @@ angular.module('controller', ['angularMoment'])
   };
 
 })
-.controller('EventBudgetController', function ($scope, $location){
+.controller('EventBudgetController', function ($scope, ServiceForEvents, ServiceForUser){
+  $scope.token = ServiceForUser.getToken();
+  $scope.currentEvent = ServiceForEvents.getEvent();
+  $scope.isPayingCount = 0;
+  $scope.total = 0;
 
+  //to get actual total  
+  // ServiceForEvents.getEventById($scope.currentEvent, $scope.token).success(function (data) {
+  //     $scope.event = data;
+  // });
+  ServiceForEvents.getBudget($scope.currentEvent, $scope.token).success(function (data)
+  {
+    console.log("budget section of" + $scope.currentEvent);
+    $scope.results = data;
+    for(var i=0; i<data.length; i++){
+      var items = data[i];
+      if (items.isPaying) $scope.isPayingCount++;
+      $scope.total += items.claimedValue;
+    }
 
-
+  });
 })
 .controller('AccountController', function ($scope, $location)
 {

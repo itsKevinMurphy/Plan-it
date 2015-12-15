@@ -89,8 +89,10 @@ event.getUsersEvents = function(req, res, next) {
           select("-_id EventID what why where when endDate picture fromTime toTime itemList totalEstCost totalActCost members").lean().exec(function(err, result){
             for(var i = 0; i < result.length;i++){
               for(var j = 0; j < result[i].members.length;j++){
-                if(result[i].members[j].UserId == token.UserID)
+                if(result[i].members[j].UserId == token.UserID){
                   result[i].isAttending = result[i].members[j].isAttending;
+                  result[i].friendlyName = result[i].members[j].friendlyName;
+                }
               }
             }
             res.status(200).json(result);
@@ -389,40 +391,52 @@ event.paying = function(req, res, next){
 
 event.budget = function(req, res, next){
   var results = [];
-  var copy = [];
+  var claimedTotal = 0;
+  var dividedTotal = 0;
+  var isPayingCount = 0;
+  var claimers = [];
+
   database.eventModel.findOne({"EventID": parseInt(req.params.id)}, function(err, event){
     if(err)
       console.log(err);
     else{
-      for(var i = 0; i < event.members.length; i++){
-        if(event.members[i].isAttending == "Owner" || event.members[i].isAttending == "Attending")
-          if(event.members[i].isPaying == true){
-            for(var j = 0; j < event.itemList.length;j++)
-              if(event.itemList[j].whoseBringing == event.members[i].friendlyName){
-                //event.itemList[i].actCost += event.itemList[j].actCost;
-                var obj = {name : event.members[i].friendlyName, total : event.totalActCost ,value : event.itemList[i].actCost, isPaying : event.members[i].isPaying};
-                results.push(obj);
-              }
+        //compare with each attending member
+        for(var i=0; i<event.members.length; i++){
+          var claimedValue = 0;
+      
+          for(var j=0; j<event.itemList.length; j++){
+            if(event.members[i].friendlyName == event.itemList[j].whoseBringing){
+              claimedValue += event.itemList[j].actCost;
+              claimedTotal += event.itemList[j].actCost;
+              console.log("claimedTotal: " + claimedTotal);
+            } 
           }
-      }
-      for(var k = 0; k < results.length;k++){
-        if(k == 0){
-          var obj = {name: results[k].name, value: results[k].value};
-          copy.push(obj);
-        }
-        else if(k > 0){
-          if(results[k].name == results[k-1].name){
-            results[k].value += results[k-1].value;
-            results.splice(k-1, 1);
-            copy = results;
-          }
+          var obj = { 
+            friendlyName: event.members[i].friendlyName, 
+            claimedValue: claimedValue, 
+            isPaying: event.members[i].isPaying };
+          results.push(obj);
         }
       }
-      for(var l = 0; l < copy.length;l++){
-        copy[l].total = (copy[l].total/copy.length);
-        copy[l].toPay = (copy[l].total-copy[l].value);
+
+      for(var i=0; i<results.length; i++){
+        if (results[i].isPaying == true)
+          isPayingCount++; 
       }
-      res.status(200).send(copy);
-    }
+
+      for(var i=0; i<results.length; i++){
+        if (results[i].isPaying == true){
+          results[i].dividedTotal = (claimedTotal/isPayingCount);
+          results[i].toPay = (claimedTotal/isPayingCount) - results[i].claimedValue;
+          console.log(results[i].friendlyName +" = "+ results[i].claimedValue);
+        }
+        else {
+          results[i].dividedTotal = 0;
+          results[i].toPay = 0;
+        }
+      }
+
+      res.status(200).send(results);
+
   });
 }

@@ -37,6 +37,9 @@ angular.module('services', ['ngCookies'])
     this.answerInvitation = function (id, answer, token){
       return $http({ url: 'http://planit.lukefarnell.CA:3000/events/' + id + '/invite/' + answer, method: "POST", headers: {'x-access-token': token}});
     }
+    this.getBudget = function (id, token){
+      return $http({ url: 'http://planit.lukefarnell.CA:3000/events/' + id + '/budget', method: "GET", headers: {'x-access-token': token}});
+    }
 
 }
 ])
