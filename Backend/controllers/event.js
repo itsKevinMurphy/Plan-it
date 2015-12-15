@@ -89,8 +89,10 @@ event.getUsersEvents = function(req, res, next) {
           select("-_id EventID what why where when endDate picture fromTime toTime itemList totalEstCost totalActCost members").lean().exec(function(err, result){
             for(var i = 0; i < result.length;i++){
               for(var j = 0; j < result[i].members.length;j++){
-                if(result[i].members[j].UserId == token.UserID)
+                if(result[i].members[j].UserId == token.UserID){
                   result[i].isAttending = result[i].members[j].isAttending;
+                  result[i].friendlyName = result[i].members[j].friendlyName;
+                }
               }
             }
             res.status(200).json(result);
@@ -403,18 +405,18 @@ event.budget = function(req, res, next){
         //compare with each attending member
         for(var i=0; i<event.members.length; i++){
           var claimedValue = 0;
-      
+
           for(var j=0; j<event.itemList.length; j++){
             if(event.members[i].friendlyName == event.itemList[j].whoseBringing){
               claimedValue += event.itemList[j].actCost;
               claimedTotal += event.itemList[j].actCost;
               console.log("claimedTotal: " + claimedTotal);
-            } 
+            }
           }
 
-          var obj = { 
-            friendlyName: event.members[i].friendlyName, 
-            claimedValue: claimedValue, 
+          var obj = {
+            friendlyName: event.members[i].friendlyName,
+            claimedValue: claimedValue,
             isPaying: event.members[i].isPaying };
           results.push(obj);
         }
