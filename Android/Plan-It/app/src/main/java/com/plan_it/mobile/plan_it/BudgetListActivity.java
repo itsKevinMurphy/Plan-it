@@ -2,6 +2,7 @@ package com.plan_it.mobile.plan_it;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,7 +12,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -32,18 +35,30 @@ public class BudgetListActivity extends AppCompatActivity implements SwipeRefres
     private SwipeRefreshLayout swipeRefreshLayout;
     ListView budgetList;
     Context context = this;
-    int eventID;
-
+    public static int eventID;
+    TextView totalActCost;
+    CheckBox isPaying;
+    TextView isPayingChange;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_budget_list);
+        isPayingChange = (TextView)findViewById(R.id.activity_budget_list_label_is_paying);
+        isPayingChange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
         Intent intent = getIntent();
         Bundle eventBundle = intent.getExtras();
         eventID = eventBundle.getInt("eventID");
-
-
+        try {
+            getTotal();
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        totalActCost = (TextView)findViewById(R.id.activity_budget_list_sub_total);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout_budget_list);
         swipeRefreshLayout.setOnRefreshListener(this);
         try {
@@ -75,24 +90,29 @@ public class BudgetListActivity extends AppCompatActivity implements SwipeRefres
                     bList = new ArrayList<>();
                     for (int i = 0; i < budgetArray.length(); i++) {
                         budget = budgetArray.getJSONObject(i);
+                       // int userId = budget.getInt("UserId"));
                         String friendlyName = budget.getString("friendlyName");
                         double sumActCost = budget.getDouble("claimedValue");
                         double toPay = budget.getDouble("toPay");
                         double dividedTotal;
-                        if(budget.has("dividedTotal")){
+                        if (budget.has("dividedTotal")) {
                             dividedTotal = budget.getDouble("dividtedTotal");
-                        }
-                        else{
+                        } else {
                             dividedTotal = 0.0;
                         }
                         boolean isPaying;
                         if (!budget.has("isPaying")) {
-                            isPaying = true;
-                        }
-                        else{
+                            isPaying = false;
+                        } else {
                             isPaying = budget.getBoolean("isPaying");
                         }
-                        bList.add(new Budget(friendlyName,sumActCost,dividedTotal, toPay, isPaying));
+
+                        /*String status = budget.getString("isAttending");
+                        if (status == "Owner" || status == "Attending") {
+                            bList.add(new Budget(friendlyName, sumActCost, dividedTotal, toPay, isPaying));
+                        }*/
+                        bList.add(new Budget(/*userId,*/friendlyName, sumActCost, dividedTotal, toPay, isPaying));
+
                         Log.d("Member: ", budget.toString());
                     }
                     budgetList = (ListView) findViewById(R.id.budget_list_view);
@@ -132,6 +152,33 @@ public class BudgetListActivity extends AppCompatActivity implements SwipeRefres
         });
 
     }
+
+    public void getTotal() throws JSONException {
+        RestClient.get("events/" + eventID, null, LoginActivity.token, new JsonHttpResponseHandler() {
+            public void onSuccess(int statusCode, Header[] header, JSONObject response){
+                JSONObject res;
+                String statusString;
+                try {
+                    res = response;
+                    statusString = res.getString("isAttending");
+                    IsAttending status = IsAttending.valueOf(statusString.trim().toUpperCase());
+                    double totalAct = res.getDouble("totalActCost");
+                    totalActCost.setText(String.format("%.2f", totalAct));
+
+                    if(status == IsAttending.ATTENDING){
+                    }
+                    else if(status == IsAttending.OWNER){
+                    }
+
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
