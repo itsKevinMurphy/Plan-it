@@ -182,7 +182,7 @@ nav {
   border-collapse: collapse;
   width: 95%;
 }
-.items th, td input {
+.items th, td, td input {
   width: 95%;
   text-align: center;
 }
