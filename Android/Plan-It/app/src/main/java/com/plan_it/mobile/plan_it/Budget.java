@@ -4,15 +4,19 @@ package com.plan_it.mobile.plan_it;
  * Created by Kristian on 13/12/2015.
  */
 public class Budget {
-
+    //int userId;
     String userName;
-    double totalPaid;
+    double dividedTotal;
+    double sumActCost;
+    double toPay;
     boolean isPaying;
-    String toPay;
 
-    Budget(String userName, double totalPaid, boolean isPaying){
+    Budget(/*int userId,*/String userName,double sumActCost, double dividedTotal,double toPay, boolean isPaying){
+        //this.userId = userId;
         this.userName = userName;
-        this.totalPaid = totalPaid;
+        this.sumActCost = sumActCost;
+        this.dividedTotal = dividedTotal;
+        this.toPay = toPay;
         this.isPaying = isPaying;
     }
 }

@@ -4,25 +4,40 @@
     android:layout_width="match_parent"
     android:layout_height="60dp"
     android:padding="10dp">
-    <ImageView
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_weight=".1"
-        android:src="@drawable/ic_account_circle_blue_24dp"
-        android:id="@+id/budget_list_profile_image"/>
     <TextView
         android:paddingTop="10dp"
         android:id="@+id/budget_list_friend_id"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
-        android:text="@string/email_user"
-        android:textSize="25sp"
+        android:text="name"
+        android:textSize="15sp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight=".75"/>
+        android:layout_weight=".35"/>
+
+    <TextView
+        android:paddingTop="10dp"
+        android:id="@+id/budget_list_contribution"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_horizontal"
+        android:text="contribution"
+        android:textSize="15sp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight=".25"/>
+    <TextView
+        android:paddingTop="10dp"
+        android:id="@+id/budget_list_amount_to_pay"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_horizontal"
+        android:text="to pay"
+        android:textSize="15sp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight=".25"/>
     <CheckBox
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:layout_weight=".15"
-        android:id="@+id/budget_list_isPaying" />
+        android:id="@+id/budget_list_is_paying"/>
 </LinearLayout>
