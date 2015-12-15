@@ -6,13 +6,16 @@ package com.plan_it.mobile.plan_it;
 public class Budget {
 
     String userName;
-    double totalPaid;
+    double dividedTotal;
+    double sumActCost;
+    double toPay;
     boolean isPaying;
-    String toPay;
 
-    Budget(String userName, double totalPaid, boolean isPaying){
+    Budget(String userName,double sumActCost, double dividedTotal,double toPay, boolean isPaying){
         this.userName = userName;
-        this.totalPaid = totalPaid;
+        this.sumActCost = sumActCost;
+        this.dividedTotal = dividedTotal;
+        this.toPay = toPay;
         this.isPaying = isPaying;
     }
 }
