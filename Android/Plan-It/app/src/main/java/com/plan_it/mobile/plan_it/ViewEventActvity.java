@@ -86,6 +86,7 @@ public class ViewEventActvity extends AppCompatActivity {
     ImageView eventImage;
     Button deleteEvent;
     Button budgetButton;
+    public static IsAttending isOwner;
 
     Calendar myCalendar = Calendar.getInstance();
 
@@ -786,7 +787,7 @@ public class ViewEventActvity extends AppCompatActivity {
                     String base64String = res.getString("picture");
                     Bitmap eventImg = base64ToBitmap(base64String);
                     bmp = Bitmap.createScaledBitmap(eventImg, 140, 150, true);
-
+                    isOwner = status;
                     etTitle.setText(eTitle);
                     etDesc.setText(eDesc);
                     etLocation.setText(eLocation);
