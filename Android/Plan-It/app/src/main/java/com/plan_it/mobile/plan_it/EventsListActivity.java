@@ -323,36 +323,10 @@ public class EventsListActivity extends AppCompatActivity implements SearchView.
         Intent intent = new Intent(this, CreateEventActivity.class);
         startActivity(intent);
     }
-    public void DeleteEvent(String isAttending, int eventID, String eventName)
-    {
-        Toast.makeText(this, "Deleting: " + eventName + " Refresh List from menu",
-                Toast.LENGTH_LONG).show();
-        UpdateDatabase.DeleteEvent(isAttending, eventID);
-    }
-    public String getUserName(int userIDtoSearch) {
-        RestClient.get("/search/" + userIDtoSearch + "/user", null, LoginActivity.token, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                // If the response is JSONObject instead of expected JSONArray
-                JSONObject res;
-                try {
-                    res = response;
-                    userName = res.getString("friendlyName");
 
-
-                } catch (JSONException ex) {
-                    ex.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] header, Throwable throwable, JSONObject response) {
-                Toast.makeText(view.getContext(), "GET USERNAME FAIL", Toast.LENGTH_LONG).show();
-            }
-
-        });
-        return userName;
+    public void navEventList(){
+        Intent intent = new Intent(EventsListActivity.this, EventsListActivity.class);
+        startActivity(intent);
     }
 
 }
