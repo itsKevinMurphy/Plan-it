@@ -40,6 +40,9 @@ angular.module('services', ['ngCookies'])
     this.getBudget = function (id, token){
       return $http({ url: 'http://planit.lukefarnell.CA:3000/events/' + id + '/budget', method: "GET", headers: {'x-access-token': token}});
     }
+    this.updateIsPaying = function (id, userid, data, token){
+      return $http({ url: 'http://planit.lukefarnell.CA:3000/events/' + id + '/paying/' + userid, method: "POST", data: data, headers: {'x-access-token': token}});
+    }
 
 }
 ])

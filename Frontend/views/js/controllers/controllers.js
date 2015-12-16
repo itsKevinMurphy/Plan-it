@@ -522,8 +522,15 @@ angular.module('controller', ['angularMoment'])
       if (items.isPaying) $scope.isPayingCount++;
       $scope.total += items.claimedValue;
     }
-
   });
+
+  $scope.updateIsPaying = function (idToUpdate, statusToUpdate) {
+    console.log("changing " + statusToUpdate + " from user " + idToUpdate);
+    ServiceForEvents.updateIsPaying($scope.currentEvent, idToUpdate, statusToUpdate, $scope.token).success(function (data) {
+      console.log("successfully changed " + statusToUpdate + " of " + idToUpdate);
+      // $window.location.reload();
+    });
+  };
 })
 .controller('AccountController', function ($scope, $location)
 {
