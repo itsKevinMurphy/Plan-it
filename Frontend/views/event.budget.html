@@ -14,7 +14,7 @@
         <th>Divided Amount</th>
         <th>Contribution</th>
         <th>Amount to Pay</th>
-    </tr><tr ng-repeat="result in results">
+    </tr><tr ng-repeat="result in results" ng-show="checkAttending(result.isAttending)">
         <td><input type="checkbox" ng-model="result.isPaying" ng-change="updateIsPaying(result.userId, result.isPaying)"></td>
         <td>{{result.friendlyName}}</td>
         <td>{{result.dividedTotal}}</td>
