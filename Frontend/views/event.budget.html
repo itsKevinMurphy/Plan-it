@@ -15,7 +15,7 @@
         <th>Contribution</th>
         <th>Amount to Pay</th>
     </tr><tr ng-repeat="result in results">
-        <td><input type="checkbox" ng-model="result.isPaying"></td>
+        <td><input type="checkbox" ng-model="result.isPaying" ng-change="updateIsPaying(result.userId, result.isPaying)"></td>
         <td>{{result.friendlyName}}</td>
         <td>{{result.dividedTotal}}</td>
         <td>{{result.claimedValue}}</td>
