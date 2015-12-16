@@ -403,32 +403,33 @@ event.budget = function(req, res, next){
         //compare with each attending member
         for(var i=0; i<event.members.length; i++){
           var claimedValue = 0;
-      
+
           for(var j=0; j<event.itemList.length; j++){
             if(event.members[i].friendlyName == event.itemList[j].whoseBringing){
               claimedValue += event.itemList[j].actCost;
               claimedTotal += event.itemList[j].actCost;
-              console.log("claimedTotal: " + claimedTotal);
-            } 
+            }
           }
-          var obj = { 
-            friendlyName: event.members[i].friendlyName, 
-            claimedValue: claimedValue, 
-            isPaying: event.members[i].isPaying };
+          var obj = {
+            friendlyName: event.members[i].friendlyName,
+            userId: event.members[i].UserId,
+            claimedValue: claimedValue,
+            isPaying: event.members[i].isPaying,
+            isAttending: event.members[i].isAttending
+          };
           results.push(obj);
         }
       }
 
       for(var i=0; i<results.length; i++){
         if (results[i].isPaying == true)
-          isPayingCount++; 
+          isPayingCount++;
       }
 
       for(var i=0; i<results.length; i++){
         if (results[i].isPaying == true){
           results[i].dividedTotal = (claimedTotal/isPayingCount);
           results[i].toPay = (claimedTotal/isPayingCount) - results[i].claimedValue;
-          console.log(results[i].friendlyName +" = "+ results[i].claimedValue);
         }
         else {
           results[i].dividedTotal = 0;
