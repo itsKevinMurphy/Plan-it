@@ -524,6 +524,12 @@ angular.module('controller', ['angularMoment'])
     }
   });
 
+  $scope.checkAttending = function (toCheck) {
+    if (toCheck == "Attending" || toCheck == "Owner") {
+      return true;
+    }
+  }
+
   $scope.updateIsPaying = function (idToUpdate, statusToUpdate) {
     console.log("changing " + statusToUpdate + " from user " + idToUpdate);
     ServiceForEvents.updateIsPaying($scope.currentEvent, idToUpdate, statusToUpdate, $scope.token).success(function (data) {
