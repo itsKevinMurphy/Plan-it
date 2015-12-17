@@ -28,7 +28,6 @@ public class BudgetListAdapter extends ArrayAdapter<Budget> {
     Context context;
     int resource;
     BudgetHolder budget;
-    String attendingString;
     public BudgetListAdapter(Context context, int resource, ArrayList<Budget> budgetList){
         super(context, resource, budgetList);
         this.context = context;
@@ -38,7 +37,6 @@ public class BudgetListAdapter extends ArrayAdapter<Budget> {
 
     public View getView (final int i, View view, ViewGroup parent) {
         View rowView = view;
-        getTotal();
        // final int i = position;
         if(rowView == null)
         {
@@ -56,18 +54,18 @@ public class BudgetListAdapter extends ArrayAdapter<Budget> {
         {
             budget = (BudgetHolder)rowView.getTag();
         }
-        if(attendingString == "Attending"){
-            budget.isPaying.setEnabled(false);
-        }
-        else if (attendingString == "Owner"){
-            budget.isPaying.setEnabled(true);
-        }
         budget.txtBudgetMember.setTag(i);
         budget.txtBudgetMember.setText(budgetList.get(i).userName);
         budget.txtBudgetContribution.setText(String.valueOf(budgetList.get(i).sumActCost));
         budget.txtBudgetAmountToPay.setText(String.format("%.2f", budgetList.get(i).toPay));
+        if(ViewEventActvity.isOwner == IsAttending.OWNER){
+            budget.isPaying.setEnabled(true);
+        }
+        else{
+            budget.isPaying.setEnabled(false);
+        }
         budget.isPaying.setChecked(budgetList.get(i).isPaying);
-        /*budget.isPaying.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        budget.isPaying.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     try {
@@ -76,7 +74,7 @@ public class BudgetListAdapter extends ArrayAdapter<Budget> {
                         e.printStackTrace();
                     }
                 }
-            });*/
+            });
         rowView.setTag(budget);
         return rowView;
     }
@@ -90,30 +88,5 @@ public class BudgetListAdapter extends ArrayAdapter<Budget> {
         CheckBox isPaying;
     }
 
-    public void getTotal(){
-        RestClient.get("events/" + BudgetListActivity.eventID, null, LoginActivity.token, new JsonHttpResponseHandler() {
-            public void onSuccess(int statusCode, Header[] header, JSONObject response){
-                JSONObject res;
-                String statusString;
-                try {
-                    res = response;
-                    statusString = res.getString("isAttending");
-                    IsAttending status = IsAttending.valueOf(statusString.trim().toUpperCase());
-
-                    if(status == IsAttending.ATTENDING){
-                        attendingString = "Attending";
-                    }
-                    else if(status == IsAttending.OWNER){
-                        attendingString = "Owner";
-                    }
-
-                } catch (JSONException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-        });
-
-    }
 
 }

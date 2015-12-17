@@ -90,13 +90,13 @@ public class BudgetListActivity extends AppCompatActivity implements SwipeRefres
                     bList = new ArrayList<>();
                     for (int i = 0; i < budgetArray.length(); i++) {
                         budget = budgetArray.getJSONObject(i);
-                       // int userId = budget.getInt("UserId"));
+                        int userId = budget.getInt("userId");
                         String friendlyName = budget.getString("friendlyName");
                         double sumActCost = budget.getDouble("claimedValue");
                         double toPay = budget.getDouble("toPay");
                         double dividedTotal;
                         if (budget.has("dividedTotal")) {
-                            dividedTotal = budget.getDouble("dividtedTotal");
+                            dividedTotal = budget.getDouble("dividedTotal");
                         } else {
                             dividedTotal = 0.0;
                         }
@@ -106,12 +106,10 @@ public class BudgetListActivity extends AppCompatActivity implements SwipeRefres
                         } else {
                             isPaying = budget.getBoolean("isPaying");
                         }
-
-                        /*String status = budget.getString("isAttending");
-                        if (status == "Owner" || status == "Attending") {
-                            bList.add(new Budget(friendlyName, sumActCost, dividedTotal, toPay, isPaying));
-                        }*/
-                        bList.add(new Budget(/*userId,*/friendlyName, sumActCost, dividedTotal, toPay, isPaying));
+                        String status = budget.getString("isAttending");
+                        if (status.equals("Owner") || status.equals("Attending")) {
+                            bList.add(new Budget(userId, friendlyName, sumActCost, dividedTotal, toPay, isPaying));
+                        }
 
                         Log.d("Member: ", budget.toString());
                     }
