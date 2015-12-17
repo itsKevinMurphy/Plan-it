@@ -77,6 +77,7 @@ public class FriendsListAdapter extends ArrayAdapter<FriendListModel> {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             ((FriendsListActivity) context).RemoveFriend(LoginActivity.userID, friendsList.get(position).UserID);
+                            friendsList.remove(position);
                             dialog.dismiss();
                         }
                     });

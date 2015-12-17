@@ -202,13 +202,11 @@ public class FriendsListActivity extends AppCompatActivity implements SwipeRefre
         RestClient.delete("/user/" + id + "/friend/" + friendId, jdata, LoginActivity.token, new JsonHttpResponseHandler() {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Toast.makeText(context, "Success, " + response + " has been removed from your list", Toast.LENGTH_LONG).show();
-
             }
 
             @Override
             public void onFailure(int statusCode, Header[] header, Throwable throwable, JSONObject response) {
                 Toast.makeText(context, "Failure, Unable to remove: " + response, Toast.LENGTH_LONG).show();
-
             }
         });
     Refresh();
