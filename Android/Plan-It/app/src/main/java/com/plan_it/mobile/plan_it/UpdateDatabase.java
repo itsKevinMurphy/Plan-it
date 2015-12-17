@@ -49,8 +49,8 @@ public class UpdateDatabase {
         });
     }
 
-    public static void DeleteEvent(String isAttending, int eventID) {
-        if(isAttending == "OWNER") {
+    public static void DeleteEvent(IsAttending isAttending, int eventID) {
+        if(isAttending == IsAttending.OWNER) {
             RestClient.delete("events/" + eventID, null, LoginActivity.token, new JsonHttpResponseHandler() {
                 public void onSuccess(String response) {
                     JSONObject res;

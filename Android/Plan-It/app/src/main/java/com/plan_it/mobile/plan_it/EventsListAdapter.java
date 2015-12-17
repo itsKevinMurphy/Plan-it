@@ -22,7 +22,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
+
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -37,7 +40,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
     public static String filter = "NONE";
     public static View view;
     private List<Event>mEvents;
-    private Context context;
+    Context context;
     public String token;
     public class EventsViewHolder extends RecyclerView.ViewHolder{
         CardView cv;
@@ -147,7 +150,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
                 if (mEvents.get(j).isAttending == IsAttending.INVITED || mEvents.get(j).isAttending == IsAttending.DECLINED)
                 {
                     try {
-                        UpdateDatabase.UpdateInvitation(mEvents.get(j).isAttending, 1, mEvents.get(j).eventID);
+                        UpdateInvitation(mEvents.get(j).isAttending, 1, mEvents.get(j).eventID);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -167,7 +170,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
                 if (mEvents.get(j).isAttending == IsAttending.INVITED ||mEvents.get(j).isAttending == IsAttending.ATTENDING)
                 {
                     try {
-                        UpdateDatabase.UpdateInvitation(mEvents.get(j).isAttending, 2, mEvents.get(j).eventID);
+                        UpdateInvitation(mEvents.get(j).isAttending, 2, mEvents.get(j).eventID);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -176,14 +179,15 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
                 }
                 else if ( mEvents.get(j).isAttending == IsAttending.DECLINED || mEvents.get(j).isAttending == IsAttending.LEFT || mEvents.get(j).isAttending == IsAttending.OWNER)
                 {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(
+                    DeleteEvent(mEvents.get(j).isAttending, mEvents.get(j).eventID);
+                    /*AlertDialog.Builder alert = new AlertDialog.Builder(
                             context);
                     alert.setTitle("Alert!!");
                     alert.setMessage("Are you sure to delete record");
                     alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            ((EventsListActivity)context).DeleteEvent(mEvents.get(j).isAttending.toString(), mEvents.get(j).eventID, mEvents.get(j).name);
+                            DeleteEvent(mEvents.get(j).isAttending, mEvents.get(j).eventID);
                             dialog.dismiss();
                         }
                     });
@@ -193,7 +197,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
                             dialog.dismiss();
                         }
                     });
-                    alert.show();
+                    alert.show();*/
                 }
 
             }
@@ -281,6 +285,57 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
         final Event event = mEvents.remove(fromPosition);
         mEvents.add(toPosition, event);
         notifyItemMoved(fromPosition, toPosition);
+    }
+
+    public static void UpdateInvitation(IsAttending isAttending, int button, int eventID) throws JSONException {
+        String answer = "";
+        if (isAttending == IsAttending.LEFT)
+        {
+            answer = "Attending";
+        }
+        else if (isAttending == IsAttending.DECLINED)
+        {
+            answer = "Attending";
+        }
+        else if (isAttending == IsAttending.INVITED && button == 1)
+        {
+            answer = "Attending";
+        }
+        else if (isAttending == IsAttending.ATTENDING  || isAttending.equals("INVITED") && button == 2)
+        {
+            answer = "Declined";
+        }
+
+        RestClient.post("events/" + eventID + "/invite/" + answer, null, LoginActivity.token, new JsonHttpResponseHandler() {
+            public void onSuccess(String response) {
+                JSONObject res;
+                try {
+                    res = new JSONObject(response);
+                    Log.d("debug", res.getString("some_key")); // this is how you get a value out
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public static void DeleteEvent(IsAttending isAttending, int eventID) {
+        if(isAttending == IsAttending.OWNER || isAttending == IsAttending.DECLINED) {
+            RestClient.delete("events/" + eventID, null, LoginActivity.token, new JsonHttpResponseHandler() {
+                public void onSuccess(String response) {
+                    JSONObject res;
+                    try {
+                        res = new JSONObject(response);
+                        Log.d("debug", res.getString("some_key")); // this is how you get a value out
+                    } catch (JSONException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
     }
 }
 

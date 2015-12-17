@@ -2,6 +2,8 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var increment = require('mongoose-auto-increment');
+var morgan = require('morgan');
+var fs = require('fs');
 
 
 module.exports = app = express();
@@ -16,6 +18,12 @@ var userCtrl = require('./controllers/user');
 var msgCtrl = require('./controllers/messages');
 
 database.createConnection();
+
+// create a write stream (in append mode)
+var accessLogStream = fs.createWriteStream(__dirname + '/access.log', {flags: 'a'})
+
+// setup the logger
+app.use(morgan('combined', {stream: accessLogStream}))
 
 app.get('/events', eventCtrl.getAllEvents);
 app.post('/events', eventCtrl.createEvent);
@@ -47,6 +55,6 @@ app.get('/message/:event/id/:msgid', msgCtrl.getAllMessagesSinceID);
 
 
 
-app.listen(3000, function() {
+app.listen(443, function() {
   console.log("Server is running on port 3000");
 });
