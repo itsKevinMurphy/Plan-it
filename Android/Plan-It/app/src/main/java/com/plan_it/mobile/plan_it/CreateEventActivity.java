@@ -1,6 +1,8 @@
 package com.plan_it.mobile.plan_it;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -25,6 +27,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -58,6 +61,11 @@ public class CreateEventActivity extends AppCompatActivity {
 
     ImageView viewImage;
 
+    private int hour;
+    private int minute;
+
+    static final int TIME_DIALOG_ID = 999;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +82,14 @@ public class CreateEventActivity extends AppCompatActivity {
         create_totime=(EditText) findViewById(R.id.event_createtotime);
 
 
+
+        create_fromtime.setInputType(InputType.TYPE_NULL);
+        create_fromtime.setOnTouchListener(lister);
+
+        create_totime.setInputType(InputType.TYPE_NULL);
+        create_totime.setOnTouchListener(listen);
+
+
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,6 +100,7 @@ public class CreateEventActivity extends AppCompatActivity {
                 e_todate = create_todate.getText().toString();
                 e_fromTime = create_fromtime.getText().toString();
                 e_toTime = create_totime.getText().toString();
+
 
                 if (e_name.equals("") || e_reason.equals("") || e_loc.equals("") || e_fromdate.equals("")
                         || e_todate.equals("")|| e_toTime.equals("")|| e_fromTime.equals("")) {
@@ -133,6 +150,52 @@ public class CreateEventActivity extends AppCompatActivity {
             return false;
         }
     };
+
+    OnTouchListener lister = new OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                showDialog(TIME_DIALOG_ID);
+                 
+                create_fromtime.setText(new StringBuilder().append(pad(hour))
+                        .append(":").append(pad(minute)));
+            }
+            return false;
+        }
+    };
+    OnTouchListener listen = new OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                showDialog(TIME_DIALOG_ID);
+
+                create_totime.setText(new StringBuilder().append(pad(hour))
+                        .append(":").append(pad(minute)));
+            }
+            return false;
+        }
+    };
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+            case TIME_DIALOG_ID:
+                // set time picker as current time
+                return new TimePickerDialog(this,
+                        timePickerListener, hour, minute, false);
+
+        }
+        return null;
+    }
+    private TimePickerDialog.OnTimeSetListener timePickerListener =
+            new TimePickerDialog.OnTimeSetListener() {
+                public void onTimeSet(TimePicker view, int selectedHour,
+                                      int selectedMinute) {
+                    hour = selectedHour;
+                    minute = selectedMinute;
+
+                }
+            };
     DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear,
@@ -155,6 +218,7 @@ public class CreateEventActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_create_event, menu);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -266,6 +330,7 @@ public class CreateEventActivity extends AppCompatActivity {
         }
     }
 
+
     public void createEvent() throws JSONException {
         RequestParams jdata = new RequestParams();
         jdata.put("what",e_name);
@@ -280,13 +345,12 @@ public class CreateEventActivity extends AppCompatActivity {
        // Token tokenClass = new Token();
         token = LoginActivity.token;
 
-        RestClient.post("events",jdata,token, new JsonHttpResponseHandler() {
+        RestClient.post("events", jdata, token, new JsonHttpResponseHandler() {
             public void onSuccess(String response) {
                 JSONObject res;
                 try {
                     res = new JSONObject(response);
                     Log.d("debug", res.getString("some_key")); // this is how you get a value out
-
 
 
                 } catch (JSONException e) {
@@ -295,5 +359,12 @@ public class CreateEventActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private static String pad(int c) {
+        if (c >= 10)
+            return String.valueOf(c);
+        else
+            return "0" + String.valueOf(c);
     }
 }

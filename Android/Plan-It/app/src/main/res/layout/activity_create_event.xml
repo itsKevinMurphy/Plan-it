@@ -193,7 +193,8 @@
                             android:id="@+id/event_createtotime"
                             android:hint="@string/to"
                             android:imeOptions="actionDone"
-                            android:singleLine="true"/>
+                            android:singleLine="true"
+                            android:onClick="timeDialog2"/>
                     </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
             </LinearLayout>
