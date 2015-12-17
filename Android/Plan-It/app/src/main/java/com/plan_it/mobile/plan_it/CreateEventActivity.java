@@ -9,7 +9,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -190,7 +189,7 @@ public class CreateEventActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     private void updateLabel(int id) {
-        String myFormat = "MMM/dd/yyyy"; //In which you need put here
+        String myFormat = "MM/dd/yyyy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.CANADA);
         switch (id) {
             case 0:
