@@ -99,7 +99,7 @@ event.getUsersEvents = function(req, res, next) {
           select("-_id EventID what why where when endDate picture fromTime toTime itemList totalEstCost totalActCost members").lean().exec(function(err, result){
             for(var i = 0; i < result.length;i++){
               for(var j = 0; j < result[i].members.length;j++){
-                if(result[i].members[j].UserId == token.UserID){
+                if(result[i].members[j].isAttending == "Owner"){
                   result[i].isAttending = result[i].members[j].isAttending;
                   result[i].friendlyName = result[i].members[j].friendlyName;
                 }
