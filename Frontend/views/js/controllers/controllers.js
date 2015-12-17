@@ -529,6 +529,12 @@ angular.module('controller', ['angularMoment'])
 
   $scope.getBudget();
 
+  $scope.checkAttending = function (toCheck) {
+    if (toCheck == "Attending" || toCheck == "Owner") {
+      return true;
+    }
+  }
+
   $scope.updateIsPaying = function (idToUpdate, statusToUpdate) {
     $scope.data = {};
     $scope.data.answer = statusToUpdate;
