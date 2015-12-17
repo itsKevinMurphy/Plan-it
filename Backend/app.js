@@ -2,6 +2,7 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var increment = require('mongoose-auto-increment');
+var morgan = require('morgan');
 
 
 module.exports = app = express();
@@ -16,6 +17,8 @@ var userCtrl = require('./controllers/user');
 var msgCtrl = require('./controllers/messages');
 
 database.createConnection();
+
+app.use(morgan('combined'));
 
 app.get('/events', eventCtrl.getAllEvents);
 app.post('/events', eventCtrl.createEvent);

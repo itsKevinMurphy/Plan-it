@@ -12,7 +12,8 @@
     "cors": "^2.7.1",
     "express": "^4.13.3",
     "jsonwebtoken": "^5.4.1",
-    "mongoose-auto-increment": "latest"
+    "mongoose-auto-increment": "latest",
+    "morgan": "^1.6.1"
   },
   "devDependencies": {},
   "scripts": {

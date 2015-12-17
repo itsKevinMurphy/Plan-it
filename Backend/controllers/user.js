@@ -38,7 +38,6 @@ user.createUser = function(req, res, next ){
         }
       }else{
         //Save the new user to database
-        console.log("Saving object.");
         userObj.save(function(err) {
           if (err)
             console.log(err);
@@ -93,7 +92,6 @@ user.addNewFriend = function(req, res, next){
   database.userModel.findOne({"UserID": req.params.id}, function(err, data){
     if(!err){
       if(!data){
-        console.log("User was not found.")
         res.status(409).send("User not found.");
       }else {
         //If the User exists find if the friend has already been added to the friends list
@@ -112,7 +110,6 @@ user.addNewFriend = function(req, res, next){
                   console.log(err);
                   res.sendStatus(500);
                 }else{
-                  console.log('Friend added.')
                   res.sendStatus(201);
                 }
               });
@@ -138,12 +135,8 @@ user.getAllFriends = function(req, res, next){
           }
           //console.log(listOfFriendID);
           database.userModel.find({"UserID": {$in: listOfFriendID.id}}, function(err, friends){
-            console.log("IDs:")
-            console.log(listOfFriendID.id);
             if(!err){
               if(friends){
-                //console.log(listOfFriendID.id)
-                console.log(friends);
                 res.json(friends);
               }
             }else{
@@ -163,19 +156,15 @@ user.removeFriend = function(req, res, next){
   {$pull: {"friendList": {"userID" : req.params.friendId}}}, function(err, friend){
     if(!err){
       if(friend){
-        console.log('Deleting Friend.')
-        console.log(friend.friendList);
         friend.save(function(err){
           if(err){
             console.log(err);
             res.status(409).send("Friend could not be deleted.");
           }else{
-            console.log("Friend deleted.");
             res.status(201).send("Friend deleted from list.");
           }
         });
       }else{
-        console.log("Friend not in friends list.");
         res.status(409).send("Friend was not found.");
       }
     }else{
