@@ -109,7 +109,7 @@ angular.module('controller', ['angularMoment'])
 
 })
 
-.controller('UpdateEventController', function ($window, $scope, $stateParams, ServiceForEvents, ServiceForUser){
+.controller('UpdateEventController', function ($window, $scope, $location, $stateParams, ServiceForEvents, ServiceForUser){
   $scope.event = [];
   $scope.id = $stateParams.eventID;
   $scope.submitted = false;
@@ -137,8 +137,9 @@ angular.module('controller', ['angularMoment'])
       ServiceForEvents.updateEvent($scope.id, $scope.event, $scope.token).success(function (data)
       {
         console.log($scope.event);
-        $window.location.reload();
+        // $window.location.reload();
         //should redirect to events
+        $location.path('/event/eventinfo/'+$scope.id);
       });
     } else {
         $scope.update_event_form.submitted = true;
