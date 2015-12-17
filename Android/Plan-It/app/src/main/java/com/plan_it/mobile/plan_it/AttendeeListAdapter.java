@@ -45,7 +45,6 @@ public class AttendeeListAdapter extends ArrayAdapter<Members> {
 
             member = new MemberHolder();
 
-            member.deleteAttendee = (ImageView) rowView.findViewById(R.id.ibDeleteInvitee);
             member.txtAttendeeName = (TextView) rowView.findViewById(R.id.tv_attendeeName);
             member.imgProfilePic = (ImageView) rowView.findViewById(R.id.iv_profilePic);
             member.imgAttendeeStatus = (ImageView) rowView.findViewById(R.id.iv_status);
@@ -58,7 +57,7 @@ public class AttendeeListAdapter extends ArrayAdapter<Members> {
         }
         member.txtAttendeeName.setTag(position);
         member.txtAttendeeName.setText(memberList.get(position).memberName);
-        member.imgProfilePic.setImageResource(R.drawable.no_image);
+        member.imgProfilePic.setImageResource(R.drawable.ic_account_circle_blue_24dp);
 
         if(memberList.get(position).status == MemberStatus.ATTENDING)
         {
@@ -66,13 +65,13 @@ public class AttendeeListAdapter extends ArrayAdapter<Members> {
         }
         else if(memberList.get(position).status == MemberStatus.INVITED)
         {
-            member.imgAttendeeStatus.setImageResource(R.drawable.ic_thumb_up_black_24dp);
+            member.imgAttendeeStatus.setImageResource(R.drawable.ic_thumbs_up_down);
         }
         else if (memberList.get(position).status == MemberStatus.DECLINED || memberList.get(position).status == MemberStatus.LEFT){
             member.imgAttendeeStatus.setImageResource(R.drawable.ic_thumb_down_red_24dp);
         }
         else if (memberList.get(position).status == MemberStatus.OWNER){
-            member.imgAttendeeStatus.setImageResource(R.drawable.ic_favorite_border_black_48dp);
+            member.imgAttendeeStatus.setImageResource(R.drawable.ic_fingerprint_blue);
         }
 
         return rowView;
@@ -83,6 +82,5 @@ public class AttendeeListAdapter extends ArrayAdapter<Members> {
         TextView txtAttendeeName;
         ImageView imgProfilePic;
         ImageView imgAttendeeStatus;
-        ImageView deleteAttendee;
     }
 }
