@@ -293,6 +293,17 @@ angular.module('controller', ['angularMoment'])
     }
   }
 
+  $scope.checkInvitedOrDeclined = function()
+  {
+    if(ServiceForEvents.getEventStatus() == "Invited" || ServiceForEvents.getEventStatus() == "Declined")
+    {
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+
 })
 
 .controller('EventDetailsController', function ($window, $location, $scope, $stateParams, ServiceForEvents, ServiceForUser){
