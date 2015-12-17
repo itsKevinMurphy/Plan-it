@@ -190,6 +190,7 @@ angular.module('controller', ['angularMoment'])
 
 .controller('EventListController', function ($scope, ServiceForEvents, ServiceForUser, $location){
   $scope.token = ServiceForUser.getToken();
+  $scope.eventFilter = "";
   console.log($scope.token);
   // $scope.event;
   ServiceForEvents.getAllEvents($scope.token).success(function (data)
@@ -198,6 +199,48 @@ angular.module('controller', ['angularMoment'])
       console.log(data);
   }
   );
+
+  $scope.clearSearch = function()
+  {
+    $scope.searchFilter = null;
+    $scope.searchword = "";
+  }
+
+  $scope.filterForOwner = function()
+  {
+    $scope.clearSearch();
+    console.log("My Events.");
+    $scope.eventFilter = "Owner";
+  }
+  $scope.filterForAttending = function()
+  {
+    $scope.clearSearch();
+    console.log("My Events.");
+    $scope.eventFilter = "Attending";
+  }
+  $scope.filterForInvited = function()
+  {
+    $scope.clearSearch();
+    console.log("My Events.");
+    $scope.eventFilter = "Invited";
+  }
+  $scope.filterForLeft = function()
+  {
+    $scope.clearSearch();
+    console.log("My Events.");
+    $scope.eventFilter = "Declined";
+  }
+  $scope.filterForAll = function()
+  {
+    $scope.clearSearch();
+    console.log("My Events.");
+    $scope.eventFilter = "";
+  }
+  $scope.searchEvents = function()
+  {
+    $scope.eventFilter = "";
+    $scope.searchFilter = $scope.searchword;
+  }
 
   $scope.setEventID = function(eventID)
   {
@@ -548,7 +591,7 @@ angular.module('controller', ['angularMoment'])
   };
 
   $scope.checkIsOwner = function(){
-    if($scope.myStatus == "Attending"){
+    if($scope.myStatus == "Owner"){
       return false;
     }
     else {

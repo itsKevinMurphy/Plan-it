@@ -9,13 +9,13 @@
 
     <table class="items">
     <tr>
-        <th ng-if="checkIsOwner()" style="width:20%;">Paying</th>
+        <th style="width:20%;">Paying</th>
         <th>Attendee</th>
         <th>Divided Amount</th>
         <th>Contribution</th>
         <th>Amount to Pay</th>
     </tr><tr ng-repeat="result in results" ng-show="checkAttending(result.isAttending)">
-        <td ng-if="checkIsOwner()"><input type="checkbox" ng-model="result.isPaying" ng-change="updateIsPaying(result.userId, result.isPaying)"></td>
+        <td><input ng-disabled="checkIsOwner()" type="checkbox" ng-model="result.isPaying" ng-change="updateIsPaying(result.userId, result.isPaying)"></td>
         <td>{{result.friendlyName}}</td>
         <td>{{result.dividedTotal}}</td>
         <td>{{result.claimedValue}}</td>
