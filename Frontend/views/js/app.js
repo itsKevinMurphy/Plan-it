@@ -145,5 +145,5 @@ app.config(['$stateProvider','$urlRouterProvider',
 
 //to extract socket object to be used in controller
 app.factory('socket', function(){
-  return io.connect('http://localhost:4030');
+  return io.connect('http://localhost:80');
 });

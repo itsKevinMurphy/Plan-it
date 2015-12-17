@@ -9,6 +9,7 @@ angular.module('controller', ['angularMoment'])
   if($scope.token != "")
   {
     $scope.isLogged = true;
+
   }
 
   $scope.checkForUrl = function()
@@ -192,7 +193,7 @@ angular.module('controller', ['angularMoment'])
   $scope.token = ServiceForUser.getToken();
   $scope.eventFilter = "";
   console.log($scope.token);
-  // $scope.event;
+
   ServiceForEvents.getAllEvents($scope.token).success(function (data)
   {
       $scope.eventList = data;
