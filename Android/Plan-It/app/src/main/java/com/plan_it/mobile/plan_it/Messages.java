@@ -29,7 +29,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class Messages extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     ArrayList<MessageModel> messages = new ArrayList<>();
-    int messageId;
+    int messageId = 1;
     ListView listView;
     EditText txt_message;
     String message = "";
@@ -63,16 +63,21 @@ public class Messages extends AppCompatActivity implements SwipeRefreshLayout.On
     @Override
     public void onRefresh() {
         swipeRefreshLayout.setRefreshing(true);
-        Intent intent = getIntent();
-        finish();
-        startActivity(intent);
-        swipeRefreshLayout.setRefreshing(false);
+        try {
+            messages = new ArrayList<>();
+            GetMessages(messageId);
+            swipeRefreshLayout.setRefreshing(false);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public void Refresh(View v)
     {
         swipeRefreshLayout.setRefreshing(true);
         try {
+            messages = new ArrayList<>();
             GetMessages(messageId);
             swipeRefreshLayout.setRefreshing(false);
 
@@ -98,7 +103,7 @@ public class Messages extends AppCompatActivity implements SwipeRefreshLayout.On
 
                     Log.d("Message: ", list_message.toString());
                     }
-                    messageId = list_message.getInt("MessageID");
+
                     Log.d("Message ID: ", Integer.toString(messageId));
                     listView = (ListView)findViewById(R.id.messages_list_view);
                     listView.setAdapter(new MessageAdapter(context, R.layout.message, messages));
@@ -180,7 +185,16 @@ public class Messages extends AppCompatActivity implements SwipeRefreshLayout.On
         if(message != "" && message != null)
         {
             RestClient.post("/message/" + eventID, jdata, token, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                    super.onSuccess(statusCode, headers, response);
+                    Refresh(listView);
+                }
 
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    Refresh(listView);
+                }
             });
             Toast.makeText(this, "sent", Toast.LENGTH_LONG);
         }
@@ -189,5 +203,6 @@ public class Messages extends AppCompatActivity implements SwipeRefreshLayout.On
             Toast.makeText(this, "Please Type a message \nbefore hitting send", Toast.LENGTH_LONG);
         }
         txt_message.setText("");
+
     }
 }
