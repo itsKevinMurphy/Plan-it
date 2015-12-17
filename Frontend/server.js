@@ -6,8 +6,8 @@ var express = require('express'),
 var moment = require('moment');
     moment().format();
 
-http.listen(4030, function(){
-  console.log('the magic happens on *:4030');
+http.listen(80, function(){
+  console.log('the magic happens on *:80');
 });
 
 app.use(express.static(__dirname+'/views'));
