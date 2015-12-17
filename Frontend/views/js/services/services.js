@@ -30,6 +30,14 @@ angular.module('services', ['ngCookies'])
     {
       return $cookies.eventID;
     }
+    this.setEventStatus = function(value)
+    {
+      $cookies.eventStatus = value;
+    }
+    this.getEventStatus = function()
+    {
+      return $cookies.eventStatus;
+    }
     this.getMembersByEventId = function(id, token)
     {
       return $http({url:'http://planit.lukefarnell.CA:3000/events/' + id + '/members', method: "GET", headers: {'x-access-token': token}});

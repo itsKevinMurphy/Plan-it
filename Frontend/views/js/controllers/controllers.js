@@ -260,6 +260,7 @@ angular.module('controller', ['angularMoment'])
   {
     console.log(data);
     $scope.event = data;
+    ServiceForEvents.setEventStatus($scope.event.isAttending);
     $scope.event.thumbnail = 'data:image/jpeg;base64,' + $scope.event.picture;
   }
   );
@@ -503,34 +504,51 @@ angular.module('controller', ['angularMoment'])
   };
 
 })
-.controller('EventBudgetController', function ($scope, ServiceForEvents, ServiceForUser){
+.controller('EventBudgetController', function ($scope, ServiceForEvents, ServiceForUser, $window, $location){
   $scope.token = ServiceForUser.getToken();
   $scope.currentEvent = ServiceForEvents.getEvent();
   $scope.isPayingCount = 0;
   $scope.total = 0;
+  $scope.myStatus = ServiceForEvents.getEventStatus();
+  console.log($scope.myStatus);
 
-  //to get actual total  
+  //to get actual total
   // ServiceForEvents.getEventById($scope.currentEvent, $scope.token).success(function (data) {
   //     $scope.event = data;
   // });
-  ServiceForEvents.getBudget($scope.currentEvent, $scope.token).success(function (data)
+  $scope.getBudget = function(){ServiceForEvents.getBudget($scope.currentEvent, $scope.token).success(function (data)
   {
-    console.log("budget section of" + $scope.currentEvent);
+    console.log("budget section of " + $scope.currentEvent);
     $scope.results = data;
     for(var i=0; i<data.length; i++){
       var items = data[i];
       if (items.isPaying) $scope.isPayingCount++;
       $scope.total += items.claimedValue;
     }
-  });
+  });}
+
+  $scope.getBudget();
 
   $scope.updateIsPaying = function (idToUpdate, statusToUpdate) {
+    $scope.data = {};
+    $scope.data.answer = statusToUpdate;
+    console.log(statusToUpdate);
     console.log("changing " + statusToUpdate + " from user " + idToUpdate);
-    ServiceForEvents.updateIsPaying($scope.currentEvent, idToUpdate, statusToUpdate, $scope.token).success(function (data) {
+
+    ServiceForEvents.updateIsPaying($scope.currentEvent, idToUpdate, $scope.data, $scope.token).success(function (data) {
       console.log("successfully changed " + statusToUpdate + " of " + idToUpdate);
-      // $window.location.reload();
+      $scope.getBudget();
     });
   };
+
+  $scope.checkIsOwner = function(){
+    if($scope.myStatus == "Attending"){
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
 })
 .controller('AccountController', function ($scope, $location)
 {
