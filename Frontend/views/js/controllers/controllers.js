@@ -405,7 +405,7 @@ angular.module('controller', ['angularMoment'])
 })
 
 //user profile
-.controller('UserProfileController', function ($scope, $stateParams, ServiceForUser){
+.controller('UserProfileController', function ($scope, $window, $location, $stateParams, ServiceForUser){
   $scope.id = $stateParams.userID;
   $scope.token = ServiceForUser.getToken();
   $scope.currentUserID = ServiceForUser.getUser();
@@ -430,7 +430,8 @@ angular.module('controller', ['angularMoment'])
     ServiceForUser.addNewFriend($scope.currentUserID, $scope.friend, $scope.token).success(function (data) {
       console.log("successfully added " + $scope.friend.userID);
     });
-    // $window.location.reload();
+    $window.location.reload();
+    $location.path('/friends');
   };
 
   $scope.removeFriend = function () {
@@ -442,6 +443,8 @@ angular.module('controller', ['angularMoment'])
         ServiceForUser.removeFriend($scope.currentUserID, $scope.friend.userID, $scope.token).success(function (data) {
           console.log("successfully removed " + $scope.friend.userID);
         });
+    $window.location.reload();
+    $location.path('/friends');
   };
 
 
