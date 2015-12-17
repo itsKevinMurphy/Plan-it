@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,7 +97,9 @@ public class FriendsListAdapter extends ArrayAdapter<FriendListModel> {
                 @Override
                 public void onClick(View v) {
                     try {
-                        ((FriendsListActivity) context).inviteFriend(friendsList.get(position).UserID);
+                        ((FriendsListActivity) context).inviteFriend(friendsList.get(position).UserID, friendsList.get(position).FriendID);
+                        friendsList.remove(position);
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

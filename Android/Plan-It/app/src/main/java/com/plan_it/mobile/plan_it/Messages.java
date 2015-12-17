@@ -57,7 +57,6 @@ public class Messages extends AppCompatActivity implements SwipeRefreshLayout.On
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout_messages);
         swipeRefreshLayout.setOnRefreshListener(this);
-
     }
 
     @Override

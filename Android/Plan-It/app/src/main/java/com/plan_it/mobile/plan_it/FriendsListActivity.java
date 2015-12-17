@@ -91,12 +91,11 @@ public class FriendsListActivity extends AppCompatActivity implements SwipeRefre
                     for (int i = 0; i < friendsArray.length(); i++)
                     {
                         friend = friendsArray.getJSONObject(i);
-                        friendsList.add(new FriendListModel(friend.getInt("UserID"), friend.getString("friendlyName"), R.drawable.ic_perm_identity_black_24dp, true));
+                        friendsList.add(new FriendListModel(friend.getInt("UserID"), friend.getString("friendlyName"), R.drawable.ic_account_circle_blue_24dp, true));
                         friendID = friend.getInt("UserID");
                         friendName = friend.getString("friendlyName");
                         Log.d("Friend: ", friend.toString());
                     }
-
                     list = (ListView)findViewById(R.id.friends_list_view);
                     list.setAdapter(new FriendsListAdapter(context, R.layout.friends_list_item, friendsList, eventID, isFromEditEvent));
 
@@ -177,20 +176,21 @@ public class FriendsListActivity extends AppCompatActivity implements SwipeRefre
         }
     }
 
-    public void inviteFriend(int friendId) throws JSONException{
+    public void inviteFriend(int friendId, String friendNameSent) throws JSONException{
         RestClient.post("/events/" + eventID + "/invite/" + friendId, null, token, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
-                Toast.makeText(getApplicationContext(), "Success, Friend: " + friendName + " Was added\n" + response, Toast.LENGTH_LONG).show();
+
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 super.onFailure(statusCode, headers, responseString, throwable);
-                Toast.makeText(getApplicationContext(), "FAILURE, Friend: " + friendName + " Could not be added\n" + responseString, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "FAILURE, Could not be added\n" + responseString, Toast.LENGTH_LONG).show();
             }
         });
+        Toast.makeText(getApplicationContext(), "Success, Friend: " + friendNameSent + " Was added", Toast.LENGTH_LONG).show();
     }
     public void RemoveFriend(int id, int friendId)
     {
@@ -202,13 +202,13 @@ public class FriendsListActivity extends AppCompatActivity implements SwipeRefre
         RestClient.delete("/user/" + id + "/friend/" + friendId, jdata, LoginActivity.token, new JsonHttpResponseHandler() {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Toast.makeText(context, "Success, " + response + " has been removed from your list", Toast.LENGTH_LONG).show();
-                Refresh();
+
             }
 
             @Override
             public void onFailure(int statusCode, Header[] header, Throwable throwable, JSONObject response) {
                 Toast.makeText(context, "Failure, Unable to remove: " + response, Toast.LENGTH_LONG).show();
-                Refresh();
+
             }
         });
     Refresh();
