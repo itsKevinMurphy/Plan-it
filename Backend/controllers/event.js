@@ -52,7 +52,6 @@ event.createEvent = function(req, res, next) {
 }
 
 event.getEventById = function(req, res, next) {
-  console.log('hit');
   database.userModel.findOne({token : req.headers["x-access-token"]}, function(err, token){
     if(err)
       console.log("error"  + err);
@@ -100,8 +99,10 @@ event.getUsersEvents = function(req, res, next) {
             for(var i = 0; i < result.length;i++){
               for(var j = 0; j < result[i].members.length;j++){
                 if(result[i].members[j].isAttending == "Owner"){
-                  result[i].isAttending = result[i].members[j].isAttending;
                   result[i].friendlyName = result[i].members[j].friendlyName;
+                }
+                if(result[i].members[j].UserId == token.UserID){
+                  result[i].isAttending = result[i].members[j].isAttending;
                 }
               }
             }
