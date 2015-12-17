@@ -23,7 +23,7 @@ h1 {
   height: 100% !important;
 }
 .user button {
-  height: 50px;
+  height: 60px;
 }
 .user a:hover, a:active, a:link, a:visited {
   text-decoration: none !important;
@@ -38,6 +38,7 @@ h1 {
   border-left: 0px;
   border-right: 0px;
   margin-left: 5px;
+  /*font-size: 1em;*/
 }
 
 /* items left of the user control panel */
