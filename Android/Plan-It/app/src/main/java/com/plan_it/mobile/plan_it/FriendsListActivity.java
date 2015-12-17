@@ -65,10 +65,14 @@ public class FriendsListActivity extends AppCompatActivity implements SwipeRefre
     @Override
     public void onRefresh() {
         swipeRefreshLayout.setRefreshing(true);
-        friendsList = null;
-        Intent intent = getIntent();
-        finish();
-        startActivity(intent);
+        try {
+            friendsList = new ArrayList<>();
+            fillFriendsList();
+            swipeRefreshLayout.setRefreshing(false);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private int GetImageResource(ImageView imageView)
@@ -162,8 +166,15 @@ public class FriendsListActivity extends AppCompatActivity implements SwipeRefre
     }
     public void Refresh()
     {
-        Intent intent = getIntent();
-        startActivity(intent);
+        swipeRefreshLayout.setRefreshing(true);
+        try {
+            friendsList = new ArrayList<>();
+            fillFriendsList();
+            swipeRefreshLayout.setRefreshing(false);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public void inviteFriend(int friendId) throws JSONException{
@@ -191,12 +202,13 @@ public class FriendsListActivity extends AppCompatActivity implements SwipeRefre
         RestClient.delete("/user/" + id + "/friend/" + friendId, jdata, LoginActivity.token, new JsonHttpResponseHandler() {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Toast.makeText(context, "Success, " + response + " has been removed from your list", Toast.LENGTH_LONG).show();
-                swipeRefreshLayout.setRefreshing(false);
+                Refresh();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] header, Throwable throwable, JSONObject response) {
                 Toast.makeText(context, "Failure, Unable to remove: " + response, Toast.LENGTH_LONG).show();
+                Refresh();
             }
         });
     Refresh();
