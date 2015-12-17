@@ -27,9 +27,9 @@
         </form>
         <ul ng-if="checkEventID()" class="nav navbar-nav nav-tabs navbar-right">
             <li role="presentation"><a ng-click="getEventDetails()" ui-sref="event.details({eventID: eventNumber})">Event Details</a></li>
-            <li role="presentation"><a ui-sref="event.chat">Messages</a></li>
-            <li role="presentation"><a ui-sref="event.items">Item List</a></li>
-            <li role="presentation"><a ui-sref="event.budget">Budget</a></li>
+            <li ng-if="checkInvitedOrDeclined()" role="presentation"><a ui-sref="event.chat">Messages</a></li>
+            <li ng-if="checkInvitedOrDeclined()" role="presentation"><a ui-sref="event.items">Item List</a></li>
+            <li ng-if="checkInvitedOrDeclined()" role="presentation"><a ui-sref="event.budget">Budget</a></li>
         </ul>
     </nav>
 </div>
