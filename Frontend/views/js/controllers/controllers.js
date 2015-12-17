@@ -328,6 +328,16 @@ angular.module('controller', ['angularMoment'])
   }
   );
 
+  $scope.showAcceptButton = function (toCheck) {
+    if ((toCheck == "Invited") || (toCheck == "Declined")) {
+      return true;
+    }
+  }
+  $scope.showLeaveButton = function (toCheck) {
+    if ((toCheck != "Invited") && (toCheck != "Owner")) {
+      return true;
+    }
+  }
   $scope.checkOwner = function (toCheck) {
     if (toCheck == "Owner") {
       return true;
