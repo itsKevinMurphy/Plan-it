@@ -30,9 +30,19 @@ event.createEvent = function(req, res, next) {
           var messages = new database.messagesModel({
             "EventID": result.EventID
           });
+
           messages.save(function(err, result){
             if(err)
               console.log(err);
+            else{
+              var message = new database.messageModel({
+                "message" : "Event Created",
+                "userID" : 0,
+                "friendlyName" : "System"
+              });
+              result.messages.push(message);
+              result.save();
+            }
           });
           res.sendStatus(201);
         }
@@ -131,6 +141,20 @@ event.updateEvent = function(req, res, next) {
         if(err)
           console.log(err);
         else{
+          database.messagesModel.findOne({"EventID" : req.params.id}, function(err, message){
+            if(err)
+              console.log(err);
+            else{
+              var text = new database.messageModel({
+                "message" : "Event Updated",
+                "userID" : 0,
+                "friendlyName" : "System"
+              });
+              message.messages.push(text);
+              message.save();
+            }
+          });
+
           res.sendStatus(200);
         }
       });
@@ -191,6 +215,19 @@ event.createListItem = function(req, res, next) {
             event.totalActCost = result[0].actCost;
             event.save();
           });
+          database.messagesModel.findOne({"EventID" : req.params.id}, function(err, message){
+            if(err)
+              console.log(err);
+            else{
+              var text = new database.messageModel({
+                "message" : "Item " + req.body.item + " was added",
+                "userID" : 0,
+                "friendlyName" : "System"
+              });
+              message.messages.push(text);
+              message.save();
+            }
+          });
           res.sendStatus(201);
         }
       });
@@ -220,8 +257,22 @@ event.claimItem = function(req, res, next){
       function(err, item){
         if(err)
           console.log(err);
-        else
+        else{
+          database.messagesModel.findOne({"EventID" : req.params.id}, function(err, message){
+            if(err)
+              console.log(err);
+            else{
+              var text = new database.messageModel({
+                "message" : "ItemID " + req.params.item + " was claimed by " + result.friendlyName,
+                "userID" : 0,
+                "friendlyName" : "System"
+              });
+              message.messages.push(text);
+              message.save();
+            }
+          });
           res.sendStatus(201);
+        }
       });
     }
   });
@@ -240,8 +291,22 @@ event.deleteItem = function(req, res, next){
         item.save(function(err) {
           if (err)
             console.log(err);
-          else
+          else{
+            database.messagesModel.findOne({"EventID" : req.params.id}, function(err, message){
+              if(err)
+                console.log(err);
+              else{
+                var text = new database.messageModel({
+                  "message" : "ItemID " + req.params.item + " was deleted",
+                  "userID" : 0,
+                  "friendlyName" : "System"
+                });
+                message.messages.push(text);
+                message.save();
+              }
+            });
             res.sendStatus(201);
+          }
         });
       });
   });
@@ -268,12 +333,24 @@ event.updateItem = function(req, res, next){
                   saved.save(function(err) {
                     if (err)
                       console.log(err);
-                    else
-                      //res.sendStatus(201);
+                    else{
+                      database.messagesModel.findOne({"EventID" : req.params.id}, function(err, message){
+                        if(err)
+                          console.log(err);
+                        else{
+                          var text = new database.messageModel({
+                            "message" : "ItemID " + req.params.item + " was updated",
+                            "userID" : 0,
+                            "friendlyName" : "System"
+                          });
+                          message.messages.push(text);
+                          message.save();
+                        }
+                      });
                       res.json(saved);
+                    }
                   });
                 });
-                //res.json(saved);
               }
             });
         }
@@ -309,8 +386,22 @@ event.inviteFriend = function(req, res, next){
                 event.save(function(err){
                   if(err)
                     console.log(err);
-                  else
+                  else{
+                    database.messagesModel.findOne({"EventID" : req.params.id}, function(err, message){
+                      if(err)
+                        console.log(err);
+                      else{
+                        var text = new database.messageModel({
+                          "message" : "User " + user.friendlyName + " was invited to the event",
+                          "userID" : 0,
+                          "friendlyName" : "System"
+                        });
+                        message.messages.push(text);
+                        message.save();
+                      }
+                    });
                     res.sendStatus(200);
+                  }
                 });
               }
             }
@@ -323,10 +414,16 @@ event.inviteFriend = function(req, res, next){
 
 event.invitation = function(req, res, next){
   var bool;
-  if(req.params.answer == "Attending")
-    bool = true
-  else
-    bool = false
+  var response;
+  if(req.params.answer == "Attending"){
+    bool = true;
+    response = "Accepted";
+  }
+  else{
+    bool = false;
+    response = "Declined";
+  }
+
   database.userModel.findOne({token: req.headers["x-access-token"]}, function(err, user){
     if(err)
       console.log(err);
@@ -337,6 +434,19 @@ event.invitation = function(req, res, next){
         if(err)
           console.log(err);
         else{
+          database.messagesModel.findOne({"EventID" : req.params.id}, function(err, message){
+            if(err)
+              console.log(err);
+            else{
+              var text = new database.messageModel({
+                "message" : "User " + user.friendlyName + " has "+ response + " the invitation to the event",
+                "userID" : 0,
+                "friendlyName" : "System"
+              });
+              message.messages.push(text);
+              message.save();
+            }
+          });
           res.sendStatus(200);
         }
       });
@@ -361,6 +471,21 @@ event.leave = function(req, res, next){
           user.save(function(err){
             if(err)
               console.log(err);
+            else{
+              database.messagesModel.findOne({"EventID" : req.params.id}, function(err, message){
+                if(err)
+                  console.log(err);
+                else{
+                  var text = new database.messageModel({
+                    "message" : "User " + user.friendlyName + " has left the event",
+                    "userID" : 0,
+                    "friendlyName" : "System"
+                  });
+                  message.messages.push(text);
+                  message.save();
+                }
+              });
+            }
           });
           event.members.pull({UserId : user.UserID});
           event.save();
@@ -403,32 +528,33 @@ event.budget = function(req, res, next){
         //compare with each attending member
         for(var i=0; i<event.members.length; i++){
           var claimedValue = 0;
-      
+
           for(var j=0; j<event.itemList.length; j++){
             if(event.members[i].friendlyName == event.itemList[j].whoseBringing){
               claimedValue += event.itemList[j].actCost;
               claimedTotal += event.itemList[j].actCost;
-              console.log("claimedTotal: " + claimedTotal);
-            } 
+            }
           }
-          var obj = { 
-            friendlyName: event.members[i].friendlyName, 
-            claimedValue: claimedValue, 
-            isPaying: event.members[i].isPaying };
+          var obj = {
+            friendlyName: event.members[i].friendlyName,
+            userId: event.members[i].UserId,
+            claimedValue: claimedValue,
+            isPaying: event.members[i].isPaying,
+            isAttending: event.members[i].isAttending
+          };
           results.push(obj);
         }
       }
 
       for(var i=0; i<results.length; i++){
         if (results[i].isPaying == true)
-          isPayingCount++; 
+          isPayingCount++;
       }
 
       for(var i=0; i<results.length; i++){
         if (results[i].isPaying == true){
           results[i].dividedTotal = (claimedTotal/isPayingCount);
           results[i].toPay = (claimedTotal/isPayingCount) - results[i].claimedValue;
-          console.log(results[i].friendlyName +" = "+ results[i].claimedValue);
         }
         else {
           results[i].dividedTotal = 0;
