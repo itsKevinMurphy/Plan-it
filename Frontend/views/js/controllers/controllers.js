@@ -190,6 +190,7 @@ angular.module('controller', ['angularMoment'])
 
 .controller('EventListController', function ($scope, ServiceForEvents, ServiceForUser, $location){
   $scope.token = ServiceForUser.getToken();
+  $scope.eventFilter = "";
   console.log($scope.token);
   // $scope.event;
   ServiceForEvents.getAllEvents($scope.token).success(function (data)
@@ -198,6 +199,48 @@ angular.module('controller', ['angularMoment'])
       console.log(data);
   }
   );
+
+  $scope.clearSearch = function()
+  {
+    $scope.searchFilter = null;
+    $scope.searchword = "";
+  }
+
+  $scope.filterForOwner = function()
+  {
+    $scope.clearSearch();
+    console.log("My Events.");
+    $scope.eventFilter = "Owner";
+  }
+  $scope.filterForAttending = function()
+  {
+    $scope.clearSearch();
+    console.log("My Events.");
+    $scope.eventFilter = "Attending";
+  }
+  $scope.filterForInvited = function()
+  {
+    $scope.clearSearch();
+    console.log("My Events.");
+    $scope.eventFilter = "Invited";
+  }
+  $scope.filterForLeft = function()
+  {
+    $scope.clearSearch();
+    console.log("My Events.");
+    $scope.eventFilter = "Declined";
+  }
+  $scope.filterForAll = function()
+  {
+    $scope.clearSearch();
+    console.log("My Events.");
+    $scope.eventFilter = "";
+  }
+  $scope.searchEvents = function()
+  {
+    $scope.eventFilter = "";
+    $scope.searchFilter = $scope.searchword;
+  }
 
   $scope.setEventID = function(eventID)
   {
@@ -260,6 +303,7 @@ angular.module('controller', ['angularMoment'])
   {
     console.log(data);
     $scope.event = data;
+    ServiceForEvents.setEventStatus($scope.event.isAttending);
     $scope.event.thumbnail = 'data:image/jpeg;base64,' + $scope.event.picture;
   }
   );
@@ -503,26 +547,30 @@ angular.module('controller', ['angularMoment'])
   };
 
 })
-.controller('EventBudgetController', function ($scope, ServiceForEvents, ServiceForUser){
+.controller('EventBudgetController', function ($scope, ServiceForEvents, ServiceForUser, $window, $location){
   $scope.token = ServiceForUser.getToken();
   $scope.currentEvent = ServiceForEvents.getEvent();
   $scope.isPayingCount = 0;
   $scope.total = 0;
+  $scope.myStatus = ServiceForEvents.getEventStatus();
+  console.log($scope.myStatus);
 
-  //to get actual total  
+  //to get actual total
   // ServiceForEvents.getEventById($scope.currentEvent, $scope.token).success(function (data) {
   //     $scope.event = data;
   // });
-  ServiceForEvents.getBudget($scope.currentEvent, $scope.token).success(function (data)
+  $scope.getBudget = function(){ServiceForEvents.getBudget($scope.currentEvent, $scope.token).success(function (data)
   {
-    console.log("budget section of" + $scope.currentEvent);
+    console.log("budget section of " + $scope.currentEvent);
     $scope.results = data;
     for(var i=0; i<data.length; i++){
       var items = data[i];
       if (items.isPaying) $scope.isPayingCount++;
       $scope.total += items.claimedValue;
     }
-  });
+  });}
+
+  $scope.getBudget();
 
   $scope.checkAttending = function (toCheck) {
     if (toCheck == "Attending" || toCheck == "Owner") {
@@ -531,12 +579,25 @@ angular.module('controller', ['angularMoment'])
   }
 
   $scope.updateIsPaying = function (idToUpdate, statusToUpdate) {
+    $scope.data = {};
+    $scope.data.answer = statusToUpdate;
+    console.log(statusToUpdate);
     console.log("changing " + statusToUpdate + " from user " + idToUpdate);
-    ServiceForEvents.updateIsPaying($scope.currentEvent, idToUpdate, statusToUpdate, $scope.token).success(function (data) {
+
+    ServiceForEvents.updateIsPaying($scope.currentEvent, idToUpdate, $scope.data, $scope.token).success(function (data) {
       console.log("successfully changed " + statusToUpdate + " of " + idToUpdate);
-      // $window.location.reload();
+      $scope.getBudget();
     });
   };
+
+  $scope.checkIsOwner = function(){
+    if($scope.myStatus == "Owner"){
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
 })
 .controller('AccountController', function ($scope, $location)
 {
