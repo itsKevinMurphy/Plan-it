@@ -147,11 +147,10 @@ nav {
 }
 
 /* MESSAGE BOARD */
-.chat {
-  margin-left: 20px;
-  /*margin-right: 20px;*/
-}
 .messages {
+  overflow:hidden;
+  overflow-y:scroll;
+  overflow-x:no-content;
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
@@ -163,6 +162,10 @@ nav {
 }
 .messages li:nth-child(odd) {
  background: #eee;
+}
+.chat {
+  margin-left: 20px;
+  /*margin-right: 20px;*/
 }
 .inputMessage {
   border: 1;
