@@ -388,40 +388,53 @@ public class ViewEventActvity extends AppCompatActivity {
             }
         });
 
-        etFromTime.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        etFromTime.addTextChangedListener(new TextWatcher() {
+
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                    try {
-                        eFromTime = etFromTime.getText().toString();
-                        updateEvent(eFromTime);
-                        Toast.makeText(getApplicationContext(), "Successfully Updated", Toast.LENGTH_LONG).show();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                //Your query to fetch Data
+            }
 
-                    return true;
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                    eFromTime = etFromTime.getText().toString();
+                    updateEvent(eFromTime);
+                    Toast.makeText(getApplicationContext(), "Successfully Updated", Toast.LENGTH_LONG).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                return false;
             }
         });
-        etToTime.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+        etToTime.addTextChangedListener(new TextWatcher() {
+
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                    try {
-                        eToTime = etToTime.getText().toString();
-                        updateEvent(eToTime);
-                        Toast.makeText(getApplicationContext(), "Successfully Updated", Toast.LENGTH_LONG).show();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                //Your query to fetch Data
+            }
 
-                    return true;
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                    eToTime = etToTime.getText().toString();
+                    updateEvent(eToTime);
+                    Toast.makeText(getApplicationContext(), "Successfully Updated", Toast.LENGTH_LONG).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                return false;
             }
         });
     }
