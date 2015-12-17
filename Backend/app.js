@@ -3,6 +3,7 @@ var express = require('express');
 var mongoose = require('mongoose');
 var increment = require('mongoose-auto-increment');
 var morgan = require('morgan');
+var fs = require('fs');
 
 
 module.exports = app = express();
@@ -18,7 +19,11 @@ var msgCtrl = require('./controllers/messages');
 
 database.createConnection();
 
-app.use(morgan('combined'));
+// create a write stream (in append mode)
+var accessLogStream = fs.createWriteStream(__dirname + '/access.log', {flags: 'a'})
+
+// setup the logger
+app.use(morgan('combined', {stream: accessLogStream}))
 
 app.get('/events', eventCtrl.getAllEvents);
 app.post('/events', eventCtrl.createEvent);
