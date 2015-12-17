@@ -135,6 +135,9 @@ nav {
   width: 250px;
   margin-bottom: 10px;
 }
+.bootstrap-timepicker-widget {
+  width: 150px !important;
+}
 .addfriend {
   margin-left: 20px;
   table-layout: fixed;
