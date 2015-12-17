@@ -48,6 +48,7 @@ public class Messages extends AppCompatActivity implements SwipeRefreshLayout.On
         txt_message = (EditText)findViewById(R.id.txt_message);
         txt_message.setText("");
         ImageButton send = (ImageButton)findViewById(R.id.btn_send_message);
+        ImageButton refresh = (ImageButton)findViewById(R.id.btn_refresh_messages);
         try {
             GetMessages(messageId);
         } catch (JSONException e) {
@@ -56,8 +57,6 @@ public class Messages extends AppCompatActivity implements SwipeRefreshLayout.On
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout_messages);
         swipeRefreshLayout.setOnRefreshListener(this);
-
-
 
     }
 
@@ -68,6 +67,18 @@ public class Messages extends AppCompatActivity implements SwipeRefreshLayout.On
         finish();
         startActivity(intent);
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    public void Refresh(View v)
+    {
+        swipeRefreshLayout.setRefreshing(true);
+        try {
+            GetMessages(messageId);
+            swipeRefreshLayout.setRefreshing(false);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public void GetMessages(int id) throws JSONException
@@ -87,7 +98,8 @@ public class Messages extends AppCompatActivity implements SwipeRefreshLayout.On
 
                     Log.d("Message: ", list_message.toString());
                     }
-//                    messageId = list_message.getInt("MessageID");
+                    messageId = list_message.getInt("MessageID");
+                    Log.d("Message ID: ", Integer.toString(messageId));
                     listView = (ListView)findViewById(R.id.messages_list_view);
                     listView.setAdapter(new MessageAdapter(context, R.layout.message, messages));
 

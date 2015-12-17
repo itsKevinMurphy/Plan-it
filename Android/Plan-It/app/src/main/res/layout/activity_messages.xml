@@ -23,11 +23,18 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true">
-
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_weight=".12"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_refresh_messages"
+            android:src="@drawable/ic_refresh_blue"
+            android:onClick="Refresh"
+            android:layout_gravity="bottom"/>
         <android.support.design.widget.TextInputLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight=".88"
+            android:layout_weight=".76"
             android:layout_gravity="bottom">
         <EditText
             android:layout_width="match_parent"
