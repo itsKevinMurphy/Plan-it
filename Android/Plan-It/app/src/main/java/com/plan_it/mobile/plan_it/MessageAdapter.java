@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * Created by Kevin on 13-Dec-2015.
  */
 public class MessageAdapter extends ArrayAdapter<MessageModel>{
-    ArrayList<MessageModel> messages = new ArrayList<>();
+    public ArrayList<MessageModel> messages = new ArrayList<>();
     Context context;
     int resource;
     MessageHolder messageHolder = new MessageHolder();

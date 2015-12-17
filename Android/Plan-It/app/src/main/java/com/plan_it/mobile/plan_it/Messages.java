@@ -21,6 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -202,6 +203,6 @@ public class Messages extends AppCompatActivity implements SwipeRefreshLayout.On
             Toast.makeText(this, "Please Type a message \nbefore hitting send", Toast.LENGTH_LONG);
         }
         txt_message.setText("");
-
+        onRefresh();
     }
 }
