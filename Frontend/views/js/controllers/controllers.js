@@ -293,6 +293,17 @@ angular.module('controller', ['angularMoment'])
     }
   }
 
+  $scope.checkInvitedOrDeclined = function()
+  {
+    if(ServiceForEvents.getEventStatus() == "Invited" || ServiceForEvents.getEventStatus() == "Declined")
+    {
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+
 })
 
 .controller('EventDetailsController', function ($window, $location, $scope, $stateParams, ServiceForEvents, ServiceForUser){
@@ -317,6 +328,16 @@ angular.module('controller', ['angularMoment'])
   }
   );
 
+  $scope.showAcceptButton = function (toCheck) {
+    if ((toCheck == "Invited") || (toCheck == "Declined")) {
+      return true;
+    }
+  }
+  $scope.showLeaveButton = function (toCheck) {
+    if ((toCheck != "Invited") && (toCheck != "Owner")) {
+      return true;
+    }
+  }
   $scope.checkOwner = function (toCheck) {
     if (toCheck == "Owner") {
       return true;
@@ -405,7 +426,7 @@ angular.module('controller', ['angularMoment'])
 })
 
 //user profile
-.controller('UserProfileController', function ($scope, $stateParams, ServiceForUser){
+.controller('UserProfileController', function ($scope, $window, $location, $stateParams, ServiceForUser){
   $scope.id = $stateParams.userID;
   $scope.token = ServiceForUser.getToken();
   $scope.currentUserID = ServiceForUser.getUser();
@@ -430,7 +451,8 @@ angular.module('controller', ['angularMoment'])
     ServiceForUser.addNewFriend($scope.currentUserID, $scope.friend, $scope.token).success(function (data) {
       console.log("successfully added " + $scope.friend.userID);
     });
-    // $window.location.reload();
+    $window.location.reload();
+    $location.path('/friends');
   };
 
   $scope.removeFriend = function () {
@@ -442,6 +464,8 @@ angular.module('controller', ['angularMoment'])
         ServiceForUser.removeFriend($scope.currentUserID, $scope.friend.userID, $scope.token).success(function (data) {
           console.log("successfully removed " + $scope.friend.userID);
         });
+    $window.location.reload();
+    $location.path('/friends');
   };
 
 

@@ -27,9 +27,9 @@
         </form>
         <ul ng-if="checkEventID()" class="nav navbar-nav nav-tabs navbar-right">
             <li role="presentation"><a ng-click="getEventDetails()" ui-sref="event.details({eventID: eventNumber})">Event Details</a></li>
-            <li role="presentation"><a ui-sref="event.chat">Messages</a></li>
-            <li role="presentation"><a ui-sref="event.items">Item List</a></li>
-            <li role="presentation"><a ui-sref="event.budget">Budget</a></li>
+            <li ng-if="checkInvitedOrDeclined()" role="presentation"><a ui-sref="event.chat">Messages</a></li>
+            <li ng-if="checkInvitedOrDeclined()" role="presentation"><a ui-sref="event.items">Item List</a></li>
+            <li ng-if="checkInvitedOrDeclined()" role="presentation"><a ui-sref="event.budget">Budget</a></li>
         </ul>
     </nav>
 </div>
@@ -44,39 +44,16 @@
         <span style="color:#E71D36;" class="glyphicon glyphicon-remove" ng-show="checkDeclined(event)"></span>
         <!-- <span class="glyphicon glyphicon-camera"></span> -->
         {{event.what}}
-        <br>Your Event
+        <br>{{event.friendlyName}}
         <br>{{event.why}}
         <!-- <br>{{event.isAttending}} -->
+        </button>
 
        <!--  <span style="float:right; font-size:1em;" class="glyphicon glyphicon-star" ng-show="checkOwner(event)"></span>
         <span style="float:right; color:#FF9F1C; font-size:1em;" class="glyphicon glyphicon-envelope" ng-show="checkInvited(event)"></span>
         <span style="float:right; color:#E71D36; font-size:1em;" class="glyphicon glyphicon-thumbs-up" ng-show="checkAttending(event)"></span>
         <span style="float:right; color:#2EC4B6; font-size:1em;" class="glyphicon glyphicon-thumbs-down" ng-show="checkDeclined(event)"></span> -->
-
-        </button>
-
-        <!-- Placeholder with 3 flag colours -->
-<!--         <button class="btn-block">
-            <span class="glyphicon glyphicon-camera"></span>
-            Camping - Tobemory
-            <br>Your Event
-            <br>Let's go camping on the long weekend!
-            <span style="float:right; color:#FF9F1C; font-size:1em;" class="glyphicon glyphicon-flag"></span>
-        </button>
-        <button class="btn-block">
-            <span class="glyphicon glyphicon-camera"></span>
-            AYCE Sushi
-            <br>Your Event
-            <br>All-You-Can-Eat!
-            <span style="float:right; color:#2EC4B6; font-size:1em;" class="glyphicon glyphicon-flag"></span>
-        </button><button class="btn-block" float="right">
-            <span class="glyphicon glyphicon-camera"></span>
-            Disneyland - Orlando
-            <br>Kevin Murphy's Event
-            <br>A whole new world!
-            <span style="float:right; color:#E71D36; font-size:1em;" class="glyphicon glyphicon-flag"></span>
-        </button>
- -->    </div>
+    </div>
 
     <div class="col-md-7">
         <div ui-view="rightView">

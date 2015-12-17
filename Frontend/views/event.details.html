@@ -15,13 +15,13 @@
         <button class="btn btn-sm btn-danger btn-block" ng-show="checkOwner(event.isAttending)" ng-click="deleteEvent()">
             <span class="glyphicon glyphicon-trash"> DELETE</span>
         </button>
-        <button class="btn btn-sm btn-default btn-block" ng-show="!checkOwner(event.isAttending)" ng-click="attendEvent()">
-            <span class="glyphicon glyphicon-ok"> ATTEND</span>
+        <button class="btn btn-sm btn-default btn-block" ng-show="showAcceptButton(event.isAttending)" ng-click="attendEvent()">
+            <span class="glyphicon glyphicon-ok"> ACCEPT</span>
         </button>
-        <button class="btn btn-sm btn-danger btn-block" ng-show="!checkOwner(event.isAttending)" ng-click="declineEvent()">
+        <button class="btn btn-sm btn-danger btn-block" ng-show="checkInvited(event.isAttending)" ng-click="declineEvent()">
             <span class="glyphicon glyphicon-remove"> DECLINE</span>
         </button>
-        <button class="btn btn-sm btn-primary btn-block" ng-show="!checkOwner(event.isAttending)" ng-click="leaveEvent()">
+        <button class="btn btn-sm btn-primary btn-block" ng-show="showLeaveButton(event.isAttending)" ng-click="leaveEvent()">
             <span class="glyphicon glyphicon-trash"> LEAVE</span>
         </button>
         <br>

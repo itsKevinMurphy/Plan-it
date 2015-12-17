@@ -37,6 +37,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.sql.Time;
+import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -156,9 +158,6 @@ public class CreateEventActivity extends AppCompatActivity {
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 showDialog(TIME_DIALOG_ID);
-                 
-                create_fromtime.setText(new StringBuilder().append(pad(hour))
-                        .append(":").append(pad(minute)));
             }
             return false;
         }
@@ -168,9 +167,6 @@ public class CreateEventActivity extends AppCompatActivity {
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 showDialog(TIME_DIALOG_ID);
-
-                create_totime.setText(new StringBuilder().append(pad(hour))
-                        .append(":").append(pad(minute)));
             }
             return false;
         }
@@ -181,7 +177,7 @@ public class CreateEventActivity extends AppCompatActivity {
         switch (id) {
             case TIME_DIALOG_ID:
                 // set time picker as current time
-                return new TimePickerDialog(this,
+                return new TimePickerDialog(CreateEventActivity.this,
                         timePickerListener, hour, minute, false);
 
         }
@@ -190,10 +186,19 @@ public class CreateEventActivity extends AppCompatActivity {
     private TimePickerDialog.OnTimeSetListener timePickerListener =
             new TimePickerDialog.OnTimeSetListener() {
                 public void onTimeSet(TimePicker view, int selectedHour,
-                                      int selectedMinute) {
-                    hour = selectedHour;
-                    minute = selectedMinute;
+                                      int selectedMinute ) {
+                    Time tme = new Time(selectedHour,selectedMinute,0);
+                    Format formatter;
+                    formatter = new SimpleDateFormat("h:mm a");
+                    formatter.format(tme);
 
+
+                    if (create_fromtime.isFocused()) {
+                        create_fromtime.setText(formatter.format(tme));
+                    }
+                    if (create_totime.isFocused()) {
+                        create_totime.setText(formatter.format(tme));
+                    }
                 }
             };
     DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {

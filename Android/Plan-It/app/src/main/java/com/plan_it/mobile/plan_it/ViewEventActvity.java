@@ -2,6 +2,8 @@ package com.plan_it.mobile.plan_it;
 
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,7 +14,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -32,6 +33,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -42,6 +44,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.sql.Time;
+import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -53,6 +57,9 @@ public class ViewEventActvity extends AppCompatActivity {
 
     private static final int CAMERA_REQUEST = 1888;
 
+    private int hour;
+    private int minute;
+    static final int TIME_DIALOG_ID = 999;
     String base64ImageUpdate;
     Bitmap bmp;
     byte[] imageByte;
@@ -381,40 +388,53 @@ public class ViewEventActvity extends AppCompatActivity {
             }
         });
 
-        etFromTime.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        etFromTime.addTextChangedListener(new TextWatcher() {
+
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                    try {
-                        eFromTime = etFromTime.getText().toString();
-                        updateEvent(eFromTime);
-                        Toast.makeText(getApplicationContext(), "Successfully Updated", Toast.LENGTH_LONG).show();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                //Your query to fetch Data
+            }
 
-                    return true;
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                    eFromTime = etFromTime.getText().toString();
+                    updateEvent(eFromTime);
+                    Toast.makeText(getApplicationContext(), "Successfully Updated", Toast.LENGTH_LONG).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                return false;
             }
         });
-        etToTime.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+        etToTime.addTextChangedListener(new TextWatcher() {
+
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                    try {
-                        eToTime = etToTime.getText().toString();
-                        updateEvent(eToTime);
-                        Toast.makeText(getApplicationContext(), "Successfully Updated", Toast.LENGTH_LONG).show();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                //Your query to fetch Data
+            }
 
-                    return true;
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                    eToTime = etToTime.getText().toString();
+                    updateEvent(eToTime);
+                    Toast.makeText(getApplicationContext(), "Successfully Updated", Toast.LENGTH_LONG).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                return false;
             }
         });
     }
@@ -608,6 +628,14 @@ public class ViewEventActvity extends AppCompatActivity {
         etToDate.setInputType(InputType.TYPE_NULL);
         etToDate.setOnTouchListener(listener);
 
+        etFromTime.setInputType(InputType.TYPE_NULL);
+        etFromTime.setOnTouchListener(lister);
+
+        etToTime.setInputType(InputType.TYPE_NULL);
+        etToTime.setOnTouchListener(listen);
+
+
+
         addMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -645,6 +673,54 @@ public class ViewEventActvity extends AppCompatActivity {
         });
 
     }
+    View.OnTouchListener lister = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                showDialog(TIME_DIALOG_ID);
+            }
+            return false;
+        }
+    };
+    View.OnTouchListener listen = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                showDialog(TIME_DIALOG_ID);
+            }
+            return false;
+        }
+    };
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+            case TIME_DIALOG_ID:
+                // set time picker as current time
+                return new TimePickerDialog(ViewEventActvity.this,
+                        timePickerListener, hour, minute, false);
+
+        }
+        return null;
+    }
+    private TimePickerDialog.OnTimeSetListener timePickerListener =
+            new TimePickerDialog.OnTimeSetListener() {
+                public void onTimeSet(TimePicker view, int selectedHour,
+                                      int selectedMinute ) {
+                    Time tme = new Time(selectedHour,selectedMinute,0);
+                    Format formatter;
+                    formatter = new SimpleDateFormat("h:mm a");
+                    formatter.format(tme);
+
+
+                    if (etFromTime.isFocused()) {
+                        etFromTime.setText(formatter.format(tme));
+                    }
+                    if (etToTime.isFocused()) {
+                        etToTime.setText(formatter.format(tme));
+                    }
+                }
+            };
     View.OnTouchListener listener = new View.OnTouchListener(){
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -676,7 +752,7 @@ public class ViewEventActvity extends AppCompatActivity {
     };
 
     private void updateLabel(int id) {
-        String myFormat = "MMM/dd/yyyy"; //In which you need put here
+        String myFormat = "MM/dd/yyyy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.CANADA );
         switch(id) {
             case 0:
